@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="281394bb-b117-4dc4-a91c-545f31434827" name="Changes" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="LogFilters">
+    <option name="FILTER_ERRORS" value="false" />
+    <option name="FILTER_WARNINGS" value="false" />
+    <option name="FILTER_INFO" value="false" />
+    <option name="FILTER_DEBUG" value="false" />
+    <option name="CUSTOM_FILTER" />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="CurrentFile" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
+  <component name="ProjectId" id="2r8Dkf4DXuDVGb1SSoiul9pjpxh" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.First.executor": "Run",
+    "Application.debug.executor": "Run",
+    "Downloaded.Files.Path": "/home/citizen/javaLibs/mockito5.12.0",
+    "Downloaded.Files.Path.Enabled": "true",
+    "JUnit.AccountServiceTest.executor": "Run",
+    "Repository.Attach.Annotations": "true",
+    "Repository.Attach.JavaDocs": "true",
+    "Repository.Attach.Sources": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "kotlin-language-version-configured": "true",
+    "last_directory_selection": "/home/citizen/Documents/java/MoneyManager/src/main/com/moneymanager/core",
+    "last_opened_file_path": "/home/seeker/Documents/MM1",
+    "project.structure.last.edited": "Libraries",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.3275862",
+    "settings.editor.selected.configurable": "project.propCompiler"
+  },
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "sqlite"
+    ]
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/lib" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.moneymanager.Cli" />
+      <recent name="com.moneymanager.database" />
+      <recent name="com.moneymanager.core" />
+      <recent name="com.moneymanager.csv" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Compound.Test&amp;Run">
+    <configuration type="CompoundRunConfigurationType">
+      <method v="2" />
+    </configuration>
+    <configuration name="First" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="com.moneymanager.core.First" />
+      <module name="MoneyManager" />
+      <option name="VM_PARAMETERS" value="-Xlog:gc*=off -Xlog:thread+os=off" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="debug" type="Application" factoryName="Application">
+      <option name="ALTERNATIVE_JRE_PATH" value="17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <output_file path="$PROJECT_DIR$/out/console.txt" />
+      <option name="MAIN_CLASS_NAME" value="com.moneymanager.core.First" />
+      <module name="MoneyManager" />
+      <option name="VM_PARAMETERS" value="-XX:+PerfDisableSharedMem" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Test&amp;Run" type="CompoundRunConfigurationType">
+      <toRun name="debug" type="Application" />
+      <toRun name="AccountServiceTest" type="JUnit" />
+      <method v="2" />
+    </configuration>
+    <configuration name="Unnamed" type="CompoundRunConfigurationType">
+      <method v="2" />
+    </configuration>
+    <configuration name="AccountServiceTest" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
+      <module name="MoneyManager" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="AccountServiceTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Application.First" />
+      <item itemvalue="Application.debug" />
+      <item itemvalue="Compound.Unnamed" />
+      <item itemvalue="Compound.Test&amp;Run" />
+      <item itemvalue="JUnit.AccountServiceTest" />
+    </list>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-fdfe4dae3a2d-intellij.indexing.shared.core-IU-243.22562.218" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="281394bb-b117-4dc4-a91c-545f31434827" name="Changes" comment="" />
+      <created>1734111087139</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1734111087139</updated>
+      <workItem from="1734111088354" duration="634000" />
+      <workItem from="1735931958449" duration="5205000" />
+      <workItem from="1736536195728" duration="12708000" />
+      <workItem from="1736558325551" duration="5886000" />
+      <workItem from="1736614087700" duration="4121000" />
+    </task>
+    <servers />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>
