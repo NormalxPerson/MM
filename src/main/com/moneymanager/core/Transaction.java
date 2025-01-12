@@ -3,14 +3,14 @@ package com.moneymanager.core;
 import java.util.Date;
 
 public class Transaction {
-	private String id;
-	private double amount;
-	private String description;
-	private String date;
-	private String type;
-	private String accountId;
+	private final String id;
+	private final double amount;
+	private final String description;
+	private final String date;
+	private final String type;
+	private final String accountId;
 
-	public Transaction(String id, double amount, String description, String date, String type, String accountId) {
+	Transaction(String id, double amount, String description, String date, String type, String accountId) {
 		this.id = id;
 		this.amount = amount;
 		this.description = description;
@@ -18,6 +18,13 @@ public class Transaction {
 		this.type = type;
 		this.accountId = accountId;
 	}
+	
+	public String getId() { return id; }
+	public double getAmount() { return amount; }
+	public String getDescription() { return description; }
+	public String getDate() { return date; }
+	public String getType() { return type; }
+	public String getAccountId() { return accountId; }
 	
 	@Override
 	public String toString() {
