@@ -4,7 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="281394bb-b117-4dc4-a91c-545f31434827" name="Changes" comment="" />
+    <list default="true" id="281394bb-b117-4dc4-a91c-545f31434827" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/com/moneymanager/repos/SQLiteTransactionRepo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/com/moneymanager/repos/TransactionRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/core/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/core/Transaction.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/service/AccountService.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -17,6 +24,9 @@
         <option value="Class" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="LogFilters">
     <option name="FILTER_ERRORS" value="false" />
@@ -47,13 +57,15 @@
     "Repository.Attach.JavaDocs": "true",
     "Repository.Attach.Sources": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
     "last_directory_selection": "/home/citizen/Documents/java/MoneyManager/src/main/com/moneymanager/core",
-    "last_opened_file_path": "/home/seeker/Documents/MM1",
+    "last_opened_file_path": "/home/citizen/Documents/java/MoneyManager",
     "project.structure.last.edited": "Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.3275862",
-    "settings.editor.selected.configurable": "project.propCompiler"
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   },
   "keyToStringList": {
     "DatabaseDriversLRU": [
@@ -147,6 +159,29 @@
       <workItem from="1736614087700" duration="4121000" />
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="origin/master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

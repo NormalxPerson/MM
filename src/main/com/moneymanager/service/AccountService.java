@@ -34,24 +34,10 @@ public class AccountService {
         accountRepo.addAccount(newAccount);
         return newAccount;
     }
-
-    public void addAccount() {
-        Scanner scan = new Scanner(System.in);
-        System.out.println("Account Name: ");
-        String accountName = scan.nextLine();
-        System.out.println("Bank's Name: ");
-        String bankName = scan.nextLine();
-        System.out.println("Account Type: ");
-        String accountType = scan.nextLine().toUpperCase();
-        Account newAccount = new Account(accountName, bankName, accountType);
-        accountRepo.addAccount(newAccount);
-
-    }
-    
     
     
     public List<Account> getAccountList() {
-	    return new ArrayList<Account>(accountRepo.getAllAccounts());
+	    return new ArrayList<>(accountRepo.getAllAccounts());
     }
 
 
