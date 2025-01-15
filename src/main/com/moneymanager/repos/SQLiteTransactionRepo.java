@@ -20,13 +20,17 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 	@Override
 	public int getTransactionCountByDate(String date) {
 		String sql = "SELECT COUNT(*) as count FROM transactions WHERE date = ?";
-		
 		try (Connection connection = dbConnection.getConnection();
 		     PreparedStatement stmt = connection.prepareStatement(sql)) {
-			stmt.setString(1, date);
-		}
-		
-		
+			 stmt.setString(1, date);
+			
+			try (ResultSet rs = stmt.executeQuery()) {
+				if (rs.next()) {
+					return rs.getInt(1);
+				}
+				return 0;
+			}
+		} catch (SQLException e) { throw new RuntimeException(e);}
 	}
 	
 	@Override
