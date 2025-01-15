@@ -39,7 +39,7 @@ public class TransactionFactory {
 		} catch (Exception e) { throw new IllegalArgumentException("Invalid Transaction Date! Use format MM-dd-yyyy"); }
 	}
 	
-	private static String getTransactionId(String date) {
+	private static String generateTransactionId(String date) {
 	
 	}
 	
