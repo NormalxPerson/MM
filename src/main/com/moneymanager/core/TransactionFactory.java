@@ -1,23 +1,32 @@
 package com.moneymanager.core;
 
+import com.moneymanager.repos.TransactionRepo;
+import com.moneymanager.service.TransactionService;
+
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class TransactionFactory {
 	private static final DateTimeFormatter transactionDateFormat = DateTimeFormatter.ofPattern("MM-dd-yyyy");
+	private static final DateTimeFormatter transactionIdFormat = DateTimeFormatter.ofPattern("yyyyMMdd");
 	
-	public static Transaction createTransaction(double amount, String description, String date, String type, String accountId) {
+	
+	public static Transaction createTransaction(double amount, String description, String date, String type, String accountId, TransactionRepo transRepo) {
 	
 	validateType(type);
 	validateAmount(amount, type);
+	double adjustedAmount;
 	if (type.equals("expense")) {
-		double adjustedAmount = Math.abs(amount) * -1; }
-	else { double adjustedAmount = Math.abs(amount); }
+		adjustedAmount = Math.abs(amount) * -1; }
+	else { adjustedAmount = Math.abs(amount); }
+	
 	validateDate(date);
-	
-	
-	
+	String transactionId = generateTransactionId(date, transRepo);
+		
+		return new Transaction(transactionId, adjustedAmount, description, date, type, accountId);
 	}
+	
+	
 	
 	private static void validateType(String type) {
 		if (type == null || (!type.equals("income") && !type.equals("expense"))) {
@@ -39,7 +48,11 @@ public class TransactionFactory {
 		} catch (Exception e) { throw new IllegalArgumentException("Invalid Transaction Date! Use format MM-dd-yyyy"); }
 	}
 	
-	private static String generateTransactionId(String date) {
+	private static String generateTransactionId(String date, TransactionRepo transRepo) {
+		LocalDate transactionDate = LocalDate.parse(date, transactionDateFormat);
+		String dateId = transactionIdFormat.format(transactionDate);
+		
+		return dateId + "-" + transRepo.getTransactionsCountByDate(date);
 	
 	}
 	
