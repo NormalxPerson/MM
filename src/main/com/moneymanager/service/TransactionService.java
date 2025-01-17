@@ -9,11 +9,6 @@ public class TransactionService {
 		this.transRepo = transRepo;
 	}
 	
-	public void cre
-	
-	public int getCountOfTransactionsOnDate(String date) {
-		return transRepo.getTransactionsCountByDate(date);
-	}
 	
 	
 }

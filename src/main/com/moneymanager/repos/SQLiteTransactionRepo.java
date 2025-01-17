@@ -1,6 +1,7 @@
 package com.moneymanager.repos;
 
 import com.moneymanager.core.Transaction;
+import com.moneymanager.core.TransactionFactory;
 import com.moneymanager.database.DatabaseConnection;
 
 import java.sql.Connection;
@@ -15,6 +16,28 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 	
 	public SQLiteTransactionRepo() {
 		this.dbConnection = DatabaseConnection.getInstance();
+	}
+	
+	@Override
+	public void addTransactions(List<Transaction> transactions) {
+		String sql = "INSERT INTO transactions (transactionId, transactionAmount, transactionDescription, transactionDate, transactionType, account_id) VALUES (?, ?, ?, ?, ?, ?)";
+		
+		try (Connection connection = dbConnection.getConnection();
+		     PreparedStatement statement = connection.prepareStatement(sql)) {
+			
+			for (Transaction transaction : transactions) {
+				statement.setString(1, transaction.getId());
+				statement.setDouble(2, transaction.getAmount());
+				statement.setString(3, transaction.getDescription());
+				statement.setString(4, transaction.getDate()); // Assuming date is stored as TEXT in your database
+				statement.setString(5, transaction.getType());
+				statement.setString(6, transaction.getAccountId());
+				
+				statement.executeUpdate();
+			}
+		} catch (SQLException e) {
+			System.err.println("Error adding transactions from list: " + e.getMessage());
+		}
 	}
 	
 	@Override
@@ -34,6 +57,33 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 	}
 	
 	@Override
+	public List<Transaction> getTransactionsByAccountId(String accountId) {
+		List<Transaction> transactions = new ArrayList<>();
+		String sql = "SELECT * FROM transactions WHERE account_id = ?";
+		try (Connection connection = dbConnection.getConnection();
+		     PreparedStatement stmt = connection.prepareStatement(sql)) {
+			 stmt.setString(1, accountId);
+			 try (ResultSet rs = stmt.executeQuery()) {
+				 while (rs.next()) {
+					 Transaction transaction = TransactionFactory.createTransaction(
+							 rs.getString("transactionID"),
+							 rs.getDouble("transactionAmount"),
+							 rs.getString("transactionDescription"),
+							 rs.getString("transactionDate"),
+							 rs.getString("transactionType"),
+							 rs.getString("accountId"));
+					 
+					 transactions.add(transaction);
+				 }
+			 }
+	
+		} catch (SQLException e) {
+			System.out.println("Error getting transactions by account id: " + accountId);
+		}
+		return transactions;
+	}
+	
+	@Override
 	public List<Transaction> getAllTransactions() {
 		List<Transaction> transactions = new ArrayList<>();
 		String sql = "SELECT * FROM transactions";
@@ -43,7 +93,7 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 		     ResultSet rs = stmt.executeQuery()) {
 			
 			while (rs.next()) {
-				Transaction transaction = new Transaction(
+				Transaction transaction = TransactionFactory.createTransaction(
 						rs.getString("transactionID"),
 						rs.getDouble("transactionAmount"),
 						rs.getString("transactionDescription"),

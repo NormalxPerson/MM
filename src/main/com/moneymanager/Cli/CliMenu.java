@@ -4,6 +4,8 @@ import com.moneymanager.core.Account;
 import com.moneymanager.service.AccountService;
 import com.moneymanager.service.TransactionService;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class CliMenu {
@@ -43,6 +45,7 @@ public class CliMenu {
 				case 1 -> listAccounts();
 				case 2 -> addAccount();
 				//case 3 -> viewAccountDetails();
+				case 4 -> addUserInputTransaction();
 				//case 5 -> importCsv();
 				//case 0 -> exit();
 				default -> System.out.println("Invalid option. Please try again.");
@@ -54,10 +57,25 @@ public class CliMenu {
 		}
 	}
 	
+	private void addUserInputTransaction() {
+		Map<String, Account> mapOfAccounts = accountService.getAccountMap();
+		System.out.println("\n====== Adding Transaction ======");
+		for (Account account : mapOfAccounts.values()) {
+			System.out.printf("Account ID: %s, %s, $(%.2f)\n", account.getAccountId(), account.getAccountName(), account.getBalance());
+		}
+		System.out.println("Enter transaction ID: ");
+		String transactionId = scanner.nextLine().trim();
+		
+		if (!mapOfAccounts.containsKey(transactionId)) {
+			System.out.println("Invalid transaction ID. Please try again.");
+		}
+	}
+	
 	private void listAccounts() {
 		System.out.println("\n=== Accounts List ===");
 		accountService.getAccountList().forEach(account ->
-				System.out.printf("%s: %s (%.2f)\n",
+				System.out.printf("%s. %s: %s (%.2f)\n",
+						account.getAccountId(),
 						account.getAccountName(),
 						account.getBankName(),
 						account.getBalance())

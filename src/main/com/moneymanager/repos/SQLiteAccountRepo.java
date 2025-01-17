@@ -8,7 +8,9 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class SQLiteAccountRepo implements AccountRepo {
     private final DatabaseConnection dbConnection;
@@ -16,6 +18,16 @@ public class SQLiteAccountRepo implements AccountRepo {
     public SQLiteAccountRepo() {
         
         this.dbConnection = DatabaseConnection.getInstance();
+    }
+    
+    @Override
+    public HashMap<String, Account> getAccountMap() {
+        List<Account> accountList = getAllAccounts();
+        Map<String, Account> accountMap = new HashMap<>();
+        for (Account account : accountList) {
+            accountMap.put(account.getAccountId(), account);
+        }
+        return accountMap;
     }
     
     @Override

@@ -5,9 +5,8 @@ import com.moneymanager.database.DatabaseConnection;
 import com.moneymanager.repos.AccountRepo;
 import com.moneymanager.repos.SQLiteAccountRepo;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
+
 // TODO: Create an AccountServiceInterface
 public class AccountService {
     private AccountRepo accountRepo;
@@ -35,6 +34,7 @@ public class AccountService {
         return newAccount;
     }
     
+    public Map<String, Account> getAccountMap() {return accountRepo.getAccountMap();}
     
     public List<Account> getAccountList() {
 	    return new ArrayList<>(accountRepo.getAllAccounts());
