@@ -7,11 +7,12 @@ import java.sql.Statement;
 public class DatabaseInitializer {
 	private static final String CREATE_TRANSACTION_TABLE = """
 			CREATE TABLE IF NOT EXISTS transactions(
-				id INTEGER PRIMARY KEY AUTOINCREMENT,
-				date TEXT NOT NULL,
-				amount integer NOT NULL,
-				description TEXT NOT NULL,
-				type TEXT CHECK(type IN ('INCOME', 'EXPENSE')) NOT NULL
+				transactionID INTEGER PRIMARY KEY AUTOINCREMENT,
+				transactionDate TEXT NOT NULL,
+				transactionAmount integer NOT NULL,
+				transactionDescription TEXT NOT NULL,
+				transactionType TEXT CHECK(type IN ('INCOME', 'EXPENSE')) NOT NULL
+				FOREIGN KEY (account_id) REFERENCES accounts(id)
 			);""";
 	
 	private static final String CREATE_ACCOUNTS_TABLE = """

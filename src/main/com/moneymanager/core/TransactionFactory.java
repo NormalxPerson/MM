@@ -21,9 +21,13 @@ public class TransactionFactory {
 	else { adjustedAmount = Math.abs(amount); }
 	
 	validateDate(date);
-	String transactionId = generateTransactionId(date, transRepo);
+	String generatedId = generateTransactionId(date, transRepo);
 		
-		return new Transaction(transactionId, adjustedAmount, description, date, type, accountId);
+		return new Transaction(generatedId, adjustedAmount, description, date, type, accountId);
+	}
+	
+	public static Transaction createTransaction(String transId, double amount, String description, String date, String type, String accountId) {
+		return new Transaction(transId, amount, description, date, type, accountId);
 	}
 	
 	
@@ -52,7 +56,7 @@ public class TransactionFactory {
 		LocalDate transactionDate = LocalDate.parse(date, transactionDateFormat);
 		String dateId = transactionIdFormat.format(transactionDate);
 		
-		return dateId + "-" + transRepo.getTransactionsCountByDate(date);
+		return dateId + "-" + transRepo.getTransactionCountByDate(date);
 	
 	}
 	

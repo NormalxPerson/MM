@@ -5,9 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="281394bb-b117-4dc4-a91c-545f31434827" name="Changes" comment="added get all transactions sql statements">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/3e2d3b78-78ce-467b-a60a-9a6e8a7a0c58.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/3e2d3b78-78ce-467b-a60a-9a6e8a7a0c58.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/core/TransactionFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/core/TransactionFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/service/AccountService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/database/DatabaseInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/database/DatabaseInitializer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/repos/SQLiteTransactionRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/repos/SQLiteTransactionRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/repos/TransactionRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/repos/TransactionRepo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/service/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/service/TransactionService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -63,7 +66,7 @@
     "project.structure.last.edited": "Libraries",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.3275862",
-    "settings.editor.selected.configurable": "preferences.toDoOptions"
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   },
   "keyToStringList": {
     "DatabaseDriversLRU": [
