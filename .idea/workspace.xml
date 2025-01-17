@@ -4,12 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="281394bb-b117-4dc4-a91c-545f31434827" name="Changes" comment="added get all transactions sql statements">
+    <list default="true" id="281394bb-b117-4dc4-a91c-545f31434827" name="Changes" comment="transactions can be created">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/Cli/CliMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/Cli/CliMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/core/First.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/core/First.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/repos/AccountRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/repos/AccountRepo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/repos/SQLiteAccountRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/repos/SQLiteAccountRepo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/service/AccountService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/service/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/service/TransactionService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +26,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="citizen &lt;citizen@normalxpc.lan&gt;" />
+      </list>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="LogFilters">
@@ -173,27 +179,43 @@
       <option name="project" value="LOCAL" />
       <updated>1736902729479</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="transactions can be created">
+      <option name="closed" value="true" />
+      <created>1737125148173</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1737125148173</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
+    <option name="RECENT_FILTERS">
+      <map>
+        <entry key="Branch">
+          <value>
+            <list>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="HEAD" />
+                </option>
+              </RecentGroup>
+              <RecentGroup>
+                <option name="FILTER_VALUES">
+                  <option value="origin/master" />
+                </option>
+              </RecentGroup>
+            </list>
+          </value>
+        </entry>
+      </map>
+    </option>
     <option name="TAB_STATES">
       <map>
         <entry key="MAIN">
           <value>
-            <State>
-              <option name="FILTERS">
-                <map>
-                  <entry key="branch">
-                    <value>
-                      <list>
-                        <option value="github/master" />
-                      </list>
-                    </value>
-                  </entry>
-                </map>
-              </option>
-            </State>
+            <State />
           </value>
         </entry>
       </map>
@@ -201,7 +223,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="added get all transactions sql statements" />
-    <option name="LAST_COMMIT_MESSAGE" value="added get all transactions sql statements" />
+    <MESSAGE value="transactions can be created" />
+    <option name="LAST_COMMIT_MESSAGE" value="transactions can be created" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

@@ -23,7 +23,7 @@ public class SQLiteAccountRepo implements AccountRepo {
     @Override
     public HashMap<String, Account> getAccountMap() {
         List<Account> accountList = getAllAccounts();
-        Map<String, Account> accountMap = new HashMap<>();
+        HashMap<String, Account> accountMap = new HashMap<>();
         for (Account account : accountList) {
             accountMap.put(account.getAccountId(), account);
         }

@@ -499,7 +499,7 @@
     </routine>
     <schema id="191" parent="1" name="main">
       <Current>1</Current>
-      <LastIntrospectionLocalTimestamp>2025-01-17.02:46:55</LastIntrospectionLocalTimestamp>
+      <LastIntrospectionLocalTimestamp>2025-01-17.15:36:30</LastIntrospectionLocalTimestamp>
     </schema>
     <argument id="192" parent="16">
       <ArgumentDirection>R</ArgumentDirection>
@@ -1590,137 +1590,28 @@
     <argument id="554" parent="190">
       <Position>1</Position>
     </argument>
-    <table id="555" parent="191" name="accounts"/>
-    <table id="556" parent="191" name="csv_strategies"/>
-    <table id="557" parent="191" name="sqlite_master">
+    <table id="555" parent="191" name="sqlite_master">
       <System>1</System>
     </table>
-    <table id="558" parent="191" name="sqlite_sequence">
-      <System>1</System>
-    </table>
-    <table id="559" parent="191" name="transactions"/>
-    <check id="560" parent="555" name="valid_account_type">
-      <Predicate>accountType IN (&apos;DEBT&apos;, &apos;CREDIT&apos;)</Predicate>
-    </check>
-    <column id="561" parent="555" name="accountId">
-      <AutoIncrement>1</AutoIncrement>
-      <Position>1</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="562" parent="555" name="accountName">
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-      <StoredType>TEXT|0s</StoredType>
-    </column>
-    <column id="563" parent="555" name="bankName">
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-      <StoredType>TEXT|0s</StoredType>
-    </column>
-    <column id="564" parent="555" name="accountBalance">
-      <NotNull>1</NotNull>
-      <Position>4</Position>
-      <StoredType>integer|0s</StoredType>
-    </column>
-    <column id="565" parent="555" name="accountType">
-      <NotNull>1</NotNull>
-      <Position>5</Position>
-      <StoredType>TEXT|0s</StoredType>
-    </column>
-    <key id="566" parent="555">
-      <ColNames>accountId</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="567" parent="556" name="id">
-      <AutoIncrement>1</AutoIncrement>
-      <Position>1</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="568" parent="556" name="account_id">
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="569" parent="556" name="header_pattern">
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-      <StoredType>TEXT|0s</StoredType>
-    </column>
-    <column id="570" parent="556" name="column_mappings">
-      <NotNull>1</NotNull>
-      <Position>4</Position>
-      <StoredType>TEXT|0s</StoredType>
-    </column>
-    <column id="571" parent="556" name="date_format">
-      <Position>5</Position>
-      <StoredType>TEXT|0s</StoredType>
-    </column>
-    <foreign-key id="572" parent="556">
-      <ColNames>account_id</ColNames>
-      <RefColNames>id</RefColNames>
-      <RefTableName>accounts</RefTableName>
-    </foreign-key>
-    <key id="573" parent="556">
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-    </key>
-    <column id="574" parent="557" name="type">
+    <column id="556" parent="555" name="type">
       <Position>1</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="575" parent="557" name="name">
+    <column id="557" parent="555" name="name">
       <Position>2</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="576" parent="557" name="tbl_name">
+    <column id="558" parent="555" name="tbl_name">
       <Position>3</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="577" parent="557" name="rootpage">
+    <column id="559" parent="555" name="rootpage">
       <Position>4</Position>
       <StoredType>INT|0s</StoredType>
     </column>
-    <column id="578" parent="557" name="sql">
+    <column id="560" parent="555" name="sql">
       <Position>5</Position>
       <StoredType>TEXT|0s</StoredType>
     </column>
-    <column id="579" parent="558" name="name">
-      <Position>1</Position>
-    </column>
-    <column id="580" parent="558" name="seq">
-      <Position>2</Position>
-    </column>
-    <check id="581" parent="559">
-      <Predicate>type IN (&apos;INCOME&apos;, &apos;EXPENSE&apos;)</Predicate>
-    </check>
-    <column id="582" parent="559" name="id">
-      <AutoIncrement>1</AutoIncrement>
-      <Position>1</Position>
-      <StoredType>INTEGER|0s</StoredType>
-    </column>
-    <column id="583" parent="559" name="date">
-      <NotNull>1</NotNull>
-      <Position>2</Position>
-      <StoredType>TEXT|0s</StoredType>
-    </column>
-    <column id="584" parent="559" name="amount">
-      <NotNull>1</NotNull>
-      <Position>3</Position>
-      <StoredType>integer|0s</StoredType>
-    </column>
-    <column id="585" parent="559" name="description">
-      <NotNull>1</NotNull>
-      <Position>4</Position>
-      <StoredType>TEXT|0s</StoredType>
-    </column>
-    <column id="586" parent="559" name="type">
-      <NotNull>1</NotNull>
-      <Position>5</Position>
-      <StoredType>TEXT|0s</StoredType>
-    </column>
-    <key id="587" parent="559">
-      <ColNames>id</ColNames>
-      <Primary>1</Primary>
-    </key>
   </database-model>
 </dataSource>

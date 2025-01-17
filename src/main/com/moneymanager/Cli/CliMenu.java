@@ -1,6 +1,7 @@
 package com.moneymanager.Cli;
 
 import com.moneymanager.core.Account;
+import com.moneymanager.core.TransactionFactory;
 import com.moneymanager.service.AccountService;
 import com.moneymanager.service.TransactionService;
 
@@ -11,13 +12,14 @@ import java.util.Scanner;
 public class CliMenu {
 	private final Scanner scanner;
 	private final AccountService accountService;
+	private final TransactionService transactionService;
 	//private final TransactionService transactionService;
 	private boolean running = true;
 	
-	public CliMenu(AccountService accountService) {
+	public CliMenu(AccountService accountService, TransactionService transactionService) {
 		this.scanner = new Scanner(System.in);
 		this.accountService = accountService;
-		//this.transactionService = transactionService;
+		this.transactionService = transactionService;
 	}
 	
 	public void start() {
@@ -60,14 +62,44 @@ public class CliMenu {
 	private void addUserInputTransaction() {
 		Map<String, Account> mapOfAccounts = accountService.getAccountMap();
 		System.out.println("\n====== Adding Transaction ======");
-		for (Account account : mapOfAccounts.values()) {
-			System.out.printf("Account ID: %s, %s, $(%.2f)\n", account.getAccountId(), account.getAccountName(), account.getBalance());
-		}
-		System.out.println("Enter transaction ID: ");
-		String transactionId = scanner.nextLine().trim();
 		
-		if (!mapOfAccounts.containsKey(transactionId)) {
-			System.out.println("Invalid transaction ID. Please try again.");
+		// Loop until a valid account ID is entered or user cancels
+		while (true) {
+			System.out.println("Enter Account ID (or 'c' to cancel): ");
+			String accountId = scanner.nextLine().trim();
+			
+			if (accountId.equalsIgnoreCase("c")) {
+				System.out.println("Transaction cancelled.");
+				return; // Exit the method if the user cancels
+			}
+			
+			if (mapOfAccounts.containsKey(accountId)) {
+				// Valid transaction ID, proceed to get other transaction details
+				try {
+					System.out.println("Enter amount:");
+					double amount = Double.parseDouble(scanner.nextLine());
+					
+					System.out.println("Enter description:");
+					String description = scanner.nextLine();
+					
+					System.out.println("Enter date (MM-dd-yyyy):");
+					String date = scanner.nextLine();
+					
+					System.out.println("Enter type (DEBIT/CREDIT):");
+					String type = scanner.nextLine().toUpperCase();
+					
+					transactionService.addTransaction(amount, description, date, type, accountId);
+					System.out.println("Transaction added successfully!");
+					return; // Exit the method after adding the transaction
+					
+				} catch (NumberFormatException e) {
+					System.out.println("Invalid input for amount. Please enter a valid number.");
+				} catch (Exception e) {
+					System.out.println("Failed to add transaction: " + e.getMessage());
+				}
+			} else {
+				System.out.println("Invalid transaction ID. Please try again.");
+			}
 		}
 	}
 	
