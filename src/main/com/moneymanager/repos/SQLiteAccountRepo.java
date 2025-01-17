@@ -21,6 +21,45 @@ public class SQLiteAccountRepo implements AccountRepo {
     }
     
     @Override
+    public void updateAccountBalance(Account account) {
+        String sql = "UPDATE accounts SET accountBalance = ? WHERE accountId = ?";
+        
+        try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(sql)) {
+            stmt.setDouble(1, account.getBalance());
+            stmt.setInt(2, Integer.parseInt(account.getAccountId()));
+            
+            int rowsUpdated = stmt.executeUpdate();
+            
+            if (rowsUpdated == 0) {
+                throw new IllegalArgumentException("No account found with ID: " + account.getAccountId());
+            }
+        } catch (SQLException e) { throw new RuntimeException("Failed to update account balance", e); }
+    }
+    
+    @Override
+    public Account getAccountById(String accountId) {
+        String sql = "SELECT * FROM accounts WHERE accountId = ?";
+        try (Connection connection = dbConnection.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setInt(1, Integer.parseInt(accountId)); // Assuming accountId is an integer in the database
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Account(
+                        String.valueOf(rs.getInt("accountId")),
+                        rs.getString("accountName"),
+                        rs.getString("bankName"),
+                        rs.getString("accountType"),
+                        rs.getDouble("accountBalance")
+                );
+            } else {
+                throw new IllegalArgumentException("Account not found for ID: " + accountId);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to retrieve account", e);
+        }
+    }
+    
+    @Override
     public HashMap<String, Account> getAccountMap() {
         List<Account> accountList = getAllAccounts();
         HashMap<String, Account> accountMap = new HashMap<>();
@@ -40,7 +79,7 @@ public class SQLiteAccountRepo implements AccountRepo {
             
             while (rs.next()) {
                 Account account = new Account(
-                        rs.getString("accountId"),
+                        String.valueOf(rs.getInt("accountId")),
                         rs.getString("accountName"),
                         rs.getString("bankName"),
                         rs.getString("accountType"),

@@ -9,4 +9,6 @@ public interface AccountRepo {
     List<Account> getAllAccounts();
     void addAccount(Account account);
     Map<String, Account> getAccountMap();
+    Account getAccountById(String id);
+    void updateAccountBalance(Account account);
 }

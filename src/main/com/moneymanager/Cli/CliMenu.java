@@ -1,11 +1,9 @@
 package com.moneymanager.Cli;
 
 import com.moneymanager.core.Account;
-import com.moneymanager.core.TransactionFactory;
 import com.moneymanager.service.AccountService;
 import com.moneymanager.service.TransactionService;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -62,7 +60,9 @@ public class CliMenu {
 	private void addUserInputTransaction() {
 		Map<String, Account> mapOfAccounts = accountService.getAccountMap();
 		System.out.println("\n====== Adding Transaction ======");
-		
+		for (Account account : mapOfAccounts.values()) {
+			System.out.printf("\t%s. %s (%s)\n", account.getAccountId(), account.getAccountName(), account.getBalance());
+		}
 		// Loop until a valid account ID is entered or user cancels
 		while (true) {
 			System.out.println("Enter Account ID (or 'c' to cancel): ");
@@ -85,10 +85,10 @@ public class CliMenu {
 					System.out.println("Enter date (MM-dd-yyyy):");
 					String date = scanner.nextLine();
 					
-					System.out.println("Enter type (DEBIT/CREDIT):");
-					String type = scanner.nextLine().toUpperCase();
+					System.out.println("Enter type (Income/Expense):");
+					String type = scanner.nextLine().toLowerCase();
 					
-					transactionService.addTransaction(amount, description, date, type, accountId);
+					transactionService.createTransactionListFromUser(amount, description, date, type, accountId);
 					System.out.println("Transaction added successfully!");
 					return; // Exit the method after adding the transaction
 					

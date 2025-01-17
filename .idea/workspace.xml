@@ -4,12 +4,29 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="281394bb-b117-4dc4-a91c-545f31434827" name="Changes" comment="added get all transactions sql statements">
+    <list default="true" id="281394bb-b117-4dc4-a91c-545f31434827" name="Changes" comment="Merge remote-tracking branch 'origin/master'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml">
+      <change afterPath="$PROJECT_DIR$/src/test/TransactionServiceTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/Cli/CliMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/Cli/CliMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/core/Account.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/core/Account.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/core/First.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/core/First.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/database/DatabaseConnection.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/database/DatabaseConnection.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/database/DatabaseInitializer.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/database/DatabaseInitializer.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/repos/AccountRepo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/repos/AccountRepo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/repos/SQLiteAccountRepo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/repos/SQLiteAccountRepo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/repos/SQLiteTransactionRepo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/repos/SQLiteTransactionRepo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/service/AccountService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/service/AccountService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/service/TransactionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/service/TransactionService.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/Cli/CliMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/Cli/CliMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/core/Account.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/core/Account.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/core/First.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/core/First.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/database/DatabaseConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/database/DatabaseConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/database/DatabaseInitializer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/database/DatabaseInitializer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/repos/AccountRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/repos/AccountRepo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/repos/SQLiteAccountRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/repos/SQLiteAccountRepo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/repos/SQLiteTransactionRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/repos/SQLiteTransactionRepo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/service/AccountService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/service/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/service/TransactionService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -25,6 +42,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="PREVIOUS_COMMIT_AUTHORS">
+      <list>
+        <option value="citizen &lt;citizen@normalxpc.lan&gt;" />
+      </list>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="LogFilters">
@@ -45,33 +67,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.First.executor&quot;: &quot;Run&quot;,
-    &quot;Application.debug.executor&quot;: &quot;Run&quot;,
-    &quot;Downloaded.Files.Path&quot;: &quot;/home/citizen/javaLibs/mockito5.12.0&quot;,
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;true&quot;,
-    &quot;JUnit.AccountServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;true&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;true&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_directory_selection&quot;: &quot;/home/citizen/Documents/java/MoneyManager/src/main/com/moneymanager/core&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/citizen/Documents/java/MoneyManager&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.3275862&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.First.executor": "Run",
+    "Application.debug.executor": "Run",
+    "Downloaded.Files.Path": "/home/citizen/javaLibs/mockito5.12.0",
+    "Downloaded.Files.Path.Enabled": "true",
+    "JUnit.AccountServiceTest.executor": "Run",
+    "JUnit.TransactionServiceTest.executor": "Run",
+    "Repository.Attach.Annotations": "true",
+    "Repository.Attach.JavaDocs": "true",
+    "Repository.Attach.Sources": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_directory_selection": "/home/citizen/Documents/java/MoneyManager/src/main/com/moneymanager/core",
+    "last_opened_file_path": "/home/citizen/Documents/java/MoneyManager",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.3275862",
+    "settings.editor.selected.configurable": "preferences.editor"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;sqlite&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "sqlite"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/lib" />
@@ -114,15 +137,26 @@
     <configuration name="Test&amp;Run" type="CompoundRunConfigurationType">
       <toRun name="debug" type="Application" />
       <toRun name="AccountServiceTest" type="JUnit" />
-      <method v="2" />
-    </configuration>
-    <configuration name="Unnamed" type="CompoundRunConfigurationType">
+      <toRun name="TransactionServiceTest" type="JUnit" />
       <method v="2" />
     </configuration>
     <configuration name="AccountServiceTest" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
       <module name="MoneyManager" />
       <option name="PACKAGE_NAME" value="" />
       <option name="MAIN_CLASS_NAME" value="AccountServiceTest" />
+      <option name="METHOD_NAME" value="" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="TransactionServiceTest" type="JUnit" factoryName="JUnit">
+      <module name="MoneyManager" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="ALTERNATIVE_JRE_PATH" value="17" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="TransactionServiceTest" />
+      <option name="METHOD_NAME" value="" />
       <option name="TEST_OBJECT" value="class" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -131,8 +165,8 @@
     <list>
       <item itemvalue="Application.First" />
       <item itemvalue="Application.debug" />
-      <item itemvalue="Compound.Unnamed" />
       <item itemvalue="Compound.Test&amp;Run" />
+      <item itemvalue="JUnit.TransactionServiceTest" />
       <item itemvalue="JUnit.AccountServiceTest" />
     </list>
   </component>
@@ -173,7 +207,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736902729479</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Merge remote-tracking branch 'origin/master'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml">
+      <option name="closed" value="true" />
+      <created>1737128412882</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1737128412882</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -201,7 +243,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="added get all transactions sql statements" />
-    <option name="LAST_COMMIT_MESSAGE" value="added get all transactions sql statements" />
+    <MESSAGE value="Merge remote-tracking branch 'origin/master'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/master'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

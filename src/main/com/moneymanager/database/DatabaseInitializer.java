@@ -7,12 +7,13 @@ import java.sql.Statement;
 public class DatabaseInitializer {
 	private static final String CREATE_TRANSACTION_TABLE = """
 			CREATE TABLE IF NOT EXISTS transactions(
-				transactionID INTEGER PRIMARY KEY AUTOINCREMENT,
+				transactionId TEXT PRIMARY KEY,
 				transactionDate TEXT NOT NULL,
-				transactionAmount integer NOT NULL,
+				transactionAmount INTEGER NOT NULL,
 				transactionDescription TEXT NOT NULL,
-				transactionType TEXT CHECK(type IN ('INCOME', 'EXPENSE')) NOT NULL
-				FOREIGN KEY (account_id) REFERENCES accounts(id)
+				transactionType TEXT NOT NULL,
+				accountId INTEGER NOT NULL,
+				FOREIGN KEY (accountId) REFERENCES accounts(accountId)
 			);""";
 	
 	private static final String CREATE_ACCOUNTS_TABLE = """
@@ -28,11 +29,11 @@ public class DatabaseInitializer {
 	private static final String CREATE_CSV_STRATEGIES_TABLE = """
 			CREATE TABLE IF NOT EXISTS csv_strategies (
 				id INTEGER PRIMARY KEY AUTOINCREMENT,
-				account_id INTEGER NOT NULL,
-				header_pattern TEXT NOT NULL,
-				column_mappings TEXT NOT NULL,
-				date_format TEXT,
-				FOREIGN KEY (account_id) REFERENCES accounts(id)
+				accountId INTEGER NOT NULL,
+				headerPattern TEXT NOT NULL,
+				columnMappings TEXT NOT NULL,
+				dateFormat TEXT,
+				FOREIGN KEY (accountId) REFERENCES accounts(accountId) ON DELETE CASCADE
 			);""";
 	
 	public static void initializeDatabase(Connection dbConnection) throws SQLException {

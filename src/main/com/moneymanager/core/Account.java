@@ -26,6 +26,10 @@ public class Account {
 		this.accountId = accountId;
 		this.balance = balance;
 	}
+	
+	public void setBalance(double balance) {
+		this.balance = balance;
+	}
 
 	public String getAccountId() {
 		return accountId;

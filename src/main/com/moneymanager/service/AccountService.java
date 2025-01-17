@@ -17,6 +17,17 @@ public class AccountService {
         this.accountRepo = accountRepo;
     }
     
+    public void updateBalance(String accountId, double amount) {
+        Account account = accountRepo.getAccountById(accountId);
+        System.out.println(account.toString());
+        double oldBalance = account.getBalance();
+        
+        account.setBalance(oldBalance + amount);
+        System.out.println(account.toString());
+        
+        accountRepo.updateAccountBalance(account);
+    }
+    
     public Account createAccount(String accountName, String bankName, String accountType) {
         // Validate inputs
         if (accountName == null || accountName.trim().isEmpty()) {
@@ -30,8 +41,13 @@ public class AccountService {
         }
         
         Account newAccount = new Account(accountName, bankName, accountType);
+        
         accountRepo.addAccount(newAccount);
         return newAccount;
+    }
+    
+    public Account getAccountByAccountId(String accountId) {
+        return accountRepo.getAccountById(accountId);
     }
     
     public Map<String, Account> getAccountMap() {return accountRepo.getAccountMap();}

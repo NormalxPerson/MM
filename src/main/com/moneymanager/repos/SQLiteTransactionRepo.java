@@ -20,7 +20,7 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 	
 	@Override
 	public void addTransactions(List<Transaction> transactions) {
-		String sql = "INSERT INTO transactions (transactionId, transactionAmount, transactionDescription, transactionDate, transactionType, account_id) VALUES (?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO transactions (transactionId, transactionAmount, transactionDescription, transactionDate, transactionType, accountId) VALUES (?, ?, ?, ?, ?, ?)";
 		
 		try (Connection connection = dbConnection.getConnection();
 		     PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -42,7 +42,7 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 	
 	@Override
 	public int getTransactionCountByDate(String date) {
-		String sql = "SELECT COUNT(*) as count FROM transactions WHERE date = ?";
+		String sql = "SELECT COUNT(*) as count FROM transactions WHERE transactionDate = ?";
 		try (Connection connection = dbConnection.getConnection();
 		     PreparedStatement stmt = connection.prepareStatement(sql)) {
 			 stmt.setString(1, date);

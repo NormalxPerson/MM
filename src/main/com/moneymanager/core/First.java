@@ -18,7 +18,7 @@ public class First {
 	    AccountRepo accountRepo = new SQLiteAccountRepo();
         AccountService accountService = new AccountService(accountRepo);
 		TransactionRepo transactionRepo = new SQLiteTransactionRepo();
-		TransactionService transactionService = new TransactionService(transactionRepo);
+		TransactionService transactionService = new TransactionService(transactionRepo, accountService);
 	    CliMenu menu = new CliMenu(accountService, transactionService);
 		menu.start();
 	    // CsvParser csvParser = new CsvParser(csvFile);
