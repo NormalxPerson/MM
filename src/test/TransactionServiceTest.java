@@ -64,9 +64,10 @@ public class TransactionServiceTest {
 		
 		
 		System.out.println("balanceBefore: " + balanceBefore);
+		double balanceAfter = testAccount.getBalance();
 		//System.out.println("balanceAfter: " + balanceAfter);
 		assertEquals(0, balanceBefore);
-		//assertEquals(-500, balanceAfter);
+		assertEquals(-500, balanceAfter);
 	
 	
 	}
