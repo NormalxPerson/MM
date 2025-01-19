@@ -1,16 +1,16 @@
 package com.moneymanager.core;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 public class Transaction {
 	private final String id;
 	private final double amount;
 	private final String description;
-	private final String date;
+	private final LocalDate date;
 	private final String type;
 	private final String accountId;
 
-	Transaction(String id, double amount, String description, String date, String type, String accountId) {
+	Transaction(String id, double amount, String description, LocalDate date, String type, String accountId) {
 		this.id = id;
 		this.amount = amount;
 		this.description = description;
@@ -22,7 +22,7 @@ public class Transaction {
 	public String getId() { return id; }
 	public double getAmount() { return amount; }
 	public String getDescription() { return description; }
-	public String getDate() { return date; }
+	public LocalDate getDate() { return date; }
 	public String getType() { return type; }
 	public String getAccountId() { return accountId; }
 	

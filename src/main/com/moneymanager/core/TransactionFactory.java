@@ -7,8 +7,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class TransactionFactory {
-	private static final DateTimeFormatter transactionDateFormat = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-	private static final DateTimeFormatter transactionIdFormat = DateTimeFormatter.ofPattern("yyyyMMdd");
+	private static final DateTimeFormatter transactionDateFormat = DateTimeFormatter.ofPattern("M-d-yy");
+	private static final DateTimeFormatter transactionIdFormat = DateTimeFormatter.ofPattern("yyMd");
 	
 	
 	public static Transaction createTransaction(double amount, String description, String date, String type, String accountId, TransactionRepo transRepo) {
@@ -20,14 +20,15 @@ public class TransactionFactory {
 		adjustedAmount = Math.abs(amount) * -1; }
 	else { adjustedAmount = Math.abs(amount); }
 	
-	validateDate(date);
+	LocalDate convertedDate = validateDate(date);
 	String generatedId = generateTransactionId(date, transRepo);
 		
-		return new Transaction(generatedId, adjustedAmount, description, date, type, accountId);
+		return new Transaction(generatedId, adjustedAmount, description, convertedDate, type, accountId);
 	}
 	
 	public static Transaction createTransaction(String transId, double amount, String description, String date, String type, String accountId) {
-		return new Transaction(transId, amount, description, date, type, accountId);
+		LocalDate convertedDate = validateDate(date);
+		return new Transaction(transId, amount, description, convertedDate, type, accountId);
 	}
 	
 	
@@ -46,9 +47,10 @@ public class TransactionFactory {
 		}
 	}
 	
-	private static void validateDate(String date) {
+	private static LocalDate validateDate(String date) {
 		try {
-			LocalDate.parse(date, transactionDateFormat);
+			return LocalDate.parse(date, transactionDateFormat);
+			
 		} catch (Exception e) { throw new IllegalArgumentException("Invalid Transaction Date! Use format MM-dd-yyyy"); }
 	}
 	

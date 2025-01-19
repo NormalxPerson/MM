@@ -58,18 +58,32 @@ public class TransactionServiceTest {
 	}
 	
 	@Test
-	public void createTransactionFromUserInputTest() {
-		double balanceBefore = testAccount.getBalance();
-		transactionService.createTransactionListFromUser(500, "Bread", "10-25-2025", "expense", "1");
+	public void addTransactionShouldUpdateAccountBalance() {
+		double initialBalance = testAccount.getBalance();  // Get initial balance
+		// Add a transaction (using your transaction service)
+		transactionService.createTransactionListFromUser(500, "Test Transaction", "12-25-2024", "income", testAccount.getAccountId());  // Assuming account ID is 1
 		
+		// Retrieve the updated account from the database (using your account service)
+		Account updatedAccount = accountService.getAccountByAccountId(testAccount.getAccountId());  // Replace with actual account ID if needed
 		
-		System.out.println("balanceBefore: " + balanceBefore);
-		double balanceAfter = testAccount.getBalance();
-		//System.out.println("balanceAfter: " + balanceAfter);
-		assertEquals(0, balanceBefore);
-		assertEquals(-500, balanceAfter);
+		// Assert that the account balance has been updated correctly
+		assertEquals(initialBalance + 500, updatedAccount.getBalance(), 0.001);  // Use delta for double comparison
+	}
 	
-	
+	@Test
+	public void addMultipleTransactionsShouldUpdateAccountBalance() {
+		double initialBalance = testAccount.getBalance();  // Get initial balance
+		
+		// Add multiple transactions
+		transactionService.createTransactionListFromUser(500, "Test Transaction 1", "12-25-2024", "income", testAccount.getAccountId());
+		transactionService.createTransactionListFromUser(300, "Test Transaction 2", "12-26-2024", "income", testAccount.getAccountId());
+		transactionService.createTransactionListFromUser(100, "Test Transaction 3", "12-27-2024", "expense", testAccount.getAccountId());  // Expense should subtract from balance
+		
+		// Retrieve the updated account
+		Account updatedAccount = accountService.getAccountByAccountId(testAccount.getAccountId());
+		
+		// Assert the final balance
+		assertEquals(initialBalance + 500 + 300 - 100, updatedAccount.getBalance(), 0.001);  // Expected balance after all transactions
 	}
 	
 	

@@ -29,7 +29,7 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 				statement.setString(1, transaction.getId());
 				statement.setDouble(2, transaction.getAmount());
 				statement.setString(3, transaction.getDescription());
-				statement.setString(4, transaction.getDate()); // Assuming date is stored as TEXT in your database
+				statement.setString(4, String.valueOf(transaction.getDate())); // Assuming date is stored as TEXT in your database
 				statement.setString(5, transaction.getType());
 				statement.setString(6, transaction.getAccountId());
 				
