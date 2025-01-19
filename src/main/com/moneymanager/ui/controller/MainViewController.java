@@ -29,8 +29,9 @@ public class MainViewController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
-		populateTransactionTable();
+		if (transactionService != null) {
+			populateTransactionTable();
+		}
 	}
 	
 	
@@ -42,6 +43,7 @@ public class MainViewController implements Initializable {
 	
 	public void setTransactionService(TransactionService transactionService) {
 		this.transactionService = transactionService;
+		populateTransactionTable();
 	}
 	
 	public void setAccountService(AccountService accountService) {

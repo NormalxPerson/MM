@@ -4,21 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="281394bb-b117-4dc4-a91c-545f31434827" name="Changes" comment="Merge remote-tracking branch 'origin/master'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml">
+    <list default="true" id="281394bb-b117-4dc4-a91c-545f31434827" name="Changes" comment="started gui">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/core/Transaction.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/core/Transaction.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/core/TransactionFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/core/TransactionFactory.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/repos/SQLiteTransactionRepo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/repos/SQLiteTransactionRepo.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/service/TransactionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/service/TransactionService.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/core/MainFx.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/core/MainFx.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/core/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/core/Transaction.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/core/TransactionFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/core/TransactionFactory.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/repos/SQLiteTransactionRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/repos/SQLiteTransactionRepo.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/service/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/service/TransactionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MoneyManager.iml" beforeDir="false" afterPath="$PROJECT_DIR$/MoneyManager.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/MainView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/MainView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/core/MainFx.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/ui/controller/MainViewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/ui/controller/MainViewController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/ui/model/TransactionModel.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/ui/model/TransactionModel.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/resources/MainView.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/core/MainFx.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/MainFx.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/MainViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/MainViewController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/ui/model/TransactionModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/model/TransactionModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/ui/view/MainView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/MainView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/ui/view/TransactionTableView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/view/TransactionTableView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/ui/view/MainView.fxml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/MainView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/resources/MainView.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -71,6 +69,8 @@
     "Downloaded.Files.Path.Enabled": "true",
     "JUnit.AccountServiceTest.executor": "Run",
     "JUnit.TransactionServiceTest.executor": "Run",
+    "JavaMethodFindUsagesOptions.isOverridingMethods": "true",
+    "JavaMethodFindUsagesOptions.isSearchForTextOccurrences": "true",
     "Repository.Attach.Annotations": "true",
     "Repository.Attach.JavaDocs": "true",
     "Repository.Attach.Sources": "false",
@@ -80,12 +80,13 @@
     "git-widget-placeholder": "master",
     "kotlin-language-version-configured": "true",
     "last_directory_selection": "/home/citizen/Documents/java/MoneyManager/src/main/com/moneymanager/core",
-    "last_opened_file_path": "/home/citizen/Documents/java/MoneyManager/src/main/resources",
+    "last_opened_file_path": "/home/citizen/.bashrc",
     "list.type.of.created.stylesheet": "CSS",
-    "project.structure.last.edited": "SDKs",
+    "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.3275862",
-    "settings.editor.selected.configurable": "advanced.settings"
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "reference.settings.ide.settings.uml"
   },
   "keyToStringList": {
     "DatabaseDriversLRU": [
@@ -98,14 +99,17 @@
       <recent name="$PROJECT_DIR$/lib" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/com/moneymanager/ui/resources" />
+      <recent name="$PROJECT_DIR$/src/main/com/moneymanager/ui" />
       <recent name="$PROJECT_DIR$/src/main/resources" />
       <recent name="$PROJECT_DIR$/src/main" />
     </key>
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="com.moneymanager.ui.controller" />
+      <recent name="com.moneymanager.ui" />
       <recent name="com.moneymanager.Cli" />
       <recent name="com.moneymanager.database" />
       <recent name="com.moneymanager.core" />
-      <recent name="com.moneymanager.csv" />
     </key>
   </component>
   <component name="RunManager" selected="Application.MainFx">
@@ -125,12 +129,12 @@
     <configuration name="MainFx" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="17" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
-      <option name="MAIN_CLASS_NAME" value="com.moneymanager.core.MainFx" />
+      <option name="MAIN_CLASS_NAME" value="com.moneymanager.ui.controller.MainFx" />
       <module name="MoneyManager" />
       <option name="VM_PARAMETERS" value="--module-path $USER_HOME$/javaLibs/javafx-sdk-17.0.13/lib --add-modules javafx.controls,javafx.fxml -XX:+PerfDisableSharedMem" />
       <extension name="coverage">
         <pattern>
-          <option name="PATTERN" value="com.moneymanager.core.*" />
+          <option name="PATTERN" value="com.moneymanager.ui.controller.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -234,8 +238,27 @@
       <option name="project" value="LOCAL" />
       <updated>1737128412882</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="started gui">
+      <option name="closed" value="true" />
+      <created>1737313006818</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1737313006818</updated>
+    </task>
+    <task id="LOCAL-00005" summary="started gui">
+      <option name="closed" value="true" />
+      <created>1737313037370</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1737313037370</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
+  </component>
+  <component name="UnknownFeatures">
+    <option featureType="com.intellij.fileTypeFactory" implementationName=".bashrc" />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
     <option name="TAB_STATES">
@@ -263,7 +286,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="added get all transactions sql statements" />
     <MESSAGE value="Merge remote-tracking branch 'origin/master'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml" />
-    <option name="LAST_COMMIT_MESSAGE" value="Merge remote-tracking branch 'origin/master'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml" />
+    <MESSAGE value="started gui" />
+    <option name="LAST_COMMIT_MESSAGE" value="started gui" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
