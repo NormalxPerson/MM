@@ -5,7 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="281394bb-b117-4dc4-a91c-545f31434827" name="Changes" comment="Merge remote-tracking branch 'origin/master'&#10;&#10;# Conflicts:&#10;#&#9;.idea/workspace.xml">
+      <change afterPath="$PROJECT_DIR$/.idea/libraries/javafx_sdk_17_0.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/com/moneymanager/core/MainFx.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/MainViewController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/model/TransactionModel.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/view/MainView.fxml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/view/TransactionTableView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/resources/stylesheetfx.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/MoneyManager.iml" beforeDir="false" afterPath="$PROJECT_DIR$/MoneyManager.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/Cli/CliMenu.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/Cli/CliMenu.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/core/TransactionFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/core/TransactionFactory.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/Cli/CliMenu.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/Cli/CliMenu.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/core/TransactionFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/core/TransactionFactory.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/service/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/service/TransactionService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/test/TransactionServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/TransactionServiceTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -17,6 +30,9 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="Interface" />
+        <option value="JavaFXApplication" />
+        <option value="FxmlFile" />
+        <option value="CSS File" />
         <option value="Class" />
       </list>
     </option>
@@ -47,34 +63,37 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Application.First.executor&quot;: &quot;Run&quot;,
-    &quot;Application.debug.executor&quot;: &quot;Run&quot;,
-    &quot;Downloaded.Files.Path&quot;: &quot;/home/citizen/javaLibs/mockito5.12.0&quot;,
-    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;true&quot;,
-    &quot;JUnit.AccountServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;JUnit.TransactionServiceTest.executor&quot;: &quot;Run&quot;,
-    &quot;Repository.Attach.Annotations&quot;: &quot;true&quot;,
-    &quot;Repository.Attach.JavaDocs&quot;: &quot;true&quot;,
-    &quot;Repository.Attach.Sources&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_directory_selection&quot;: &quot;/home/citizen/Documents/java/MoneyManager/src/main/com/moneymanager/core&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/home/citizen/Documents/java/MoneyManager&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.3275862&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.editor&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Application.First.executor": "Run",
+    "Application.MainFx.executor": "Run",
+    "Application.debug.executor": "Run",
+    "Downloaded.Files.Path": "/home/citizen/Documents/java/javafx-sdk-21.0.5",
+    "Downloaded.Files.Path.Enabled": "true",
+    "JUnit.AccountServiceTest.executor": "Run",
+    "JUnit.TransactionServiceTest.executor": "Run",
+    "Repository.Attach.Annotations": "true",
+    "Repository.Attach.JavaDocs": "true",
+    "Repository.Attach.Sources": "false",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "kotlin-language-version-configured": "true",
+    "last_directory_selection": "/home/citizen/Documents/java/MoneyManager/src/main/com/moneymanager/core",
+    "last_opened_file_path": "/home/citizen/javaLibs/javafx-sdk-17.0.13/src.zip",
+    "list.type.of.created.stylesheet": "CSS",
+    "project.structure.last.edited": "SDKs",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.3275862",
+    "settings.editor.selected.configurable": "advanced.settings"
   },
-  &quot;keyToStringList&quot;: {
-    &quot;DatabaseDriversLRU&quot;: [
-      &quot;sqlite&quot;
+  "keyToStringList": {
+    "DatabaseDriversLRU": [
+      "sqlite"
     ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/lib" />
@@ -89,7 +108,7 @@
       <recent name="com.moneymanager.csv" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.TransactionServiceTest">
+  <component name="RunManager" selected="Application.debug">
     <configuration type="CompoundRunConfigurationType">
       <method v="2" />
     </configuration>
@@ -103,21 +122,35 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="MainFx" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="ALTERNATIVE_JRE_PATH" value="17" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
+      <option name="MAIN_CLASS_NAME" value="com.moneymanager.core.MainFx" />
+      <module name="MoneyManager" />
+      <option name="VM_PARAMETERS" value="--module-path $USER_HOME$/javaLibs/javafx-sdk-17.0.13/lib --add-modules javafx.controls,javafx.fxml -XX:+PerfDisableSharedMem" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.moneymanager.core.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <configuration name="debug" type="Application" factoryName="Application">
       <option name="ALTERNATIVE_JRE_PATH" value="17" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
       <output_file path="$PROJECT_DIR$/out/console.txt" />
       <option name="MAIN_CLASS_NAME" value="com.moneymanager.core.First" />
       <module name="MoneyManager" />
-      <option name="VM_PARAMETERS" value="-XX:+PerfDisableSharedMem" />
+      <option name="VM_PARAMETERS" value="--module-path $USER_HOME$/javaLibs/javafx-sdk-17.0.13/lib --add-modules javafx.controls,javafx.fxml -XX:+PerfDisableSharedMem" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
     <configuration name="Test&amp;Run" type="CompoundRunConfigurationType">
       <toRun name="debug" type="Application" />
-      <toRun name="AccountServiceTest" type="JUnit" />
-      <toRun name="TransactionServiceTest" type="JUnit" />
       <method v="2" />
     </configuration>
     <configuration name="AccountServiceTest" type="JUnit" factoryName="JUnit" nameIsGenerated="true">
@@ -145,10 +178,16 @@
     <list>
       <item itemvalue="Application.First" />
       <item itemvalue="Application.debug" />
+      <item itemvalue="Application.MainFx" />
       <item itemvalue="Compound.Test&amp;Run" />
       <item itemvalue="JUnit.TransactionServiceTest" />
       <item itemvalue="JUnit.AccountServiceTest" />
     </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.MainFx" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>

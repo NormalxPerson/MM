@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.moneymanager.ui.controller.MainViewController">
+   <right>
+      <TableView fx:id="transactionTableView" prefHeight="400.0" prefWidth="269.0" BorderPane.alignment="CENTER">
+        <columns>
+            <TableColumn fx:id="transactionId" prefWidth="75.0" text="Date" />
+          <TableColumn fx:id="transactionAmount" prefWidth="75.0" text="Amount" />
+          <TableColumn fx:id="transactionDescription" prefWidth="75.0" text="Description" />
+            <TableColumn fx:id="transactionType" prefWidth="75.0" text="Type" />
+            <TableColumn fx:id="accountName" prefWidth="75.0" text="Account" />
+        </columns>
+      </TableView>
+   </right>
+</BorderPane>

@@ -7,8 +7,8 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class TransactionFactory {
-	private static final DateTimeFormatter transactionDateFormat = DateTimeFormatter.ofPattern("MM-dd-yyyy");
-	private static final DateTimeFormatter transactionIdFormat = DateTimeFormatter.ofPattern("yyyyMMdd");
+	private static final DateTimeFormatter transactionDateFormat = DateTimeFormatter.ofPattern("M-d-yy");
+	private static final DateTimeFormatter transactionIdFormat = DateTimeFormatter.ofPattern("yyMd");
 	
 	
 	public static Transaction createTransaction(double amount, String description, String date, String type, String accountId, TransactionRepo transRepo) {

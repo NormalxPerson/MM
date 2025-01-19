@@ -47,7 +47,7 @@ public class CliMenu {
 				//case 3 -> viewAccountDetails();
 				case 4 -> addUserInputTransaction();
 				//case 5 -> importCsv();
-				//case 0 -> exit();
+				case 0 -> exit();
 				default -> System.out.println("Invalid option. Please try again.");
 			}
 		} catch (NumberFormatException e) {
@@ -129,5 +129,9 @@ public class CliMenu {
 		} catch (Exception e) {
 			System.out.println("Failed to add account: " + e.getMessage());
 		}
+	}
+	
+	private void exit() {
+		running = false;
 	}
 }
