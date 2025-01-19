@@ -20,11 +20,7 @@ public class MainFx extends Application {
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		// 1. Load the FXML file
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/home/citizen/Documents/java/MoneyManager/src/main/resources/MainView.fxml"));
-		System.out.println(loader.toString());
 		
-		MainViewController mainViewController = new MainViewController(); // Create controller instance
-		loader.setController(mainViewController); // Set the controller on the loader
 		
 		AccountRepo accountRepo = new SQLiteAccountRepo();
 		AccountService accountService = new AccountService(accountRepo);
@@ -33,7 +29,6 @@ public class MainFx extends Application {
 		
 		mainViewController.setTransactionService(transactionService);
 		mainViewController.setAccountService(accountService);
-		Parent root = loader.load();
 		// 2. Create the Scene
 		Scene scene = new Scene(root);
 		
@@ -44,7 +39,6 @@ public class MainFx extends Application {
 	}
 	
 	public static void main(String[] args) {
-
 		launch(args);
 	}
 }
