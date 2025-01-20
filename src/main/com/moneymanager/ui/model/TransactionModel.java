@@ -1,21 +1,18 @@
 package com.moneymanager.ui.model;
 
 import com.moneymanager.core.Transaction;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 
 import java.time.LocalDate;
 
 public class TransactionModel {
 	private StringProperty id = new SimpleStringProperty();
-	private DoubleProperty amount;
-	private StringProperty description;
-	private ObjectProperty<LocalDate> date;
-	private StringProperty type;
-	private StringProperty accountId;
-	private StringProperty accountName;
+	private DoubleProperty amount = new SimpleDoubleProperty();
+	private StringProperty description = new SimpleStringProperty();
+	private ObjectProperty<LocalDate> date = new SimpleObjectProperty<>();
+	private StringProperty type = new SimpleStringProperty();
+	private StringProperty accountId = new SimpleStringProperty();
+	private StringProperty accountName = new SimpleStringProperty();
 	
 	//pass a transaction and build model. Also keep original. Maybe create in TransactionService
 	public TransactionModel(Transaction transaction, String accountName) {
@@ -28,16 +25,16 @@ public class TransactionModel {
 		this.accountName.set(accountName);
 	}
 	
-	public StringProperty getId() {
-		return id;
+	public String getId() {
+		return id.get();
 	}
 	
-	public StringProperty getAccountName() {
-		return accountName;
+	public String getAccountName() {
+		return accountName.getName();
 	}
 	
-	public DoubleProperty getAmount() {
-		return amount;
+	public Double getAmount() {
+		return amount.get();
 	}
 	
 	public void setAmount(double amount) {
@@ -45,16 +42,16 @@ public class TransactionModel {
 		//update db
 	}
 	
-	public StringProperty getDescription() {
-		return description;
+	public String getDescription() {
+		return description.get();
 	}
 	
 	public void setDescription(String description) {
 		this.description.set(description);
 	}
 	
-	public ObjectProperty<LocalDate> getDate() {
-		return date;
+	public LocalDate getDate() {
+		return date.get();
 	}
 	
 	public void setDate(String date) {
@@ -69,8 +66,8 @@ public class TransactionModel {
 		this.type.set(type);
 	}
 	
-	public StringProperty getAccountId() {
-		return accountId;
+	public String getAccountId() {
+		return accountId.get();
 	}
 	
 	public void setAccountId(String accountId) {
