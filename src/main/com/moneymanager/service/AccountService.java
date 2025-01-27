@@ -4,17 +4,37 @@ import com.moneymanager.core.Account;
 import com.moneymanager.database.DatabaseConnection;
 import com.moneymanager.repos.AccountRepo;
 import com.moneymanager.repos.SQLiteAccountRepo;
+import com.moneymanager.ui.view.AccountTableView;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.util.*;
 
 // TODO: Create an AccountServiceInterface
 public class AccountService {
     private AccountRepo accountRepo;
-
+    private ObservableList<AccountTableView.AccountModel> accountModelObservableList;
 
     public AccountService(AccountRepo accountRepo) {
         
         this.accountRepo = accountRepo;
+        this.accountModelObservableList = FXCollections.observableArrayList();
+        loadAccountModelsObservableList();
+    }
+    
+    public ObservableList<AccountTableView.AccountModel> getAccountModelObservableList() {
+        loadAccountModelsObservableList();
+        return accountModelObservableList;
+    }
+    
+    private void loadAccountModelsObservableList() {
+        List<Account> accounts = accountRepo.getAllAccounts();
+        accountModelObservableList.clear();
+        for (Account account : accounts) {
+            AccountTableView.AccountModel accountModel = new AccountTableView.AccountModel(account.getAccountName(), account.getBankName(), account.getAccountType(), account.getBalance(), account.getAccountId());
+            accountModelObservableList.add(accountModel);
+        }
+        
     }
     
     public void updateBalance(String accountId, double amount) {

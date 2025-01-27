@@ -28,8 +28,9 @@ public class MainFx extends Application {
 		
 		mainViewController.setTransactionService(transactionService);
 		mainViewController.setAccountService(accountService);
+		mainViewController.postInitialize();
 		// 2. Create the Scene
-		Scene scene = new Scene(root);
+		Scene scene = new Scene(root, 1000, 800);
 		
 		// 3. Set up the Stage
 		primaryStage.setTitle("Money Manager");

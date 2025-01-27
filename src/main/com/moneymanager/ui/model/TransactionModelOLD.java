@@ -5,7 +5,7 @@ import javafx.beans.property.*;
 
 import java.time.LocalDate;
 
-public class TransactionModel {
+public class TransactionModelOLD {
 	private StringProperty id = new SimpleStringProperty();
 	private DoubleProperty amount = new SimpleDoubleProperty();
 	private StringProperty description = new SimpleStringProperty();
@@ -15,7 +15,7 @@ public class TransactionModel {
 	private StringProperty accountName = new SimpleStringProperty();
 	
 	//pass a transaction and build model. Also keep original. Maybe create in TransactionService
-	public TransactionModel(Transaction transaction, String accountName) {
+	public TransactionModelOLD(Transaction transaction, String accountName) {
 		this.id.set(transaction.getId());
 		this.amount.set(transaction.getAmount());
 		this.description.set(transaction.getDescription());

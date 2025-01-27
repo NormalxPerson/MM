@@ -3,15 +3,13 @@ package com.moneymanager.service;
 import com.moneymanager.core.Account;
 import com.moneymanager.core.Transaction;
 import com.moneymanager.core.TransactionFactory;
-import com.moneymanager.repos.AccountRepo;
 import com.moneymanager.repos.TransactionRepo;
-import com.moneymanager.ui.model.TransactionModel;
-import javafx.beans.Observable;
+import com.moneymanager.ui.model.TransactionModelOLD;
+import com.moneymanager.ui.view.TransactionTableView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +17,7 @@ import java.util.Map;
 public class TransactionService {
 	private final TransactionRepo transRepo;
 	private final AccountService accountService;
-	private final ObservableList<TransactionModel> transactionModels;
+	private final ObservableList<TransactionTableView.TransactionModel> transactionModels;
 	
 	public TransactionService(TransactionRepo transRepo, AccountService accountService) {
 		this.transRepo = transRepo;
@@ -29,15 +27,17 @@ public class TransactionService {
 	}
 	
 	private void loadObservableList() {
+		transactionModels.clear();
 		List<Transaction> transactions = transRepo.getAllTransactions();
 		Map<String, Account> hashMapOfAccounts = accountService.getAccountMap();
 		for (Transaction transaction : transactions) {
-			transactionModels.add(new TransactionModel(transaction, hashMapOfAccounts.get(transaction.getAccountId()).getAccountName()));
+			transactionModels.add(new TransactionTableView.TransactionModel(transaction.getId(), transaction.getDate(), transaction.getAmount(), transaction.getDescription(), transaction.getType(), transaction.getAccountId(), hashMapOfAccounts.get(transaction.getAccountId()).getAccountName()));
 		}
 	}
 	
-	public ObservableList<TransactionModel> getUnmodifiableTransactionModelsList() {
-		return FXCollections.unmodifiableObservableList(transactionModels);
+	public ObservableList<TransactionTableView.TransactionModel> getObservableTransactionModelsList() {
+		loadObservableList();
+		return transactionModels;
 	}
 	
 	public void createTransactionListFromUser(double amount, String description, String date, String type, String accountId) {

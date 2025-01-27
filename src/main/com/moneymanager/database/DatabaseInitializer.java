@@ -28,7 +28,7 @@ public class DatabaseInitializer {
 	
 	private static final String CREATE_CSV_STRATEGIES_TABLE = """
 			CREATE TABLE IF NOT EXISTS csv_strategies (
-				id INTEGER PRIMARY KEY AUTOINCREMENT,
+				transactionId INTEGER PRIMARY KEY AUTOINCREMENT,
 				accountId INTEGER NOT NULL,
 				headerPattern TEXT NOT NULL,
 				columnMappings TEXT NOT NULL,
