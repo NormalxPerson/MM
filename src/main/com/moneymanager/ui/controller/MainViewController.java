@@ -2,10 +2,8 @@ package com.moneymanager.ui.controller;
 
 import com.moneymanager.service.AccountService;
 import com.moneymanager.service.TransactionService;
-import com.moneymanager.ui.model.TransactionModelOLD;
 import com.moneymanager.ui.view.AccountTableView;
 import com.moneymanager.ui.view.TransactionTableView;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,11 +17,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
-import javax.swing.text.TabExpander;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 import java.util.ResourceBundle;
 
 public class MainViewController implements Initializable {
@@ -159,7 +155,7 @@ public class MainViewController implements Initializable {
 		
 		try {
 			accountService.createAccount(accountName, bankName, accountType);
-			populateAccountTable(); // Refresh the table
+//			populateAccountTable(); // Refresh the table
 			accountNameField.clear();
 			bankNameField.clear();
 			accountTypeComboBox.getSelectionModel().clearSelection();
@@ -202,9 +198,10 @@ public class MainViewController implements Initializable {
 			
 			try {
 				double amount = Double.parseDouble(amountText);
-				transactionService.createTransactionListFromUser(amount, description, strDate, transactionType, accountId);
-				populateTransactionTable();
-				populateAccountTable();// Refresh the tables
+				System.out.println("handleAddTransaction(): strDate = " + strDate);
+				transactionService.createTransactionFromUser(amount, description, strDate, transactionType, accountId);
+//				populateTransactionTable();
+//				populateAccountTable();// Refresh the tables
 				transactionDescriptionField.clear();
 				transactionAmountField.clear();
 				transactionTypeComboBox.getSelectionModel().select(1);

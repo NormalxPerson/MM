@@ -65,13 +65,7 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 			 stmt.setString(1, accountId);
 			 try (ResultSet rs = stmt.executeQuery()) {
 				 while (rs.next()) {
-					 Transaction transaction = TransactionFactory.createTransaction(
-							 rs.getString("transactionID"),
-							 rs.getDouble("transactionAmount"),
-							 rs.getString("transactionDescription"),
-							 rs.getString("transactionDate"),
-							 rs.getString("transactionType"),
-							 rs.getString("accountId"));
+					 Transaction transaction = TransactionFactory.createTransaction(rs);
 					 
 					 transactions.add(transaction);
 				 }
@@ -93,13 +87,7 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 		     ResultSet rs = stmt.executeQuery()) {
 			
 			while (rs.next()) {
-				Transaction transaction = TransactionFactory.createTransaction(
-						rs.getString("transactionID"),
-						rs.getDouble("transactionAmount"),
-						rs.getString("transactionDescription"),
-						rs.getString("transactionDate"),
-						rs.getString("transactionType"),
-						rs.getString("accountId"));
+				Transaction transaction = TransactionFactory.createTransaction(rs);
 				
 				transactions.add(transaction);
 			}
@@ -108,5 +96,21 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 			System.out.println(e.getMessage());
 		}
 		return transactions;
+	}
+	
+	@Override
+	public String getLastTransactionIdForDate(String date) {
+		String sql = "SELECT transactionId FROM transactions WHERE transactionDate = ? ORDER BY transactionId DESC LIMIT 1";
+		try (Connection connection = dbConnection.getConnection();
+			PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, date);
+			try (ResultSet rs = stmt.executeQuery()) {
+				if (rs.next()) {
+					return rs.getString("transactionId");
+				}
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException("TransactionRepo.getLastTransactionIdForDateFailed to fetch last transaction ID for date: " + date, e);}
+		return null;
 	}
 }

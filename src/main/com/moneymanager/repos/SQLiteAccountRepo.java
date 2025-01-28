@@ -25,7 +25,8 @@ public class SQLiteAccountRepo implements AccountRepo {
         String sql = "UPDATE accounts SET accountBalance = ? WHERE accountId = ?";
         
         try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(sql)) {
-            stmt.setDouble(1, account.getBalance());
+            int balanceInCents = (int) Math.round(account.getBalance() * 100);
+            stmt.setInt(1, balanceInCents);
             stmt.setInt(2, Integer.parseInt(account.getAccountId()));
             
             int rowsUpdated = stmt.executeUpdate();

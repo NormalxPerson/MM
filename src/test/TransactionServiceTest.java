@@ -6,8 +6,6 @@ import com.moneymanager.service.AccountService;
 import com.moneymanager.service.TransactionService;
 import org.junit.jupiter.api.*;
 
-import java.sql.Connection;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TransactionServiceTest {
@@ -61,7 +59,7 @@ public class TransactionServiceTest {
 	public void addTransactionShouldUpdateAccountBalance() {
 		double initialBalance = testAccount.getBalance();  // Get initial balance
 		// Add a transaction (using your transaction service)
-		transactionService.createTransactionListFromUser(500, "Test Transaction", "12-25-2024", "income", testAccount.getAccountId());  // Assuming account ID is 1
+		transactionService.createTransactionFromUser(500, "Test Transaction", "12-25-2024", "income", testAccount.getAccountId());  // Assuming account ID is 1
 		
 		// Retrieve the updated account from the database (using your account service)
 		Account updatedAccount = accountService.getAccountByAccountId(testAccount.getAccountId());  // Replace with actual account ID if needed
@@ -75,9 +73,9 @@ public class TransactionServiceTest {
 		double initialBalance = testAccount.getBalance();  // Get initial balance
 		
 		// Add multiple transactions
-		transactionService.createTransactionListFromUser(500, "Test Transaction 1", "12-25-2024", "income", testAccount.getAccountId());
-		transactionService.createTransactionListFromUser(300, "Test Transaction 2", "12-26-2024", "income", testAccount.getAccountId());
-		transactionService.createTransactionListFromUser(100, "Test Transaction 3", "12-27-2024", "expense", testAccount.getAccountId());  // Expense should subtract from balance
+		transactionService.createTransactionFromUser(500, "Test Transaction 1", "12-25-2024", "income", testAccount.getAccountId());
+		transactionService.createTransactionFromUser(300, "Test Transaction 2", "12-26-2024", "income", testAccount.getAccountId());
+		transactionService.createTransactionFromUser(100, "Test Transaction 3", "12-27-2024", "expense", testAccount.getAccountId());  // Expense should subtract from balance
 		
 		// Retrieve the updated account
 		Account updatedAccount = accountService.getAccountByAccountId(testAccount.getAccountId());

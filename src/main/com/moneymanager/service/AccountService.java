@@ -1,9 +1,7 @@
 package com.moneymanager.service;
 
 import com.moneymanager.core.Account;
-import com.moneymanager.database.DatabaseConnection;
 import com.moneymanager.repos.AccountRepo;
-import com.moneymanager.repos.SQLiteAccountRepo;
 import com.moneymanager.ui.view.AccountTableView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,11 +11,13 @@ import java.util.*;
 // TODO: Create an AccountServiceInterface
 public class AccountService {
     private AccountRepo accountRepo;
+    private HashMap<String, Account> theSourceHashMapOfAccounts;
     private ObservableList<AccountTableView.AccountModel> accountModelObservableList;
 
     public AccountService(AccountRepo accountRepo) {
         
         this.accountRepo = accountRepo;
+        updateTheSourceAccountMap();
         this.accountModelObservableList = FXCollections.observableArrayList();
         loadAccountModelsObservableList();
     }
@@ -28,9 +28,9 @@ public class AccountService {
     }
     
     private void loadAccountModelsObservableList() {
-        List<Account> accounts = accountRepo.getAllAccounts();
+        updateTheSourceAccountMap();
         accountModelObservableList.clear();
-        for (Account account : accounts) {
+        for (Account account : theSourceHashMapOfAccounts.values()) {
             AccountTableView.AccountModel accountModel = new AccountTableView.AccountModel(account.getAccountName(), account.getBankName(), account.getAccountType(), account.getBalance(), account.getAccountId());
             accountModelObservableList.add(accountModel);
         }
@@ -38,14 +38,14 @@ public class AccountService {
     }
     
     public void updateBalance(String accountId, double amount) {
-        Account account = accountRepo.getAccountById(accountId);
-        System.out.println(account.toString());
-        double oldBalance = account.getBalance();
+        Account account = theSourceHashMapOfAccounts.get(accountId);
+        System.out.println("Updating account balance: AccountService.updateBalance: Old Balance: " + account.getBalance() + ", Transaction Amount: " + amount);
+        account.setBalance(account.getBalance() + amount);
+        System.out.println("Updated account balance: AccountService.updateBalance: New Balance: " + account.getBalance());
         
-        account.setBalance(oldBalance + amount);
-        System.out.println(account.toString());
-        
+        accountModelObservableList.get(Integer.parseInt(accountId)-1).setAccountBalance(account.getBalance());
         accountRepo.updateAccountBalance(account);
+        
     }
     
     public Account createAccount(String accountName, String bankName, String accountType) {
@@ -67,10 +67,16 @@ public class AccountService {
     }
     
     public Account getAccountByAccountId(String accountId) {
-        return accountRepo.getAccountById(accountId);
+        return theSourceHashMapOfAccounts.get(accountId);
     }
     
-    public Map<String, Account> getAccountMap() {return accountRepo.getAccountMap();}
+    public String getAccountNameByAccountId(String accountId) {
+        return theSourceHashMapOfAccounts.get(accountId).getAccountName();
+    }
+    
+    public HashMap<String, Account> getAccountMap() {return theSourceHashMapOfAccounts;}
+    
+    private void updateTheSourceAccountMap() {this.theSourceHashMapOfAccounts = (HashMap<String, Account>) accountRepo.getAccountMap();}
     
     public List<Account> getAccountList() {
 	    return new ArrayList<>(accountRepo.getAllAccounts());

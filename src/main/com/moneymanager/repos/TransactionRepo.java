@@ -8,4 +8,5 @@ public interface TransactionRepo {
 	List<Transaction> getTransactionsByAccountId(String accountId);
 	int getTransactionCountByDate(String date);
 	void addTransactions(List<Transaction> transactions);
+	String getLastTransactionIdForDate(String date);
 }

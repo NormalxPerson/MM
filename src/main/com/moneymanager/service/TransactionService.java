@@ -4,17 +4,17 @@ import com.moneymanager.core.Account;
 import com.moneymanager.core.Transaction;
 import com.moneymanager.core.TransactionFactory;
 import com.moneymanager.repos.TransactionRepo;
-import com.moneymanager.ui.model.TransactionModelOLD;
 import com.moneymanager.ui.view.TransactionTableView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 // TODO: Create a TransactionServiceInterface
-public class TransactionService {
+public class TransactionService implements TransactionServiceInterface {
 	private final TransactionRepo transRepo;
 	private final AccountService accountService;
 	private final ObservableList<TransactionTableView.TransactionModel> transactionModels;
@@ -23,30 +23,29 @@ public class TransactionService {
 		this.transRepo = transRepo;
 		this.accountService = accountService;
 		this.transactionModels = FXCollections.observableArrayList();
-		loadObservableList();
 	}
 	
-	private void loadObservableList() {
-		transactionModels.clear();
-		List<Transaction> transactions = transRepo.getAllTransactions();
-		Map<String, Account> hashMapOfAccounts = accountService.getAccountMap();
-		for (Transaction transaction : transactions) {
-			transactionModels.add(new TransactionTableView.TransactionModel(transaction.getId(), transaction.getDate(), transaction.getAmount(), transaction.getDescription(), transaction.getType(), transaction.getAccountId(), hashMapOfAccounts.get(transaction.getAccountId()).getAccountName()));
-		}
-	}
-	
+	@Override
 	public ObservableList<TransactionTableView.TransactionModel> getObservableTransactionModelsList() {
 		loadObservableList();
 		return transactionModels;
 	}
 	
-	public void createTransactionListFromUser(double amount, String description, String date, String type, String accountId) {
-		List<Transaction> transactionList = new ArrayList<>();
+	@Override
+	public void createTransactionFromUser(double amount, String description, String date, String type, String accountId) {
 		Transaction transaction = TransactionFactory.createTransaction(amount, description, date, type, accountId, transRepo);
-		System.out.println(transaction.toString());
-		transactionList.add(transaction);
-		transRepo.addTransactions(transactionList);
+		System.out.println("TransactionService.createTransactionFromUser: " + transaction.toString());
+
+		saveTransaction(transaction);
 		updateAccountBalance(accountId, transaction.getAmount());
+		addNewTransactionModelToTable(transaction);
+		
+		
+	}
+	
+	private void saveTransaction(Transaction transaction) {
+		transRepo.addTransactions(Collections.singletonList(transaction));
+		transactionModels.add(createNewTransactionModel(transaction));
 	}
 	
 	private void updateAccountBalance(String accountId, double amount) {
@@ -54,8 +53,25 @@ public class TransactionService {
 		
 	}
 	
-	public List<Transaction> getListOfAllTransactions() {
+	private void addNewTransactionModelToTable(Transaction transaction) {
+		transactionModels.add(createNewTransactionModel(transaction));
+	}
+	
+	@Override
+	public List<Transaction> getListAllTransactions() {
 		return transRepo.getAllTransactions();
+	}
+	
+	private void loadObservableList() {
+		transactionModels.clear();
+		List<Transaction> transactions = transRepo.getAllTransactions();
+		for (Transaction transaction : transactions) {
+			transactionModels.add(createNewTransactionModel(transaction));
+		}
+	}
+	
+	private TransactionTableView.TransactionModel createNewTransactionModel(Transaction transaction) {
+		return new TransactionTableView.TransactionModel(transaction.getId(), transaction.getDate(), transaction.getAmount(), transaction.getDescription(), transaction.getType(), transaction.getAccountId(), accountService.getAccountNameByAccountId(transaction.getAccountId()));
 	}
 	
 	

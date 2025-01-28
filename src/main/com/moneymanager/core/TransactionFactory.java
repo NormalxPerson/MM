@@ -1,79 +1,105 @@
 package com.moneymanager.core;
-
+import com.moneymanager.exceptions.ValidationException;
 import com.moneymanager.repos.TransactionRepo;
-import com.moneymanager.service.TransactionService;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 public class TransactionFactory {
 	private static final DateTimeFormatter transactionDateFormat = DateTimeFormatter.ofPattern("M-d-yy");
-	private static final DateTimeFormatter transactionIdFormat = DateTimeFormatter.ofPattern("yyMd");
+	private static final DateTimeFormatter transactionIdFormat = DateTimeFormatter.ofPattern("M-d-yyyy");
 	private static final DateTimeFormatter inputDateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	
 	public static Transaction createTransaction(double amount, String description, String date, String type, String accountId, TransactionRepo transRepo) {
-		System.out.printf("Transaction Factory: amount=%s, description=%s, date=%s, type=%s, accountId=%s\n", amount, description, date, type, accountId);
+		System.out.printf("Transaction Factory: before Validation: amount=%s, description=%s, strdate: %s, date=%s, type=%s, accountId=%s\n", amount, description,date.getClass(), date, type, accountId);
 		
 		LocalDate convertedDate = validateDate(date);
-		
-		validateType(type);
-		validateAmount(amount, type);
-		double adjustedAmount;
-		if (type.equals("EXPENSE")) {
-			adjustedAmount = Math.abs(amount) * -1;
-		} else {
-			adjustedAmount = Math.abs(amount);
-		}
-		
-		String generatedId = generateTransactionId(convertedDate, transRepo);
-		
-		return new Transaction(generatedId, adjustedAmount, description, convertedDate, type, accountId);
+		String formattedType = validateType(type);
+		double adjustedAmount = validateAndAdjustAmount(amount, formattedType);
+		String generatedId = generateTransactionId(convertedDate, accountId, transRepo);
+	
+		return new Transaction(generatedId, adjustedAmount, description, convertedDate, formattedType, accountId);
 	}
 	
-	public static Transaction createTransaction(String transId, double amount, String description, String date, String type, String accountID) {
-		System.out.printf("Transaction Factory: transId=%s amount=%s, description=%s, date=%s, type=%s, accountId=%s\n",transId, amount, description, date, type, accountId);
+	public static Transaction createTransaction(ResultSet rs) throws SQLException {
+		System.out.printf("Transaction Factory: ResultSet: %s\n",rs.toString());
 		
-		LocalDate convertedDate = validateDate(date);
-		return new Transaction(transId, amount, description, convertedDate, type, accountId);
+		String id = rs.getString("transactionId");
+		double amount = rs.getInt("transactionAmount") / 100.0;
+		String description = rs.getString("transactionDescription");
+		LocalDate date = rs.getDate("transactionDate").toLocalDate();
+		String type = rs.getString("transactionType");
+		String accountId = rs.getString("accountId");
+		
+		return new Transaction(id, amount, description, date, type, accountId);
+		
 	}
 	
 	
-	private static void validateType(String type) {
+	private static String validateType(String type) {
 		
-		if (type == null || (!type.equalsIgnoreCase("income") && !type.equalsIgnoreCase("expense"))) {
-			throw new IllegalArgumentException("Transaction type must be Income/Expense");
+		if (type == null || (!type.equalsIgnoreCase("INCOME") && !type.equalsIgnoreCase("EXPENSE"))) {
+			throw new ValidationException.InvalidTransactionTypeException(type, "TransactionFactory.validateType");
 		}
-	}
-	
-	private static void validateAmount(double amount, String type) {
-		if (amount == 0) {
-			throw new IllegalArgumentException("Amount must be greater than zero");
-		}
-		if (amount < 0 && type.equals("income")) {
-			throw new IllegalArgumentException("Income Transaction must be greater than zero");
-		}
+		return type.toUpperCase();
 	}
 	
 	private static LocalDate validateDate(String date) {
-		try {
-			return LocalDate.parse(date, inputDateFormat);
-			
-		} catch (Exception e) {
+		DateTimeFormatter[] formatters = {inputDateFormat, transactionDateFormat, transactionIdFormat};
+		
+		for (DateTimeFormatter formatter : formatters) {
 			try {
-				return LocalDate.parse(date, transactionDateFormat);
-			} catch (Exception e2) {
-				System.out.println("Error parsing transaction date: " + date);
-			throw new IllegalArgumentException("Invalid Transaction Date! Use format MM-dd-yy");
+				return LocalDate.parse(date, formatter);
+			} catch (Exception ignored) {
+				// Continue to the next formatter
 			}
+		}
+		throw new ValidationException.InvalidTransactionDateException(date, "TransactionFactory.validateDate");
+	}
+	
+	private static double validateAndAdjustAmount(double amount, String type) {
+		if (type.equals("INCOME")) {
+			if (amount < 0) {
+				throw new ValidationException.InvalidTransactionAmountException(amount, "TransactionFactory.validateAndAdjustAmount: Income cannot have a negative amount");
+			}
+			return amount; // Positive amount for INCOME
+		} else if (type.equals("EXPENSE")) {
+			if (amount > 0) {
+				return -Math.abs(amount); // Convert positive to negative for EXPENSE
+			}
+			return amount; // Already negative for EXPENSE
+		} else {
+			throw new ValidationException.InvalidTransactionTypeException(type, "TransactionFactory.validateAndAdjustAmount");
 		}
 	}
 	
-	private static String generateTransactionId(LocalDate date, TransactionRepo transRepo) {
-		String dateId = transactionIdFormat.format(date);
+	private static String generateTransactionId(LocalDate date, String accountId, TransactionRepo transRepo) {
+		// Format the date as "m-d-yyyy"
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M-d-yyyy");
+		String formattedDate = date.format(formatter);
 		
-		return dateId + "-" + transRepo.getTransactionCountByDate(String.valueOf(date));
-	
+		// Get the last transaction ID for the date
+		String lastTransactionId = transRepo.getLastTransactionIdForDate(formattedDate);
+		
+		int nextCount = 1; // Default to 1 if no previous transactions exist
+		if (lastTransactionId != null) {
+			// Extract the last count from the transaction ID
+			String[] parts = lastTransactionId.split("-");
+			if (parts.length > 2) {
+				try {
+					nextCount = Integer.parseInt(parts[2]) + 1;
+				} catch (NumberFormatException e) {
+					throw new RuntimeException("Failed to parse transaction count from ID: " + lastTransactionId, e);
+				}
+			}
+		}
+		
+		// Generate the new transaction ID
+		return String.format("ACC%s-%s-%d", accountId, formattedDate, nextCount);
 	}
+
 	
 	
 }
