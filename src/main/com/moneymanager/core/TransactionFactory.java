@@ -13,6 +13,9 @@ public class TransactionFactory {
 	
 	public static Transaction createTransaction(double amount, String description, String date, String type, String accountId, TransactionRepo transRepo) {
 		System.out.printf("Transaction Factory: amount=%s, description=%s, date=%s, type=%s, accountId=%s\n", amount, description, date, type, accountId);
+		
+		LocalDate convertedDate = validateDate(date);
+		
 		validateType(type);
 		validateAmount(amount, type);
 		double adjustedAmount;
@@ -22,13 +25,12 @@ public class TransactionFactory {
 			adjustedAmount = Math.abs(amount);
 		}
 		
-		LocalDate convertedDate = validateDate(date);
 		String generatedId = generateTransactionId(convertedDate, transRepo);
 		
 		return new Transaction(generatedId, adjustedAmount, description, convertedDate, type, accountId);
 	}
 	
-	public static Transaction createTransaction(String transId, double amount, String description, String date, String type, String accountId) {
+	public static Transaction createTransaction(String transId, double amount, String description, String date, String type, String accountID) {
 		System.out.printf("Transaction Factory: transId=%s amount=%s, description=%s, date=%s, type=%s, accountId=%s\n",transId, amount, description, date, type, accountId);
 		
 		LocalDate convertedDate = validateDate(date);
