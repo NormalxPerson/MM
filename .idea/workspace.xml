@@ -5,22 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="281394bb-b117-4dc4-a91c-545f31434827" name="Changes" comment="The GUI and DB are now connected.">
-      <change afterPath="$PROJECT_DIR$/src/main/com/moneymanager/exceptions/ValidationException.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/com/moneymanager/service/TransactionServiceInterface.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/Cli/CliMenu.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/core/TransactionFactory.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/core/TransactionFactory.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/repos/SQLiteTransactionRepo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/repos/SQLiteTransactionRepo.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/repos/TransactionRepo.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/repos/TransactionRepo.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/service/AccountService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/service/AccountService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/service/TransactionService.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/service/TransactionService.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/core/Transaction.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/core/Transaction.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/core/TransactionFactory.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/core/TransactionFactory.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/repos/SQLiteAccountRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/repos/SQLiteAccountRepo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/repos/SQLiteTransactionRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/repos/SQLiteTransactionRepo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/repos/TransactionRepo.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/repos/TransactionRepo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/service/AccountService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/service/AccountService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/service/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/service/TransactionService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/MainViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/MainViewController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/exceptions/ValidationException.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/TransactionServiceTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/TransactionServiceTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/ui/view/AccountTableView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/view/AccountTableView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/ui/view/TransactionTableView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/view/TransactionTableView.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -70,42 +68,42 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.First.executor": "Run",
-    "Application.MainFx.executor": "Run",
-    "Application.NewMainView.executor": "Run",
-    "Application.debug.executor": "Run",
-    "Downloaded.Files.Path": "/home/citizen/Documents/java/javafx-sdk-21.0.5",
-    "Downloaded.Files.Path.Enabled": "true",
-    "JUnit.AccountServiceTest.executor": "Run",
-    "JUnit.All in MoneyManager.executor": "Run",
-    "JUnit.TransactionServiceTest.executor": "Run",
-    "JavaMethodFindUsagesOptions.isOverridingMethods": "true",
-    "JavaMethodFindUsagesOptions.isSearchForTextOccurrences": "true",
-    "Repository.Attach.Annotations": "true",
-    "Repository.Attach.JavaDocs": "true",
-    "Repository.Attach.Sources": "false",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "kotlin-language-version-configured": "true",
-    "last_directory_selection": "/home/citizen/Documents/java/MoneyManager/src/main",
-    "last_opened_file_path": "/home/citizen/Documents/java/MoneyManager/src/main/com/moneymanager",
-    "list.type.of.created.stylesheet": "CSS",
-    "project.structure.last.edited": "Libraries",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.3275862",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "preferences.keymap"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.First.executor&quot;: &quot;Run&quot;,
+    &quot;Application.MainFx.executor&quot;: &quot;Run&quot;,
+    &quot;Application.NewMainView.executor&quot;: &quot;Run&quot;,
+    &quot;Application.debug.executor&quot;: &quot;Run&quot;,
+    &quot;Downloaded.Files.Path&quot;: &quot;/home/citizen/Documents/java/javafx-sdk-21.0.5&quot;,
+    &quot;Downloaded.Files.Path.Enabled&quot;: &quot;true&quot;,
+    &quot;JUnit.AccountServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.All in MoneyManager.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.TransactionServiceTest.executor&quot;: &quot;Run&quot;,
+    &quot;JavaMethodFindUsagesOptions.isOverridingMethods&quot;: &quot;true&quot;,
+    &quot;JavaMethodFindUsagesOptions.isSearchForTextOccurrences&quot;: &quot;true&quot;,
+    &quot;Repository.Attach.Annotations&quot;: &quot;true&quot;,
+    &quot;Repository.Attach.JavaDocs&quot;: &quot;true&quot;,
+    &quot;Repository.Attach.Sources&quot;: &quot;false&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_directory_selection&quot;: &quot;/home/citizen/Documents/java/MoneyManager/src/main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/citizen/Documents/java/MoneyManager/src/main/com/moneymanager&quot;,
+    &quot;list.type.of.created.stylesheet&quot;: &quot;CSS&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Libraries&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.3275862&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "sqlite"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;sqlite&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$/lib" />

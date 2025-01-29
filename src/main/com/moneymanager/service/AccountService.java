@@ -17,7 +17,6 @@ public class AccountService {
     public AccountService(AccountRepo accountRepo) {
         
         this.accountRepo = accountRepo;
-        updateTheSourceAccountMap();
         this.accountModelObservableList = FXCollections.observableArrayList();
         loadAccountModelsObservableList();
     }
@@ -43,6 +42,7 @@ public class AccountService {
         account.setBalance(account.getBalance() + amount);
         System.out.println("Updated account balance: AccountService.updateBalance: New Balance: " + account.getBalance());
         
+        
         accountModelObservableList.get(Integer.parseInt(accountId)-1).setAccountBalance(account.getBalance());
         accountRepo.updateAccountBalance(account);
         
@@ -63,6 +63,7 @@ public class AccountService {
         Account newAccount = new Account(accountName, bankName, accountType);
         
         accountRepo.addAccount(newAccount);
+        loadAccountModelsObservableList();
         return newAccount;
     }
     

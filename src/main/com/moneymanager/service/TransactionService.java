@@ -38,7 +38,6 @@ public class TransactionService implements TransactionServiceInterface {
 
 		saveTransaction(transaction);
 		updateAccountBalance(accountId, transaction.getAmount());
-		addNewTransactionModelToTable(transaction);
 		
 		
 	}

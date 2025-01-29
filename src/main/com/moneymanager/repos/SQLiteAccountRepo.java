@@ -45,12 +45,13 @@ public class SQLiteAccountRepo implements AccountRepo {
             stmt.setInt(1, Integer.parseInt(accountId)); // Assuming accountId is an integer in the database
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
+                double balanceInDollars = rs.getInt("accountBalance") / 100.0;
                 return new Account(
                         String.valueOf(rs.getInt("accountId")),
                         rs.getString("accountName"),
                         rs.getString("bankName"),
                         rs.getString("accountType"),
-                        rs.getDouble("accountBalance")
+                        balanceInDollars
                 );
             } else {
                 throw new IllegalArgumentException("Account not found for ID: " + accountId);
@@ -79,12 +80,13 @@ public class SQLiteAccountRepo implements AccountRepo {
              ResultSet rs = stmt.executeQuery()) {
             
             while (rs.next()) {
+                double balanceInDollars = rs.getDouble("accountBalance") / 100;
                 Account account = new Account(
                         String.valueOf(rs.getInt("accountId")),
                         rs.getString("accountName"),
                         rs.getString("bankName"),
                         rs.getString("accountType"),
-                        rs.getDouble("accountBalance")
+                        balanceInDollars
                 );
                 accountList.add(account);
             }

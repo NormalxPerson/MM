@@ -3,11 +3,13 @@ package com.moneymanager.ui.view;
 import com.moneymanager.ui.model.TransactionModelOLD;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class TransactionTableView extends TableView<TransactionTableView.TransactionModel> {
@@ -19,9 +21,11 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 	private void initializeColumns() {
 		TableColumn<TransactionModel, LocalDate> dateColumn = new TableColumn<>("Date");
 		dateColumn.setCellValueFactory(cellData -> cellData.getValue().transactionDateProperty());
+		dateColumn.setCellFactory(this::createFormattedDateCellFactory);
 		
 		TableColumn<TransactionModel, Double> amountColumn = new TableColumn<>("Amount");
 		amountColumn.setCellValueFactory(cellData -> cellData.getValue().transactionAmountProperty().asObject());
+		amountColumn.setCellFactory(this::createAmountCellFactory); // Use method reference
 		
 		TableColumn<TransactionModel, String> descriptionColumn = new TableColumn<>("Description");
 		descriptionColumn.setCellValueFactory(cellData -> cellData.getValue().transactionDescriptionProperty());
@@ -34,6 +38,36 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 		
 		getColumns().addAll(List.of(dateColumn, amountColumn, descriptionColumn, accountNameColumn));
 		
+	}
+	
+	private TableCell<TransactionModel, LocalDate> createFormattedDateCellFactory(TableColumn<TransactionModel, LocalDate> column) {
+		return new TableCell<>() {
+			private final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M-d-yy");
+			
+			@Override
+			protected void updateItem(LocalDate item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty || item == null) {
+					setText(null);
+				} else {
+					setText(formatter.format(item));
+				}
+			}
+		};
+	}
+	
+	private TableCell<TransactionModel, Double> createAmountCellFactory(TableColumn<TransactionModel, Double> column) {
+		return new TableCell<>() {
+			@Override
+			protected void updateItem(Double item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty || item == null) {
+					setText(null);
+				} else {
+					setText("$" + String.format("%.2f", item));
+				}
+			}
+		};
 	}
 	
 	public void populateTransactionTable(ObservableList<TransactionModel> items) {

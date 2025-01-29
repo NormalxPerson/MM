@@ -3,6 +3,7 @@ package com.moneymanager.ui.view;
 import com.moneymanager.core.Account;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
@@ -24,6 +25,7 @@ public class AccountTableView extends TableView<AccountTableView.AccountModel> {
 		
 		TableColumn<AccountModel, Double> accountBalanceColumn = new TableColumn<>("Balance");
 		accountBalanceColumn.setCellValueFactory(cellData -> cellData.getValue().accountBalanceProperty().asObject());
+		accountBalanceColumn.setCellFactory(this::createBalanceCellFactory); // Use method reference
 		
 		//width of columns
 		this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
@@ -34,6 +36,22 @@ public class AccountTableView extends TableView<AccountTableView.AccountModel> {
 		
 		getColumns().addAll(List.of(accountNameColumn, accountTypeColumn, accountBalanceColumn));
 	}
+	
+	private TableCell<AccountModel, Double> createBalanceCellFactory(TableColumn<AccountModel, Double> column) {
+		return new TableCell<>() {
+			@Override
+			protected void updateItem(Double item, boolean empty) {
+				super.updateItem(item, empty);
+				if (empty || item == null) {
+					setText(null);
+				} else {
+					setText("$" + String.format("%.2f", item));
+				}
+			}
+		};
+	}
+	
+
 	
 	
 	public static class AccountModel {

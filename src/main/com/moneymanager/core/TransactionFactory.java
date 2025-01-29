@@ -29,7 +29,7 @@ public class TransactionFactory {
 		String id = rs.getString("transactionId");
 		double amount = rs.getInt("transactionAmount") / 100.0;
 		String description = rs.getString("transactionDescription");
-		LocalDate date = rs.getDate("transactionDate").toLocalDate();
+		LocalDate date = LocalDate.parse(rs.getString("transactionDate"), transactionDateFormat);
 		String type = rs.getString("transactionType");
 		String accountId = rs.getString("accountId");
 		
@@ -76,12 +76,12 @@ public class TransactionFactory {
 	}
 	
 	private static String generateTransactionId(LocalDate date, String accountId, TransactionRepo transRepo) {
-		// Format the date as "m-d-yyyy"
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M-d-yyyy");
-		String formattedDate = date.format(formatter);
+		DateTimeFormatter transactionFormatter = DateTimeFormatter.ofPattern("M-d-yy");
+		DateTimeFormatter idFormatter = DateTimeFormatter.ofPattern("Mdyy");
+		String formattedIdDate = date.format(idFormatter);
 		
 		// Get the last transaction ID for the date
-		String lastTransactionId = transRepo.getLastTransactionIdForDate(formattedDate);
+		String lastTransactionId = transRepo.getLastTransactionIdForDate(date.format(transactionFormatter));
 		
 		int nextCount = 1; // Default to 1 if no previous transactions exist
 		if (lastTransactionId != null) {
@@ -97,7 +97,7 @@ public class TransactionFactory {
 		}
 		
 		// Generate the new transaction ID
-		return String.format("ACC%s-%s-%d", accountId, formattedDate, nextCount);
+		return String.format("ACC%s-%s-%d", accountId, formattedIdDate, nextCount);
 	}
 
 	

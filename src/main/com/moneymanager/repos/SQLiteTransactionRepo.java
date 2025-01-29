@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +28,9 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 			
 			for (Transaction transaction : transactions) {
 				statement.setString(1, transaction.getId());
-				statement.setDouble(2, transaction.getAmount());
+				statement.setInt(2, (int) Math.round(transaction.getAmount() * 100));
 				statement.setString(3, transaction.getDescription());
-				statement.setString(4, String.valueOf(transaction.getDate())); // Assuming date is stored as TEXT in your database
+				statement.setString(4, transaction.getFormattedDate()); // Assuming date is stored as TEXT in your database
 				statement.setString(5, transaction.getType());
 				statement.setString(6, transaction.getAccountId());
 				

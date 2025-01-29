@@ -1,12 +1,14 @@
 package com.moneymanager.core;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Transaction {
 	private final String id;
 	private final double amount;
 	private final String description;
 	private final LocalDate date;
+	private String formattedDate;
 	private final String type;
 	private final String accountId;
 
@@ -25,6 +27,14 @@ public class Transaction {
 	public LocalDate getDate() { return date; }
 	public String getType() { return type; }
 	public String getAccountId() { return accountId; }
+	
+	public String getFormattedDate() {
+		if (formattedDate == null) {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M-d-yy");
+			this.formattedDate = date.format(formatter);
+		}
+		return formattedDate;
+	}
 	
 	@Override
 	public String toString() {
