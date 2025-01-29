@@ -14,6 +14,7 @@ public class AccountTableView extends TableView<AccountTableView.AccountModel> {
 	public AccountTableView() {
 		
 		initializeColumns();
+		this.getStyleClass().add("table-view");
 	}
 	
 	private void initializeColumns() {

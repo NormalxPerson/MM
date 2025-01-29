@@ -15,8 +15,7 @@ import java.util.List;
 public class TransactionTableView extends TableView<TransactionTableView.TransactionModel> {
 	
 	public TransactionTableView() {
-		initializeColumns();
-	}
+		initializeColumns(); this.getStyleClass().add("table-view");}
 	
 	private void initializeColumns() {
 		TableColumn<TransactionModel, LocalDate> dateColumn = new TableColumn<>("Date");

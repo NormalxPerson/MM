@@ -13,7 +13,7 @@
 <?import javafx.scene.control.cell.ComboBoxListCell?>
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.moneymanager.ui.controller.MainViewController">
     <left>
-    <VBox fx:id="navigationBar" spacing="10" prefWidth="150" style="-fx-background-color: #f0f0f0;" BorderPane.alignment="CENTER_LEFT" >
+    <VBox fx:id="navigationBar" spacing="10" prefWidth="150"  BorderPane.alignment="CENTER_LEFT" >
         <Button fx:id="accountsButton" text="Accounts" />
         <Button fx:id="transactionsButton" text="Transactions" />
 
