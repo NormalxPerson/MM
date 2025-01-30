@@ -1,12 +1,10 @@
 package com.moneymanager.ui.view;
 
-import com.moneymanager.ui.model.TransactionModelOLD;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

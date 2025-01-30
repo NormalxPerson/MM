@@ -5,18 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="281394bb-b117-4dc4-a91c-545f31434827" name="Changes" comment="The GUI and DB are now connected.">
-      <change afterPath="$PROJECT_DIR$/.idea/cssdialects.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/AccountViewController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/MainView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/MainView.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/ui/controller/MainViewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/ui/controller/MainViewController.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/resources/stylesheetfx.css" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/resources/stylesheetfx.css" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/stylesheetfx.css" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/stylesheetfx.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/test/MoneyManager/TransactionServiceTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/test/MoneyManager/TransactionServiceTest.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/MainFx.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/MainFx.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/ui/view/AccountTableView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/view/AccountTableView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/MainViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/MainViewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/ui/model/TransactionModelOLD.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/ui/view/TransactionTableView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/view/TransactionTableView.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/MainView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/MainView.fxml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/stylesheetfx.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/stylesheetfx.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -64,8 +59,11 @@
 }</component>
   <component name="ProjectId" id="2r8Dkf4DXuDVGb1SSoiul9pjpxh" />
   <component name="ProjectViewState">
+    <option name="autoscrollToSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="openDirectoriesWithSingleClick" value="true" />
     <option name="showLibraryContents" value="true" />
+    <option name="showModules" value="false" />
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
@@ -95,7 +93,7 @@
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.3275862",
     "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "settings.css.dialects"
+    "settings.editor.selected.configurable": "preferences.customizations"
   },
   "keyToStringList": {
     "DatabaseDriversLRU": [

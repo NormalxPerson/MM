@@ -1,145 +1,80 @@
-/* Gruvbox Light Hard Color Palette */
+/* Base Colors */
 .root {
-    -gruvbox-light0-hard: #f9f5d7;
-    -gruvbox-light1-hard: #ebdbb2;
-    -gruvbox-light2-hard: #d5c4a1;
-    -gruvbox-light3-hard: #bdae93;
-    -gruvbox-light4-hard: #a89984;
-    -gruvbox-gray-hard: #928374;
-    -gruvbox-dark0-hard: #1d2021;
-    -gruvbox-dark1-hard: #3c3836;
-    -gruvbox-dark2-hard: #504945;
-    -gruvbox-dark3-hard: #665c54;
-    -gruvbox-dark4-hard: #7c6f64;
-    -gruvbox-bright-red-hard: #cc241d;
-    -gruvbox-bright-green-hard: #98971a;
-    -gruvbox-bright-yellow-hard: #d79921;
-    -gruvbox-bright-blue-hard: #458588;
-    -gruvbox-bright-purple-hard: #b16286;
-    -gruvbox-bright-aqua-hard: #689d6a;
-    -gruvbox-bright-orange-hard: #d65d0e;
-
-    /* Apply Gruvbox colors to the background */
-    -fx-background-color: -gruvbox-light0-hard;
+    -fx-primary-color: #00504F; /* Teal */
+    -fx-on-primary-color: #FFFFFF;
+    -fx-primary-container-color: #5BC0BE; /* Signature Teal */
+    -fx-on-primary-container-color: #00201F;
+    -fx-secondary-color: #14A66D; /* Emerald Green */
+    -fx-on-secondary-color: #FFFFFF;
+    -fx-secondary-container-color: #B2F1DA; /* Light Emerald */
+    -fx-on-secondary-container-color: #003825;
+    -fx-tertiary-color: #735B2E; /* Warm Gold */
+    -fx-on-tertiary-color: #FFFFFF;
+    -fx-tertiary-container-color: #FFDFA6; /* Light Gold */
+    -fx-on-tertiary-container-color: #261A00;
+    -fx-background-color: #FBFDFC; /* Almost White */
+    -fx-on-background-color: #191C1D; /* Dark Gray */
+    -fx-surface-color: #FBFDFC;
+    -fx-on-surface-color: #191C1D;
+    -fx-surface-variant-color: #DAE5E3; /* Pale Teal-Gray */
+    -fx-on-surface-variant-color: #3F4947; /* Charcoal */
+    -fx-error-color: #BA1A1A; /* Red 700 */
+    -fx-on-error-color: #FFFFFF;
+    -fx-error-container-color: #FFDAD6; /* Light Red */
+    -fx-on-error-container-color: #410002;
+    -fx-outline-color: #6F7977; /* Gray-Green */
 }
 
-/* Style buttons */
-.button {
-    -fx-background-color: -gruvbox-bright-blue-hard;
-    -fx-text-fill: -gruvbox-dark0-hard;
-    -fx-border-color: transparent;
-    -fx-border-radius: 4px;
-    -fx-padding: 8px 16px;
-    -fx-font-size: 14px;
-    -fx-cursor: hand;
-}
-
-.button:hover {
-    -fx-background-color: -gruvbox-bright-aqua-hard;
-}
-
-.button:pressed {
-    -fx-background-color: -gruvbox-bright-green-hard;
-}
-
-/* Style text fields */
-.text-field {
-    -fx-background-color: -gruvbox-light1-hard;
-    -fx-text-fill: -gruvbox-dark0-hard;
-    -fx-prompt-text-fill: -gruvbox-gray-hard;
-    -fx-border-color: -gruvbox-light2-hard;
-    -fx-border-radius: 4px;
-    -fx-padding: 8px;
-}
-
-.text-field:focused {
-    -fx-border-color: -gruvbox-bright-green-hard;
-}
-
-/* Style labels */
+/* Typography */
 .label {
-    -fx-text-fill: -gruvbox-dark1-hard;
     -fx-font-size: 14px;
+    -fx-text-fill: -fx-on-surface-color;
 }
 
-/* Style tables */
+/* Buttons */
+.button {
+    -fx-background-color: -fx-primary-color;
+    -fx-text-fill: -fx-on-primary-color;
+    -fx-padding: 10px 20px;
+    -fx-border-radius: 5px;
+}
+.button:hover {
+    -fx-background-color: -fx-primary-container-color;
+    -fx-text-fill: -fx-on-primary-container-color;
+}
+
+/* Text Fields */
+.text-field {
+    -fx-background-color: -fx-surface-color;
+    -fx-text-fill: -fx-on-surface-color;
+    -fx-border-color: -fx-outline-color;
+    -fx-border-width: 1px;
+    -fx-border-radius: 5px;
+    -fx-padding: 10px;
+}
+
+/* Table View */
 .table-view {
-    -fx-background-color: -gruvbox-light1-hard;
-    -fx-border-color: -gruvbox-light2-hard;
-    -fx-border-radius: 4px;
+    -fx-background-color: -fx-surface-color;
 }
-
-.table-view.column-header {
-    -fx-background-color: -gruvbox-light2-hard;
-    -fx-text-fill: -gruvbox-dark0-hard;
+.table-view.column-header-background {
+    -fx-background-color: -fx-primary-color;
 }
-
+.table-view.column-header-background.label {
+    -fx-text-fill: -fx-on-primary-color;
+}
 .table-view.table-cell {
-    -fx-text-fill: -gruvbox-dark1-hard;
-    -fx-border-color: -gruvbox-light2-hard;
+    -fx-text-fill: -fx-on-surface-color;
+    -fx-border-color: -fx-outline-color;
+    -fx-border-width: 0 0 1 0; /* Only bottom border */
 }
-
-.table-view.table-row-cell:selected {
-    -fx-background-color: -gruvbox-bright-blue-hard;
-    -fx-text-fill: -gruvbox-light0-hard;
+.table-row-cell:odd {
+    -fx-background-color: -fx-surface-variant-color;
 }
-
-/* Style combo boxes */
-.combo-box-base {
-    -fx-background-color: -gruvbox-light1-hard;
-    -fx-border-color: -gruvbox-light2-hard;
-    -fx-border-radius: 4px;
+.table-row-cell:even {
+    -fx-background-color: -fx-surface-color;
 }
-
-.combo-box-base.list-cell {
-    -fx-text-fill: -gruvbox-dark1-hard;
-}
-
-.combo-box-base.list-cell:selected {
-    -fx-background-color: -gruvbox-bright-blue-hard;
-    -fx-text-fill: -gruvbox-light0-hard;
-}
-
-/* Style for the TableView */
-.table-view {
-    -fx-background-color: -gruvbox-light1-hard;
-    -fx-border-color: -gruvbox-light2-hard;
-    -fx-border-radius: 4px;
-    -fx-padding: 4px;
-}
-
-/* Style for column headers */
-.table-view .column-header {
-    -fx-background-color: -gruvbox-light2-hard;
-    -fx-text-fill: -gruvbox-dark0-hard;
-    -fx-font-size: 14px;
-    -fx-padding: 8px;
-    -fx-border-color: -gruvbox-light3-hard;
-}
-
-/* Style for table cells */
-.table-view .table-cell {
-    -fx-text-fill: -gruvbox-dark1-hard;
-    -fx-border-color: -gruvbox-light3-hard;
-    -fx-padding: 8px;
-}
-
-/* Alternate row colors */
-.table-view .table-row-cell:odd {
-    -fx-background-color: -gruvbox-light3-hard;
-}
-
-.table-view .table-row-cell:even {
-    -fx-background-color: -gruvbox-light2-hard;
-}
-
-/* Selected row styles */
-.table-view .table-row-cell:selected {
-    -fx-background-color: -gruvbox-bright-blue-hard;
-    -fx-text-fill: -gruvbox-light0-hard;
-}
-
-/* Hover effect for rows */
-.table-view .table-row-cell:hover {
-    -fx-background-color: -gruvbox-bright-aqua-hard;
+.table-row-cell:selected {
+    -fx-background-color: -fx-secondary-color;
+    -fx-text-fill: -fx-on-secondary-color;
 }
