@@ -1,28 +1,32 @@
 /* Base Colors */
 .root {
-    -fx-primary-color: #00504F; /* Teal */
+    -fx-primary-color: #6750a4; /* Teal */
     -fx-on-primary-color: #FFFFFF;
-    -fx-primary-container-color: #5BC0BE; /* Signature Teal */
-    -fx-on-primary-container-color: #00201F;
-    -fx-secondary-color: #14A66D; /* Emerald Green */
+    -fx-primary-container-color: #EADDFF; /* Signature Teal */
+    -fx-on-primary-container-color: #21005D;
+
+    -fx-secondary-color: #625B71; /* Emerald Green */
     -fx-on-secondary-color: #FFFFFF;
-    -fx-secondary-container-color: #B2F1DA; /* Light Emerald */
-    -fx-on-secondary-container-color: #003825;
-    -fx-tertiary-color: #735B2E; /* Warm Gold */
+    -fx-secondary-container-color: #E8DEF8; /* Light Emerald */
+    -fx-on-secondary-container-color: #1D192B;
+
+    -fx-tertiary-color: #7D5260; /* Warm Gold */
     -fx-on-tertiary-color: #FFFFFF;
-    -fx-tertiary-container-color: #FFDFA6; /* Light Gold */
-    -fx-on-tertiary-container-color: #261A00;
-    -fx-background-color: #FBFDFC; /* Almost White */
-    -fx-on-background-color: #191C1D; /* Dark Gray */
-    -fx-surface-color: #FBFDFC;
-    -fx-on-surface-color: #191C1D;
-    -fx-surface-variant-color: #DAE5E3; /* Pale Teal-Gray */
-    -fx-on-surface-variant-color: #3F4947; /* Charcoal */
-    -fx-error-color: #BA1A1A; /* Red 700 */
+    -fx-tertiary-container-color: #FFD8E4; /* Light Gold */
+    -fx-on-tertiary-container-color: #31111D;
+
+    -fx-background-color: #FFFBFE; /* Almost White */
+    -fx-on-background-color: #1C1B1F; /* Dark Gray */
+    -fx-surface-color: #FFFBFE;
+    -fx-on-surface-color: #1C1B1F;
+    -fx-surface-variant-color: #E7E0EC; /* Pale Teal-Gray */
+    -fx-on-surface-variant-color: #49454F; /* Charcoal */
+
+    -fx-error-color: #B3261E; /* Red 700 */
     -fx-on-error-color: #FFFFFF;
-    -fx-error-container-color: #FFDAD6; /* Light Red */
-    -fx-on-error-container-color: #410002;
-    -fx-outline-color: #6F7977; /* Gray-Green */
+    -fx-error-container-color: #f9dedc; /* Light Red */
+    -fx-on-error-container-color: #601410;
+    -fx-outline-color: #79747E; /* Gray-Green */
 }
 
 /* Typography */
@@ -55,26 +59,53 @@
 
 /* Table View */
 .table-view {
+    /* Set the overall background */
     -fx-background-color: -fx-surface-color;
+    -fx-control-inner-background: -fx-surface-color;
+    -fx-border-color: -fx-outline-color;
+    -fx-border-width: 1;
 }
 .table-view.column-header-background {
-    -fx-background-color: -fx-primary-color;
-}
-.table-view.column-header-background.label {
-    -fx-text-fill: -fx-on-primary-color;
-}
-.table-view.table-cell {
-    -fx-text-fill: -fx-on-surface-color;
+    -fx-background-color: -fx-primary-container-color;
     -fx-border-color: -fx-outline-color;
-    -fx-border-width: 0 0 1 0; /* Only bottom border */
+    -fx-border-width: 0 0 1 0;
 }
-.table-row-cell:odd {
-    -fx-background-color: -fx-surface-variant-color;
+/* Column Header Text & Filler */
+.table-view.column-header,
+.table-view.filler {
+    -fx-background-color: -fx-primary-container-color;
+    -fx-text-fill: -fx-on-primary-container-color;
+    -fx-font-weight: bold;
+    -fx-alignment: CENTER_LEFT;
+    -fx-padding: 8px;
 }
-.table-row-cell:even {
+/* Table Row Cells */
+.table-view.table-row-cell {
     -fx-background-color: -fx-surface-color;
 }
-.table-row-cell:selected {
-    -fx-background-color: -fx-secondary-color;
-    -fx-text-fill: -fx-on-secondary-color;
+.table-row-cell:odd {
+    -fx-background-color: -fx-surface-color;
+}
+.table-row-cell:even {
+    -fx-background-color: -fx-surface-variant-color;
+}
+/* Selected Row Cells */
+.table-view.table-row-cell:filled:selected,
+.table-view.table-row-cell:selected {
+    -fx-background-color: -fx-primary-color;
+}
+/* Table Cells Content */
+.table-view.table-cell {
+    -fx-text-fill: -fx-on-surface-color;
+    -fx-padding: 8px;
+}
+
+.md3-navigation-rail {
+    -fx-background-color: -fx-surface-color;
+    -fx-border-color: -fx-outline-color;
+}
+
+.md3-navigation-rail-item {
+    -fx-background-color: -fx-primary-color;
+    -fx-text-fill: -fx-on-primary-color;
 }

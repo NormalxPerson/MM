@@ -4,6 +4,7 @@ import com.moneymanager.core.Account;
 import com.moneymanager.core.Transaction;
 import com.moneymanager.core.TransactionFactory;
 import com.moneymanager.repos.TransactionRepo;
+import com.moneymanager.ui.view.AccountTableView;
 import com.moneymanager.ui.view.TransactionTableView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -71,6 +72,10 @@ public class TransactionService implements TransactionServiceInterface {
 	
 	private TransactionTableView.TransactionModel createNewTransactionModel(Transaction transaction) {
 		return new TransactionTableView.TransactionModel(transaction.getId(), transaction.getDate(), transaction.getAmount(), transaction.getDescription(), transaction.getType(), transaction.getAccountId(), accountService.getAccountNameByAccountId(transaction.getAccountId()));
+	}
+	
+	public ObservableList<AccountTableView.AccountModel> getAccountModelObservableList() {
+		return accountService.getAccountModelObservableList();
 	}
 	
 	

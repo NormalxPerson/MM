@@ -11,47 +11,22 @@
 <?import java.lang.String?>
 <?import javafx.scene.control.DatePicker?>
 <?import javafx.scene.control.cell.ComboBoxListCell?>
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.moneymanager.ui.controller.MainViewController">
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.ToggleButton?>
+
+<?import javafx.scene.layout.StackPane?>
+
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.moneymanager.ui.controller.MainViewController">
+
+<BorderPane fx:id="mainlayout">
+    <fx:define>
+        <ToggleGroup fx:id="navigationGroup"/>
+    </fx:define>
+
     <left>
-    <VBox fx:id="navigationBar" spacing="10" prefWidth="150"  BorderPane.alignment="CENTER_LEFT" >
-        <Button fx:id="accountsButton" text="Accounts" />
-        <Button fx:id="transactionsButton" text="Transactions" />
-
-        <!-- Account Fields -->
-        <VBox fx:id="accountFields" spacing="10" alignment="CENTER" visible="true" managed="true">
-            <TextField fx:id="accountNameField" promptText="Account Name" />
-            <TextField fx:id="bankNameField" promptText="Bank Name" />
-            <ComboBox fx:id="accountTypeComboBox" promptText="Account Type">
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="DEBT" />
-                        <String fx:value="CREDIT" />
-                    </FXCollections>
-                </items>
-            </ComboBox>
-            <Button text="Add Account" onAction="#handleAddAccount" />
-        </VBox>
-
-        <!-- Transaction Fields -->
-        <VBox fx:id="transactionFields" spacing="10" alignment="CENTER" visible="false" managed="false">
-            <TextField fx:id="transactionAmountField" promptText="Amount" />
-            <TextField fx:id="transactionDescriptionField" promptText="Description" />
-            <DatePicker fx:id="transactionDatePicker" promptText="Date" />
-            <ComboBox fx:id="transactionTypeComboBox" promptText="Transaction Type">
-                <items>
-                    <FXCollections fx:factory="observableArrayList">
-                        <String fx:value="INCOME" />
-                        <String fx:value="EXPENSE" />
-                    </FXCollections>
-                </items>
-            </ComboBox>
-            <ComboBox fx:id="accountComboBox" promptText="Account">
-
-            </ComboBox>
-
-            <Button text="Add Transaction" onAction="#handleAddTransaction" />
-        </VBox>
-
+    <VBox fx:id="navigationRail" spacing="12" prefWidth="80" styleClass="md3-navigation-rail" BorderPane.alignment="CENTER_LEFT" >
+        <ToggleButton fx:id="accountsButton" text="Accounts" toggleGroup="$navigationGroup" styleClass="md3-navigation-rail-item"/>
+        <ToggleButton fx:id="transactionsButton" text="Transactions" toggleGroup="$navigationGroup" styleClass="md3-navigation-rail-item"/>
     </VBox>
     </left>
     <center>
@@ -59,3 +34,11 @@
         <HBox fx:id="contentArea" style="-fx-padding: 10;" BorderPane.alignment="CENTER" maxWidth="Infinity" maxHeight="Infinity" />
     </center>
 </BorderPane>
+
+        <!-- Floating Action Button (FAB) -->
+<Button fx:id="fab" text="+" onAction="#handleFabAction" styleClass="fab"
+        StackPane.alignment="BOTTOM_RIGHT"
+        style="-fx-background-radius: 50%; -fx-min-width: 56px; -fx-min-height: 56px; -fx-max-width: 56px; -fx-max-height: 56px;"/>
+
+
+        </StackPane>
