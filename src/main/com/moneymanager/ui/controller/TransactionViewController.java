@@ -38,12 +38,11 @@ public class TransactionViewController implements Initializable {
 		refreshTransactionTable(transactionService.getObservableTransactionModelsList());
 		transactionSlidingForm = new TransactionSlidingForm(transactionService);
 		transactionContainer.getChildren().addAll(transactionTableView, transactionSlidingForm);
+		transactionContainer.setVgrow(transactionTableView, Priority.ALWAYS);
 	}
 	
 	
-	public void showTransactionForm() {
-		transactionSlidingForm.showForm();
-	}
+	public void showTransactionForm() { transactionSlidingForm.showForm();}
 	
 	public void hideTransactionForm() {
 		transactionSlidingForm.hideForm();

@@ -33,10 +33,10 @@ public class TransactionSlidingForm extends VBox {
 		initializeTransactionForm();
 		this.getStyleClass().add("sliding-form");
 		
-		HBox hBox = new HBox(10, closeButton, saveButton);
-		hBox.setAlignment(Pos.CENTER_RIGHT);
+		HBox buttonBox = new HBox(10, closeButton, saveButton);
+		buttonBox.setAlignment(Pos.CENTER_RIGHT);
 		
-		this.getChildren().addAll(transactionAmountField, transactionDescriptionField, transactionDatePicker, transactionTypeComboBox, accountComboBox);
+		this.getChildren().addAll(transactionAmountField, transactionDescriptionField, transactionDatePicker, transactionTypeComboBox, accountComboBox, buttonBox);
 		
 		this.setVisible(false);
 		this.setManaged(false);
