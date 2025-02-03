@@ -5,13 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="281394bb-b117-4dc4-a91c-545f31434827" name="Changes" comment="The GUI and DB are now connected.">
-      <change afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/NavigationController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/MainFx.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/MainFx.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/MainViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/MainViewController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/TransactionViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/TransactionViewController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/ui/view/TransactionSlidingForm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/view/TransactionSlidingForm.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/MainView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/MainView.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
