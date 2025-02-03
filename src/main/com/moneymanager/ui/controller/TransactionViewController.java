@@ -34,17 +34,12 @@ public class TransactionViewController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 	}
 	
-	public void postInitialize(TransactionService transactionService) {
-		this.transactionService = transactionService;
-		transactionTableView.populateTransactionTable(transactionService.getObservableTransactionModelsList());
-		this.transactionSlidingForm = new TransactionSlidingForm(transactionService.getAccountModelObservableList());
+	public void postInitialize() {
+		refreshTransactionTable(transactionService.getObservableTransactionModelsList());
+		transactionSlidingForm = new TransactionSlidingForm(transactionService);
 		transactionContainer.getChildren().addAll(transactionTableView, transactionSlidingForm);
-		transactionSlidingForm.hideForm();
-		VBox.setVgrow(transactionTableView, Priority.ALWAYS);
-		
 	}
 	
-
 	
 	public void showTransactionForm() {
 		transactionSlidingForm.showForm();
@@ -54,13 +49,16 @@ public class TransactionViewController implements Initializable {
 		transactionSlidingForm.hideForm();
 	}
 	
-	public void refreshTransactionTable() {
-		transactionTableView.populateTransactionTable(transactionService.getObservableTransactionModelsList());
+	public void refreshTransactionTable(ObservableList<TransactionTableView.TransactionModel> transactionModels) {
+		transactionTableView.populateTransactionTable(transactionModels);
 	}
 	
 	public VBox getTransactionContainer() { return this.transactionContainer; }
-
-
+	
+	public void setTransactionService(TransactionService transactionService) {
+		this.transactionService = transactionService;
+		postInitialize();
+	}
 }
 
 

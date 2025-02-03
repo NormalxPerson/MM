@@ -16,19 +16,20 @@ public class MainFx extends Application {
 	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
-		// 1. Load the FXML file
 		
 		AccountRepo accountRepo = new SQLiteAccountRepo();
-		AccountService accountService = new AccountService(accountRepo);
 		TransactionRepo transactionRepo = new SQLiteTransactionRepo();
+		
+		AccountService accountService = new AccountService(accountRepo);
 		TransactionService transactionService = new TransactionService(transactionRepo, accountService);
+		
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainView.fxml"));
 		Parent root = loader.load();
-		MainViewController mainViewController = loader.getController();
+		NavigationController navigationController = loader.getController();
+		navigationController.setAccountService(accountService);
+		navigationController.setTransactionService(transactionService);
+		navigationController.setUpControllers();
 		
-		mainViewController.setTransactionService(transactionService);
-		mainViewController.setAccountService(accountService);
-		mainViewController.postInitialize();
 		// 2. Create the Scene
 		Scene scene = new Scene(root, 1000, 800);
 		scene.getStylesheets().add(getClass().getResource("/stylesheetfx.css").toExternalForm());

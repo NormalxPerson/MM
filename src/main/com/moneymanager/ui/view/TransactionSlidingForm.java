@@ -1,5 +1,6 @@
 package com.moneymanager.ui.view;
 
+import com.moneymanager.service.TransactionService;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -22,10 +23,10 @@ public class TransactionSlidingForm extends VBox {
 	private ComboBox<AccountTableView.AccountModel> accountComboBox;
 	private Button saveButton;
 	private Button closeButton;
-	private ObservableList<AccountTableView.AccountModel> accountModels;
+	private TransactionService transactionService;
 	
-	public TransactionSlidingForm(ObservableList<AccountTableView.AccountModel> accounts) {
-		this.accountModels = FXCollections.observableArrayList(accounts);
+	public TransactionSlidingForm(TransactionService transactionService) {
+		this.transactionService = transactionService;
 		this.setSpacing(10);
 		this.setPadding(new Insets(10));
 		this.setAlignment(Pos.CENTER);
@@ -53,8 +54,8 @@ public class TransactionSlidingForm extends VBox {
 		transactionTypeComboBox.setValue("EXPENSE");
 		
 		accountComboBox = new ComboBox<>();
-		accountComboBox.setItems(accountModels);
-		if (!accountModels.isEmpty()) { accountComboBox.getSelectionModel().selectFirst(); }
+		accountComboBox.setItems(transactionService.getAccountModelObservableList());
+		if (!transactionService.getAccountModelObservableList().isEmpty()) { accountComboBox.getSelectionModel().selectFirst(); }
 		else {accountComboBox.setPromptText("Account"); }
 		
 		saveButton = new Button("Save");
@@ -74,7 +75,7 @@ public class TransactionSlidingForm extends VBox {
 		transactionDescriptionField.setPromptText("Description");
 		transactionDatePicker.setValue(LocalDate.now());
 		transactionTypeComboBox.setValue("EXPENSE");
-		if (!accountModels.isEmpty()) { accountComboBox.getSelectionModel().selectFirst(); }
+		if (!transactionService.getAccountModelObservableList().isEmpty()) { accountComboBox.getSelectionModel().selectFirst(); }
 		else {accountComboBox.setPromptText("Account"); }
 	}
 	

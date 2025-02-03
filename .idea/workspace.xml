@@ -5,18 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="281394bb-b117-4dc4-a91c-545f31434827" name="Changes" comment="The GUI and DB are now connected.">
-      <change afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/TransactionViewController.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/view/TransactionSlidingForm.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/NavigationController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/MainView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/MainView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/ui/controller/MainViewController.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/ui/controller/MainViewController.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/ui/view/TransactionTableView.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/com/moneymanager/ui/view/TransactionTableView.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/resources/stylesheetfx.css" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/resources/stylesheetfx.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/MoneyManager/stylesheetfx.css" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/MoneyManager/stylesheetfx.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/service/TransactionService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/service/TransactionService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/MainFx.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/MainFx.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/MainViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/MainViewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/TransactionViewController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/controller/TransactionViewController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/com/moneymanager/ui/view/TransactionSlidingForm.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/com/moneymanager/ui/view/TransactionSlidingForm.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/MainView.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/MainView.fxml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/stylesheetfx.css" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/stylesheetfx.css" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

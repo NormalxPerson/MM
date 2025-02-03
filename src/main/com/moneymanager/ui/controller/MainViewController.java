@@ -1,3 +1,4 @@
+/*
 package com.moneymanager.ui.controller;
 
 import com.moneymanager.service.AccountService;
@@ -20,18 +21,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class MainViewController implements Initializable {
+
 	
-	@FXML
-	private VBox navigationBar;
-	
-	@FXML
-	private ToggleButton accountsButton;
-	
-	@FXML
-	private ToggleButton transactionsButton;
-	
-	@FXML
-	private HBox contentArea;
+
 	
 	private TransactionViewController transactionViewController;
 
@@ -82,7 +74,7 @@ public class MainViewController implements Initializable {
 		}
 		if (transactionService != null) {
 			transactionViewController = new TransactionViewController();
-			transactionViewController.postInitialize(transactionService);
+			transactionViewController.postInitialize();
 		}
 
 	}
@@ -195,3 +187,4 @@ public class MainViewController implements Initializable {
 	public void handleModalCancel(ActionEvent actionEvent) {
 	}
 }
+*/
