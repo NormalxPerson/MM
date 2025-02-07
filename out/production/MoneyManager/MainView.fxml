@@ -16,29 +16,25 @@
 
 <?import javafx.scene.layout.StackPane?>
 
-<StackPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.moneymanager.ui.controller.NavigationController">
 
+
+<StackPane xmlns:fx="http://javafx.com/fxml" fx:id="stackPane" fx:controller="com.moneymanager.ui.controller.NavigationController" styleClass="root">
 <BorderPane fx:id="mainlayout">
     <fx:define>
         <ToggleGroup fx:id="navigationGroup"/>
     </fx:define>
 
     <left>
-    <VBox fx:id="navigationRail" spacing="12" prefWidth="80" styleClass="md3-navigation-rail" BorderPane.alignment="CENTER_LEFT" >
-        <ToggleButton fx:id="accountsButton" text="Accounts" toggleGroup="$navigationGroup" styleClass="md3-navigation-rail-item"/>
-        <ToggleButton fx:id="transactionsButton" text="Transactions" toggleGroup="$navigationGroup" styleClass="md3-navigation-rail-item"/>
-    </VBox>
+        <VBox fx:id="navigationRail" spacing="12" prefWidth="80" styleClass="md3-navigation-rail, md3-navigation-rail-container" BorderPane.alignment="CENTER_LEFT" >
+            <ToggleButton fx:id="accountsButton" text="Accounts" toggleGroup="$navigationGroup" styleClass="md3-navigation-rail-item, md3-rounded-large" userData="accountView"/>
+            <ToggleButton fx:id="transactionsButton" text="Transactions" toggleGroup="$navigationGroup" styleClass="md3-navigation-rail-item, md3-rounded-large" userData="transactionView"/>
+        </VBox>
     </left>
     <center>
         <!-- Main Content Area -->
-        <HBox fx:id="contentArea" style="-fx-padding: 10;" BorderPane.alignment="CENTER" maxWidth="Infinity" maxHeight="Infinity" />
+        <HBox fx:id="contentArea" styleClass="content-area" style="-fx-padding: 10;" BorderPane.alignment="CENTER" maxWidth="Infinity" maxHeight="Infinity" />
     </center>
 </BorderPane>
-
-        <!-- Floating Action Button (FAB) -->
-<Button fx:id="fab" text="+" onAction="#handleFabAction" styleClass="fab"
-        StackPane.alignment="BOTTOM_RIGHT"
-        style="-fx-background-radius: 50%; -fx-min-width: 56px; -fx-min-height: 56px; -fx-max-width: 56px; -fx-max-height: 56px;"/>
+</StackPane>
 
 
-        </StackPane>

@@ -25,6 +25,7 @@ public class MainFx extends Application {
 		
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainView.fxml"));
 		Parent root = loader.load();
+		
 		NavigationController navigationController = loader.getController();
 		navigationController.setAccountService(accountService);
 		navigationController.setTransactionService(transactionService);

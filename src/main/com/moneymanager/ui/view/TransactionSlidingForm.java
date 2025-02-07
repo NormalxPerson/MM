@@ -1,8 +1,11 @@
 package com.moneymanager.ui.view;
 
 import com.moneymanager.service.TransactionService;
+import com.moneymanager.ui.event.FormClosedEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -41,17 +44,22 @@ public class TransactionSlidingForm extends VBox {
 		this.setVisible(false);
 		this.setManaged(false);
 		
-		closeButton.setOnAction(e -> hideForm());
+		closeButton.setOnAction(e -> {
+			hideForm();
+			Event.fireEvent(this, new FormClosedEvent());
+		});
 	}
-	
 	private void initializeTransactionForm() {
 		transactionAmountField = new TextField("Amount");
+		transactionAmountField.getStyleClass().addAll("text-field", "md3-rounded-small");
 		transactionDescriptionField = new TextField("Description");
+		transactionDescriptionField.getStyleClass().addAll("text-field", "md3-rounded-small");
 		transactionDatePicker = new DatePicker(LocalDate.now());
-		
+		transactionDatePicker.getStyleClass().add("md3-rounded-small");
 		transactionTypeComboBox = new ComboBox<>();
 		transactionTypeComboBox.setItems(FXCollections.observableArrayList("INCOME", "EXPENSE"));
 		transactionTypeComboBox.setValue("EXPENSE");
+		transactionTypeComboBox.getStyleClass().add("md3-rounded-small");
 		
 		accountComboBox = new ComboBox<>();
 		accountComboBox.setItems(transactionService.getAccountModelObservableList());
@@ -59,9 +67,12 @@ public class TransactionSlidingForm extends VBox {
 		else {accountComboBox.setPromptText("Account"); }
 		
 		saveButton = new Button("Save");
+		saveButton.getStyleClass().addAll("button", "md3-rounded-medium");
 		closeButton = new Button("Close");
+		closeButton.getStyleClass().addAll("button", "md3-rounded-medium"); // Apply button styles and rounded corners
 		
-	
+		
+		
 	}
 	
 	public void showForm() {
@@ -83,6 +94,7 @@ public class TransactionSlidingForm extends VBox {
 		setVisible(false);
 		setManaged(false);
 		clearFields();
+
 	}
 	
 	public void clearFields() {
