@@ -110,7 +110,7 @@ public class SQLiteAccountRepo implements AccountRepo {
                         stmt.setString(1, account.getAccountName());
                         stmt.setString(2, account.getBankName());
                         stmt.setDouble(3, account.getBalance());
-                        stmt.setString(4, account.getAccountType());
+                        stmt.setString(4, account.getAccountType().toUpperCase());
                         
                         stmt.executeUpdate();
                         System.out.println("Successfully added account: " + account.getAccountName());

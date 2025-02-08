@@ -1,9 +1,11 @@
 package com.moneymanager.ui.controller;
 
 import com.moneymanager.service.AccountService;
+import com.moneymanager.ui.event.FormOpenedEvent;
 import com.moneymanager.ui.view.AccountSlidingForm;
 import com.moneymanager.ui.view.AccountTableView;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.Priority;
@@ -21,12 +23,31 @@ public class AccountViewController implements Initializable, BaseViewController 
 	private AccountSlidingForm accountSlidingForm;
 	private AccountService accountService;
 	
+	private AccountTableView.AccountModel selectedAccountModel;
+	
 	public AccountViewController() {
 		this.accountTableView = new AccountTableView();
 	}
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
+		accountTableView.setOnMouseClicked(event -> {
+			if (event.getClickCount() == 1) {
+				showForm();
+				accountContainer.fireEvent(new FormOpenedEvent());
+				selectedAccountModel = accountTableView.getSelectionModel().getSelectedItem();
+				if (selectedAccountModel != null) {
+					accountSlidingForm.getAccountNameField().setText(selectedAccountModel.getAccountName());
+					accountSlidingForm.getBankNameField().setText(selectedAccountModel.getBankName());
+					if (accountSlidingForm.getAccountTypeField().getItems().contains(selectedAccountModel.getAccountType())) {
+						accountSlidingForm.getAccountTypeField().setValue(selectedAccountModel.getAccountType());
+					}
+				}
+			}
+		});
+		
+		
 	}
 	
 	public void postInitialize() {
@@ -52,6 +73,7 @@ public class AccountViewController implements Initializable, BaseViewController 
 	public void refreshAccountTable(ObservableList<AccountTableView.AccountModel> accountModelObservableList) {
 		accountTableView.populateAccountTable(accountModelObservableList);
 	}
+	
 	
 	
 }

@@ -3,8 +3,10 @@ package com.moneymanager.ui.controller;
 import com.moneymanager.service.AccountService;
 import com.moneymanager.service.TransactionService;
 import com.moneymanager.ui.event.FormClosedEvent;
+import com.moneymanager.ui.event.FormOpenedEvent;
 import com.moneymanager.ui.view.FloatingActionButton;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -22,7 +24,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class NavigationController implements Initializable, EventHandler<FormClosedEvent> {
+public class NavigationController implements Initializable{
 	
 	@FXML
 	private StackPane stackPane;
@@ -58,7 +60,10 @@ public class NavigationController implements Initializable, EventHandler<FormClo
 		this.fab = FloatingActionButton.getInstance();
 		
 		BorderPane.setMargin(contentArea, new Insets(5));
-		contentArea.addEventHandler(FormClosedEvent.FORM_CLOSED, this);
+		
+		//Adding Event Handler to Content Area.
+		contentArea.addEventHandler(Event.ANY, this::handle);
+		
 		
 		fab.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -150,11 +155,16 @@ public class NavigationController implements Initializable, EventHandler<FormClo
 	
 	public void setTransactionService(TransactionService transactionService) { this.transactionService = transactionService;}
 	
-	@Override
-	public void handle(FormClosedEvent event) {
-		// This method is called when a FormClosedEvent is fired and reaches this handler.
-		fab.showFab(); // Show the FAB when any form is closed
-		System.out.println("FormClosedEvent received in NavigationController. Showing FAB.");
+	
+	public void handle(Event event) {
+		if (event.getEventType() == FormClosedEvent.FORM_CLOSED) {
+			fab.showFab();
+			System.out.println("FormClosedEvent received in NavigationController: showing FAB");
+		}
+		else if (event.getEventType() == FormOpenedEvent.FORM_OPENED) {
+			fab.hideFab();
+			System.out.println("FormOpenedEvent received in NavigationController: hiding FAB");
+		}
 	}
 	
 }

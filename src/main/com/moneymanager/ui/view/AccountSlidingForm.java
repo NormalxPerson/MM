@@ -40,6 +40,7 @@ public class AccountSlidingForm extends VBox {
 	private void initializeAccountForm() {
 		accountNameField = new TextField("Account Name");
 		accountNameField.getStyleClass().addAll("text-field", "md3-rounded-small"); // Apply text-field styles and rounded corners
+		
 		bankNameField = new TextField("Bank Name");
 		bankNameField.getStyleClass().addAll("text-field", "md3-rounded-small"); // Apply text-field styles and rounded corners
 		
@@ -80,6 +81,18 @@ public class AccountSlidingForm extends VBox {
 		setVisible(false);
 		setManaged(false);
 		clearFields();
+	}
+	
+	public TextField getAccountNameField() {
+		return accountNameField;
+	}
+	
+	public TextField getBankNameField() {
+		return bankNameField;
+	}
+	
+	public ComboBox<String> getAccountTypeField() {
+		return accountTypeField;
 	}
 
 
