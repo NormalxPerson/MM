@@ -56,8 +56,10 @@ public class NavigationController implements Initializable, EventHandler<FormClo
 		ViewManager.initialize(contentArea);
 		this.viewManager = ViewManager.getInstance();
 		this.fab = FloatingActionButton.getInstance();
+		
 		BorderPane.setMargin(contentArea, new Insets(5));
 		contentArea.addEventHandler(FormClosedEvent.FORM_CLOSED, this);
+		
 		fab.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
 			public void handle(ActionEvent event) {
@@ -66,11 +68,13 @@ public class NavigationController implements Initializable, EventHandler<FormClo
 		});
 		
 		
-		
 		// Listen for navigation changes. When a ToggleButton is selected,
 		// retrieve its userData (the view name) and switch to that view.
 		navigationGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
 			// First, if there was a previously selected toggle, get its view name
+			if (newToggle == null) {
+				oldToggle.setSelected(true);
+			}
 			if (oldToggle != null && viewManager.getController() != null) {
 				viewManager.getController().hideForm();
 			}
@@ -83,6 +87,12 @@ public class NavigationController implements Initializable, EventHandler<FormClo
 			// Optionally, show the FAB when switching views.
 			fab.showFab();
 		});
+		
+/*		contentArea.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+			if (isNowFocused && navigationGroup.getSelectedToggle() != null) {
+				((ToggleButton) navigationGroup.getSelectedToggle()).setSelected(true);
+			}
+		});*/
 		
 		
 		

@@ -138,10 +138,12 @@
     -fx-background-color: derive(-fx-md3-primary-color, -10%); /* Darken slightly on press */
 }
 
+/*
 .button:focused {
-    -fx-background-color: -fx-md3-primary-color; /* Keep primary color on focus */
+    -fx-background-color: -fx-md3-primary-color; !* Keep primary color on focus *!
     -fx-text-fill: -fx-md3-on-primary-color;
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.14), 3, 0, 0, 2),  dropshadow(gaussian, -fx-focus-color, 12, 0, 0, 0); /* Focus ring - **CORRECTED** */}
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.14), 3, 0, 0, 2),  dropshadow(gaussian, -fx-focus-color, 12, 0, 0, 0); !* Focus ring - **CORRECTED** *!}
+*/
 
 /* **TEXT FIELDS (MD3 Filled Text Field style)** */
 .text-field {
@@ -209,15 +211,14 @@
     -fx-background-color: -fx-md3-surface-color; /* Even rows - Surface */
 }
 
-.table-view .table-row-cell:filled:selected,
-.table-view .table-row-cell:filled:focused, /* Added focus for better visual feedback */
+.table-view .table-row-cell:filled:selected, /* Added focus for better visual feedback */
 .table-view .table-row-cell:selected,
-.table-view .table-row-cell:focused {
+.table-view {
     -fx-background-color: -fx-md3-primary-color; /* Selected/Focused row - Primary color */
     -fx-text-fill: -fx-md3-on-primary-color;    /* Text color in selected row - On Primary */
 }
 .table-view .table-row-cell:selected .table-cell, /* Ensure text color changes in selected cells */
-.table-view .table-row-cell:focused .table-cell{
+.table-view .table-cell{
     -fx-text-fill: -fx-md3-on-primary-color;
 }
 
@@ -261,10 +262,12 @@
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.14), 3, 0, 0, 2); /*!* Slightly more *!*/
 }
 
+/*
 .md3-navigation-rail-item:focused {
-    -fx-background-color: -fx-md3-primary-container-color; /* Focus background - Primary Container */
-    -fx-text-fill: -fx-md3-on-primary-container-color;    /* Focus text - On Primary Container */
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.14), 3, 0, 0, 2),  dropshadow(gaussian, -fx-focus-color, 12, 0, 0, 0); /* Focus ring - **CORRECTED** */}
+    -fx-background-color: -fx-md3-primary-container-color; !* Focus background - Primary Container *!
+    -fx-text-fill: -fx-md3-on-primary-container-color;    !* Focus text - On Primary Container *!
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.14), 3, 0, 0, 2),  dropshadow(gaussian, -fx-focus-color, 12, 0, 0, 0); !* Focus ring - **CORRECTED** *!}
+*/
 
 
 
@@ -287,11 +290,11 @@
     -fx-background-color: derive(-fx-md3-primary-color, -10%); /* Darken slightly on press */
 }
 
-.floating-action-button:focused {
-    -fx-background-color: -fx-md3-primary-color;     /* FAB background - Primary color */
-    -fx-text-fill: -fx-md3-on-primary-color;        /* FAB icon/text color - On Primary */
-    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.14), 3, 0, 0, 2),  dropshadow(gaussian, -fx-focus-color, 12, 0, 0, 0); /* Focus ring - **CORRECTED** */
-}
+/*.floating-action-button:focused {
+    -fx-background-color: -fx-md3-primary-color;     !* FAB background - Primary color *!
+    -fx-text-fill: -fx-md3-on-primary-color;        !* FAB icon/text color - On Primary *!
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.14), 3, 0, 0, 2),  dropshadow(gaussian, -fx-focus-color, 12, 0, 0, 0); !* Focus ring - **CORRECTED** *!
+}*/
 
 
 /* -------------------- ADDITIONAL STYLES - ADJUST AS NEEDED -------------------- */

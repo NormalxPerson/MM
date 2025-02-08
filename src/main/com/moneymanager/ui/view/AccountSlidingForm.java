@@ -50,6 +50,7 @@ public class AccountSlidingForm extends VBox {
 		
 		saveButton = new Button("Save");
 		saveButton.getStyleClass().addAll("button", "md3-rounded-medium"); // Apply button styles and rounded corners
+		
 		closeButton = new Button("Close");
 		closeButton.getStyleClass().addAll("button", "md3-rounded-medium"); // Apply button styles and rounded corners
 		closeButton.setOnAction(event -> {
