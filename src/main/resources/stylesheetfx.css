@@ -155,7 +155,7 @@
     -fx-padding: 12px;                                /* Adjust text field padding as needed */
 }
 
-.text-field:focused {
+.text-field:selected {
     -fx-background-color: -fx-md3-surface-variant-color; /* Keep background on focus */
     -fx-text-fill: -fx-md3-on-surface-variant-color;
     -fx-border-color: -fx-md3-primary-color;            /* Primary color for focus outline */
@@ -175,12 +175,17 @@
 
 /* **TABLE VIEW (MD3 Data Table Style)** */
 .table-view {
-    -fx-background-color: -fx-md3-surface-color; /* Table background - Surface color */
+    -fx-background-color: -fx-md3-surface-variant-color; /* Table background - Surface color */
     -fx-control-inner-background: -fx-md3-surface-color; /* Inner background too */
     -fx-border-color: -fx-md3-outline-color;        /* Table outline */
     -fx-border-width: 1px;
     -fx-background-radius: 8px;                   /* Rounded corners for table itself */
     -fx-border-radius: 8px;
+}
+
+.table-view:focused {
+    -fx-effect: none;
+    -fx-border-color: transparent;
 }
 
 .table-view .column-header-background {
@@ -199,7 +204,7 @@
 }
 
 .table-view .table-row-cell {
-    -fx-background-color: -fx-md3-surface-color; /* Default row background - Surface */
+    -fx-background-color: -fx-md3-surface-variant-color; /* Default row background - Surface */
     -fx-cell-padding: 12px;                       /* Cell padding for rows */
 }
 
@@ -208,18 +213,20 @@
 }
 
 .table-view .table-row-cell:even {
-    -fx-background-color: -fx-md3-surface-color; /* Even rows - Surface */
+    -fx-background-color: -fx-md3-surface-variant-color; /* Even rows - Surface */
 }
 
-.table-view .table-row-cell:filled:selected, /* Added focus for better visual feedback */
+
+ .table-view .table-row-cell:filled:selected,
 .table-view .table-row-cell:selected,
 .table-view {
-    -fx-background-color: -fx-md3-primary-color; /* Selected/Focused row - Primary color */
-    -fx-text-fill: -fx-md3-on-primary-color;    /* Text color in selected row - On Primary */
+    -fx-background-color: -fx-md3-secondary-color;
+    -fx-text-fill: -fx-md3-on-secondary-color;
 }
-.table-view .table-row-cell:selected .table-cell, /* Ensure text color changes in selected cells */
+
+.table-view .table-row-cell:selected .table-cell,
 .table-view .table-cell{
-    -fx-text-fill: -fx-md3-on-primary-color;
+    -fx-text-fill: -fx-md3-on-secondary-color;
 }
 
 

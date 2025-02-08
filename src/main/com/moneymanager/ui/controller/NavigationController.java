@@ -158,6 +158,7 @@ public class NavigationController implements Initializable{
 	
 	public void handle(Event event) {
 		if (event.getEventType() == FormClosedEvent.FORM_CLOSED) {
+			viewManager.getController().setFormStatus(false);
 			fab.showFab();
 			System.out.println("FormClosedEvent received in NavigationController: showing FAB");
 		}

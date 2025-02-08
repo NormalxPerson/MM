@@ -4,9 +4,11 @@ import com.moneymanager.repos.SQLiteAccountRepo;
 import com.moneymanager.repos.SQLiteTransactionRepo;
 import com.moneymanager.service.AccountService;
 import com.moneymanager.service.TransactionService;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TransactionServiceTest {
 	
@@ -89,7 +91,6 @@ public class TransactionServiceTest {
 		try {
 			// Get the singleton connection
 			DatabaseConnection connection = DatabaseConnection.getInstance();
-			
 			connection.getConnection().createStatement().execute("PRAGMA foreign_keys = OFF");
 			// Clear the database tables
 			connection.getConnection().createStatement().execute("DELETE FROM csv_strategies");

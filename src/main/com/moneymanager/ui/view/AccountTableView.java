@@ -4,9 +4,7 @@ import com.moneymanager.core.Account;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 
 import java.util.List;
 
@@ -16,7 +14,9 @@ public class AccountTableView extends TableView<AccountTableView.AccountModel> {
 		
 		initializeColumns();
 		this.getStyleClass().addAll("table-view", "md3-rounded-medium");
+	
 	}
+	
 	
 	private void initializeColumns() {
 		TableColumn<AccountModel, String> accountNameColumn = new TableColumn<>("Account Name");
@@ -39,6 +39,8 @@ public class AccountTableView extends TableView<AccountTableView.AccountModel> {
 		getColumns().addAll(List.of(accountNameColumn, accountTypeColumn, accountBalanceColumn));
 	}
 	
+	
+	
 	private TableCell<AccountModel, Double> createBalanceCellFactory(TableColumn<AccountModel, Double> column) {
 		return new TableCell<>() {
 			@Override
@@ -52,6 +54,10 @@ public class AccountTableView extends TableView<AccountTableView.AccountModel> {
 			}
 		};
 	}
+	
+	
+	
+	
 	
 	public void populateAccountTable(ObservableList<AccountModel> items) { super.setItems(items); }
 	

@@ -18,12 +18,14 @@ public class AccountViewController implements Initializable, BaseViewController 
 	
 	@FXML
 	private VBox accountContainer;
+	private boolean formOpened = false;
 	
 	private AccountTableView accountTableView;
 	private AccountSlidingForm accountSlidingForm;
 	private AccountService accountService;
 	
 	private AccountTableView.AccountModel selectedAccountModel;
+	
 	
 	public AccountViewController() {
 		this.accountTableView = new AccountTableView();
@@ -33,9 +35,13 @@ public class AccountViewController implements Initializable, BaseViewController 
 	public void initialize(URL location, ResourceBundle resources) {
 		
 		accountTableView.setOnMouseClicked(event -> {
-			if (event.getClickCount() == 1) {
+			if (event.getClickCount() == 1 && !formOpened) {
 				showForm();
 				accountContainer.fireEvent(new FormOpenedEvent());
+			}
+			
+			if (event.getClickCount() == 1 && formOpened) {
+
 				selectedAccountModel = accountTableView.getSelectionModel().getSelectedItem();
 				if (selectedAccountModel != null) {
 					accountSlidingForm.getAccountNameField().setText(selectedAccountModel.getAccountName());
@@ -63,15 +69,19 @@ public class AccountViewController implements Initializable, BaseViewController 
 	}
 	
 	@Override
-	public void showForm() { accountSlidingForm.showForm();}
+	public void showForm() { accountSlidingForm.showForm(); formOpened = true; }
 	
 	@Override
-	public void hideForm() { accountSlidingForm.hideForm();}
+	public void hideForm() { accountSlidingForm.hideForm(); formOpened = false; }
+	
+	@Override
+	public void setFormStatus(boolean status) { formOpened = status; }
 	
 	public VBox getAccountContainer() { return this.accountContainer;}
 	
 	public void refreshAccountTable(ObservableList<AccountTableView.AccountModel> accountModelObservableList) {
 		accountTableView.populateAccountTable(accountModelObservableList);
+		
 	}
 	
 	

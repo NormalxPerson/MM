@@ -18,6 +18,7 @@ public class AccountSlidingForm extends VBox {
 	private ComboBox<String> accountTypeField;
 	private Button saveButton;
 	private Button closeButton;
+	private Button addButton;
 	private AccountService accountService;
 
 	public AccountSlidingForm(AccountService accountService) {
@@ -28,7 +29,7 @@ public class AccountSlidingForm extends VBox {
 		initializeAccountForm();
 		this.getStyleClass().add("sliding-form");
 		
-		HBox buttonBox = new HBox(10, closeButton, saveButton);
+		HBox buttonBox = new HBox(10, addButton, saveButton, closeButton);
 		buttonBox.setAlignment(Pos.CENTER_RIGHT);
 		this.getChildren().addAll(accountNameField, bankNameField, accountTypeField, buttonBox);
 		
@@ -48,6 +49,15 @@ public class AccountSlidingForm extends VBox {
 		accountTypeField.getItems().addAll("Debit", "Credit");
 		accountTypeField.getSelectionModel().selectFirst();
 		accountTypeField.getStyleClass().add("md3-rounded-small"); // Example: rounded corners for ComboBox - adjust if needed
+		
+		addButton = new Button("Add Account");
+		addButton.getStyleClass().addAll("button", "md3-rounded-medium");
+		addButton.setOnAction(event -> {
+			AccountTableView.AccountModel tempModel = new AccountTableView.AccountModel("", "", "", 0.0, null);
+			accountService.addModelToAccountTableView(tempModel);
+			
+		
+		});
 		
 		saveButton = new Button("Save");
 		saveButton.getStyleClass().addAll("button", "md3-rounded-medium"); // Apply button styles and rounded corners

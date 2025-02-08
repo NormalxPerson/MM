@@ -16,6 +16,7 @@ public class TransactionViewController implements Initializable, BaseViewControl
 	
 	@FXML
 	private VBox transactionContainer;
+	private boolean formOpened = false;
 	
 	private TransactionTableView transactionTableView;
 	private TransactionSlidingForm transactionSlidingForm;
@@ -38,12 +39,14 @@ public class TransactionViewController implements Initializable, BaseViewControl
 	}
 	
 	@Override
-	public void showForm() { transactionSlidingForm.showForm();}
+	public void showForm() { transactionSlidingForm.showForm(); formOpened = true; }
 	
 	@Override
 	public void hideForm() {
-		transactionSlidingForm.hideForm();
-	}
+		transactionSlidingForm.hideForm(); formOpened = false; }
+	
+	@Override
+	public void setFormStatus(boolean status) { formOpened = status; }
 	
 	public void refreshTransactionTable(ObservableList<TransactionTableView.TransactionModel> transactionModels) {
 		transactionTableView.populateTransactionTable(transactionModels);

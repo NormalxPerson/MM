@@ -29,11 +29,11 @@ public class AccountService {
     private void loadAccountModelsObservableList() {
         updateTheSourceAccountMap();
         accountModelObservableList.clear();
+        
         for (Account account : theSourceHashMapOfAccounts.values()) {
             AccountTableView.AccountModel accountModel = new AccountTableView.AccountModel(account.getAccountName(), account.getBankName(), account.getAccountType(), account.getBalance(), account.getAccountId());
             accountModelObservableList.add(accountModel);
         }
-        
     }
     
     public void updateBalance(String accountId, double amount) {
@@ -67,6 +67,10 @@ public class AccountService {
         return newAccount;
     }
     
+    public void addModelToAccountTableView(AccountTableView.AccountModel accountModel) {
+        accountModelObservableList.add(accountModel);
+    }
+    
     public Account getAccountByAccountId(String accountId) {
         return theSourceHashMapOfAccounts.get(accountId);
     }
@@ -82,6 +86,7 @@ public class AccountService {
     public List<Account> getAccountList() {
 	    return new ArrayList<>(accountRepo.getAllAccounts());
     }
+
 
 
 }
