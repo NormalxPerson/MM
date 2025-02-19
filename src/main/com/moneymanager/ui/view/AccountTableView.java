@@ -14,6 +14,8 @@ public class AccountTableView extends TableView<AccountTableView.AccountModel> {
 		
 		initializeColumns();
 		this.getStyleClass().addAll("table-view", "md3-rounded-medium");
+		
+
 	
 	}
 	
@@ -37,6 +39,7 @@ public class AccountTableView extends TableView<AccountTableView.AccountModel> {
 		accountBalanceColumn.setPrefWidth(130);
 		
 		getColumns().addAll(List.of(accountNameColumn, accountTypeColumn, accountBalanceColumn));
+		
 	}
 	
 	

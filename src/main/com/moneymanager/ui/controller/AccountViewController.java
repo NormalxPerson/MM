@@ -4,10 +4,12 @@ import com.moneymanager.service.AccountService;
 import com.moneymanager.ui.event.FormOpenedEvent;
 import com.moneymanager.ui.view.AccountSlidingForm;
 import com.moneymanager.ui.view.AccountTableView;
+import com.moneymanager.ui.view.SlidingForm;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableRow;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
@@ -34,23 +36,27 @@ public class AccountViewController implements Initializable, BaseViewController 
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		
-		accountTableView.setOnMouseClicked(event -> {
-			if (event.getClickCount() == 1 && !formOpened) {
-				showForm();
-				accountContainer.fireEvent(new FormOpenedEvent());
-			}
+		accountTableView.setRowFactory(tv -> {
+			TableRow<AccountTableView.AccountModel> row = new TableRow<>();
 			
-			if (event.getClickCount() == 1 && formOpened) {
-
-				selectedAccountModel = accountTableView.getSelectionModel().getSelectedItem();
-				if (selectedAccountModel != null) {
-					accountSlidingForm.getAccountNameField().setText(selectedAccountModel.getAccountName());
-					accountSlidingForm.getBankNameField().setText(selectedAccountModel.getBankName());
-					if (accountSlidingForm.getAccountTypeField().getItems().contains(selectedAccountModel.getAccountType())) {
-						accountSlidingForm.getAccountTypeField().setValue(selectedAccountModel.getAccountType());
-					}
+			row.setOnMouseClicked(event -> {
+				if (accountSlidingForm.getFormStatus() == SlidingForm.FormStatus.ADDING) {
+					// Prevent selection of any row while adding
+					event.consume(); // Consume the event to stop further processing
+					selectBlankRow();
+					return;
 				}
-			}
+				if (!row.isEmpty() && event.getClickCount() == 1 ) {
+					if (accountSlidingForm.getFormStatus().equals(SlidingForm.FormStatus.CLOSED)) {
+						accountContainer.fireEvent(new FormOpenedEvent());
+					}
+					this.selectedAccountModel = row.getItem();
+					// handle click
+					System.out.println("Clicked row: " + selectedAccountModel);
+					accountSlidingForm.showForm(SlidingForm.FormStatus.EDITING, selectedAccountModel);
+				}
+			});
+			return row;
 		});
 		
 		
@@ -69,7 +75,26 @@ public class AccountViewController implements Initializable, BaseViewController 
 	}
 	
 	@Override
-	public void showForm() { accountSlidingForm.showForm(); formOpened = true; }
+	public void selectBlankRow() {
+		int row = accountTableView.getItems().size()-1;
+		if (row >= 0) {
+			accountTableView.getSelectionModel().select(row);
+		}
+	}
+	
+	@Override
+	public void setFormForBlankModel() {
+		accountSlidingForm.setUpForAddingModel();
+	}
+	
+	@Override
+	public void unselectRow() {
+		accountTableView.getSelectionModel().clearSelection();
+	}
+	
+	@Override
+	public void showForm() {
+		accountSlidingForm.setUpForAddingModel(); }
 	
 	@Override
 	public void hideForm() { accountSlidingForm.hideForm(); formOpened = false; }

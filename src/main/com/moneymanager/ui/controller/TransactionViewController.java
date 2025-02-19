@@ -39,6 +39,21 @@ public class TransactionViewController implements Initializable, BaseViewControl
 	}
 	
 	@Override
+	public void setFormForBlankModel() {
+	
+	}
+	
+	@Override
+	public void selectBlankRow() {
+	
+	}
+	
+	@Override
+	public void unselectRow() {
+		transactionTableView.getSelectionModel().clearSelection();
+	}
+	
+	@Override
 	public void showForm() { transactionSlidingForm.showForm(); formOpened = true; }
 	
 	@Override

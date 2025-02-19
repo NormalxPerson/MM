@@ -26,7 +26,7 @@ public class AccountService {
         return accountModelObservableList;
     }
     
-    private void loadAccountModelsObservableList() {
+    public void loadAccountModelsObservableList() {
         updateTheSourceAccountMap();
         accountModelObservableList.clear();
         
@@ -48,27 +48,39 @@ public class AccountService {
         
     }
     
-    public Account createAccount(String accountName, String bankName, String accountType) {
-        // Validate inputs
-        if (accountName == null || accountName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Account name cannot be empty");
-        }
-        if (bankName == null || bankName.trim().isEmpty()) {
-            throw new IllegalArgumentException("Bank name cannot be empty");
-        }
-        if (accountType == null || (!accountType.equals("DEBT") && !accountType.equals("CREDIT"))) {
-            throw new IllegalArgumentException("Account type must be DEBT or CREDIT");
-        }
-        
-        Account newAccount = new Account(accountName, bankName, accountType);
-        
+    public void createAccount(AccountTableView.AccountModel accountModel) {
+        System.out.println(accountModel.toString());
+        Account newAccount = new Account(accountModel.getAccountName(), accountModel.getBankName(), accountModel.getAccountType(), accountModel.getAccountBalance());
+        System.out.println(newAccount.toString());
         accountRepo.addAccount(newAccount);
-        loadAccountModelsObservableList();
-        return newAccount;
+    }
+    
+    public AccountTableView.AccountModel createAndGetBlankAccountModel() {
+        AccountTableView.AccountModel blankAccountModel = new AccountTableView.AccountModel("", "", "", 0.00, "");
+	    
+	    accountModelObservableList.add(blankAccountModel);
+
+        return blankAccountModel;
+    }
+    
+    public void removeBlankAccountModel(AccountTableView.AccountModel accountModel) {
+        accountModelObservableList.remove(accountModel);
     }
     
     public void addModelToAccountTableView(AccountTableView.AccountModel accountModel) {
+        
         accountModelObservableList.add(accountModel);
+    }
+    
+    public AccountTableView.AccountModel createAddAndGetNewAccountModel(String accountName, String bankName, String accountType, Double balance) {
+        String  id = String.valueOf(accountModelObservableList.size() + 1);
+        Account newAccount = new Account(id, accountName, bankName, accountType, balance);
+        accountRepo.addAccount(newAccount);
+	    return createModelFromAccount(newAccount);
+    }
+    
+    public void updateAccount(AccountTableView.AccountModel accountModel) {
+        accountRepo.updateAccount(accountModel);
     }
     
     public Account getAccountByAccountId(String accountId) {
@@ -85,6 +97,11 @@ public class AccountService {
     
     public List<Account> getAccountList() {
 	    return new ArrayList<>(accountRepo.getAllAccounts());
+    }
+    
+    public AccountTableView.AccountModel createModelFromAccount(Account account) {
+	    return new AccountTableView.AccountModel(account.getAccountName(), account.getBankName(), account.getAccountType(), account.getBalance(), account.getAccountId());
+     
     }
 
 

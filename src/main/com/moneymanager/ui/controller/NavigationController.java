@@ -2,6 +2,7 @@ package com.moneymanager.ui.controller;
 
 import com.moneymanager.service.AccountService;
 import com.moneymanager.service.TransactionService;
+import com.moneymanager.ui.event.AddingModelEvent;
 import com.moneymanager.ui.event.FormClosedEvent;
 import com.moneymanager.ui.event.FormOpenedEvent;
 import com.moneymanager.ui.view.FloatingActionButton;
@@ -112,10 +113,12 @@ public class NavigationController implements Initializable{
 	private void handleFabAction(ActionEvent event) {
 		// Use the currently selected view name to determine which view's controller to notify.
 		if (navigationGroup.getSelectedToggle() != null && viewManager.getController() != null) {
-			viewManager.getController().showForm();
+			//viewManager.getController().showForm();
 			
 			// Hide the FAB after opening a form.
 			fab.hideFab();
+			viewManager.getController().setFormForBlankModel();
+			System.out.println("In NavigationController: fab.hideFab() + viewManager.getController().setFormForBlankModel()");
 		}
 	}
 	
@@ -158,14 +161,20 @@ public class NavigationController implements Initializable{
 	
 	public void handle(Event event) {
 		if (event.getEventType() == FormClosedEvent.FORM_CLOSED) {
-			viewManager.getController().setFormStatus(false);
 			fab.showFab();
+			viewManager.getController().unselectRow();
 			System.out.println("FormClosedEvent received in NavigationController: showing FAB");
 		}
 		else if (event.getEventType() == FormOpenedEvent.FORM_OPENED) {
 			fab.hideFab();
 			System.out.println("FormOpenedEvent received in NavigationController: hiding FAB");
 		}
+		else if (event.getEventType() == AddingModelEvent.ADDING_MODEL) {
+			viewManager.getController().selectBlankRow();
+		
+		}
+		
+		
 	}
 	
 }

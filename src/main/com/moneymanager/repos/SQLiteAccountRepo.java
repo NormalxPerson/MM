@@ -2,6 +2,7 @@ package com.moneymanager.repos;
 
 import com.moneymanager.core.Account;
 import com.moneymanager.database.DatabaseConnection;
+import com.moneymanager.ui.view.AccountTableView;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -100,7 +101,7 @@ public class SQLiteAccountRepo implements AccountRepo {
     @Override
     public void addAccount(Account account) {
         String sql = "INSERT INTO accounts (accountName, bankName, accountBalance, accountType) VALUES (?, ?, ?, ?)";
-        
+        int balanceInCents = (int) Math.round(account.getBalance() * 100);
         int maxRetries = 3;
         int attempt = 0;
         while (attempt < maxRetries) {
@@ -109,7 +110,7 @@ public class SQLiteAccountRepo implements AccountRepo {
                     try (PreparedStatement stmt = connection.prepareStatement(sql)) {
                         stmt.setString(1, account.getAccountName());
                         stmt.setString(2, account.getBankName());
-                        stmt.setDouble(3, account.getBalance());
+                        stmt.setDouble(3, balanceInCents);
                         stmt.setString(4, account.getAccountType().toUpperCase());
                         
                         stmt.executeUpdate();
@@ -136,6 +137,26 @@ public class SQLiteAccountRepo implements AccountRepo {
                 System.out.println("Retrying database operation... Attempt " + (attempt + 1));
             }
             
+        }
+    }
+    
+    public void updateAccount(AccountTableView.AccountModel account) {
+        String sql = "UPDATE accounts SET accountName = ?, bankName = ?, accountBalance = ?, accountType = ? WHERE accountId = ?";
+        int balanceInCents = (int) Math.round(account.getAccountBalance() * 100);
+        try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(sql)) {
+            stmt.setString(1, account.getAccountName());
+            stmt.setString(2, account.getBankName());
+            stmt.setDouble(3, balanceInCents);
+            stmt.setString(4, account.getAccountType());
+            stmt.setInt(5, Integer.parseInt(account.getAccountId()));
+            
+            int rowsUpdated = stmt.executeUpdate();
+            
+            if (rowsUpdated == 0) {
+                throw new IllegalArgumentException("No account found with ID: " + account.getAccountId());
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to update account", e);
         }
     }
 }

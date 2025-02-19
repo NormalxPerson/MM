@@ -128,6 +128,25 @@
     -fx-font-size: 14px;                          /* MD3 button font size */
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 2, 0, 0, 1);}
 
+.delete-button {
+    -fx-background-color: -fx-md3-error-color;
+    -fx-text-fill: -fx-md3-on-error-color;
+    -fx-border-color: -fx-md3-error-container-color;
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+.delete-button:hover {
+    -fx-background-color: derive(-fx-md3-error-color, -10%); /* Slightly darker red */
+    -fx-border-color: derive(-fx-md3-error-container-color, -10%);
+}
+
+.delete-button:pressed {
+    -fx-background-color: -fx-md3-on-error-container-color; /* Darkest red */
+    -fx-border-color: -fx-md3-error-color;
+    -fx-translate-y: 1px; /* Press effect */
+}
+
+
 .button:hover {
     -fx-background-color: -fx-md3-primary-container-color; /* Hover uses primary container */
     -fx-text-fill: -fx-md3-on-primary-container-color;    /* Text on primary container */
@@ -216,6 +235,9 @@
     -fx-background-color: -fx-md3-surface-variant-color; /* Even rows - Surface */
 }
 
+.table-row-cell:selected.no-highlight {
+    -fx-background-color: transparent; /* Or your default row background color */
+}
 
  .table-view .table-row-cell:filled:selected,
 .table-view .table-row-cell:selected,
