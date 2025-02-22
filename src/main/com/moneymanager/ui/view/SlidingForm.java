@@ -5,8 +5,13 @@ import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Control;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class SlidingForm<T> extends VBox {
 	public enum FormStatus {
@@ -129,6 +134,63 @@ public abstract class SlidingForm<T> extends VBox {
 	protected abstract void onSaveAction();
 	protected abstract void onCancelAction();
 	protected abstract void onDeleteAction();
+	
+	protected Map<String, String> validateFields(Map<String, String> fieldValues, Map<String, List<String>> constraints) {
+		Map<String, String> errors = new HashMap<>();
+		
+		for (Map.Entry<String, String> entry : fieldValues.entrySet()) {
+			String field = entry.getKey();
+			String value = entry.getValue();
+			List<String> rules = constraints.get(field);
+			
+			if (rules != null) {
+				for (String rule : rules) {
+					if (rule.equals("required") && (value == null || value.trim().isEmpty())) {
+						errors.put(field, field + " cannot be empty.");
+					} else if (rule.equals("double")) {
+						try {
+							Double.parseDouble(value);
+						} catch (NumberFormatException e) {
+							errors.put(field, field + " must be a valid number.");
+						}
+					} else if (rule.startsWith("options:")) {
+						List<String> options = List.of(rule.replace("options:", "").split(","));
+						if (!options.contains(value)) {
+							errors.put(field, field + " must be one of: " + options);
+						}
+					}
+				}
+			}
+		}
+		
+		return errors;
+	}
+	
+	protected void showValidationErrors(Map<String, String> errors, Map<String, Control> fieldMap) {
+		// Reset field styles
+		for (Control field : fieldMap.values()) {
+			field.setStyle("");
+		}
+		
+		// Apply error styles
+		for (Map.Entry<String, String> entry : errors.entrySet()) {
+			if (fieldMap.containsKey(entry.getKey())) {
+				fieldMap.get(entry.getKey()).setStyle("-fx-border-color: red; -fx-border-width: 2px;");
+			}
+		}
+	}
+	
+	protected Map<String, String> hasModelChanged(Map<String, String> oldValues, Map<String, String> newValues) {
+		Map<String, String> changes = new HashMap<>();
+		
+		for (String field : oldValues.keySet()) {
+			if (!oldValues.get(field).equals(newValues.get(field))) {
+				changes.put(field, "Changed " + field);
+			}
+		}
+		
+		return changes;
+	}
 	
 }
 

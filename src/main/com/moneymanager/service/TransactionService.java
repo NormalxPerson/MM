@@ -9,6 +9,7 @@ import com.moneymanager.ui.view.TransactionTableView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -24,6 +25,16 @@ public class TransactionService implements TransactionServiceInterface {
 		this.transRepo = transRepo;
 		this.accountService = accountService;
 		this.transactionModels = FXCollections.observableArrayList();
+	}
+	
+	public TransactionTableView.TransactionModel createAddAndGetNewTransactionModel(double amount, String description, String date, String type, String accountId) {
+		// Create transaction using TransactionFactory
+		Transaction newTransaction = TransactionFactory.createTransaction(amount, description, date, type, accountId, transRepo);
+		
+		// Insert the transaction into the database
+		transRepo.addTransaction(newTransaction);
+		return createTransactionModelFromTransaction(newTransaction);
+		
 	}
 	
 	@Override
@@ -53,8 +64,8 @@ public class TransactionService implements TransactionServiceInterface {
 		
 	}
 	
-	private void addNewTransactionModelToTable(Transaction transaction) {
-		transactionModels.add(createNewTransactionModel(transaction));
+	public void addNewTransactionModelToTable(TransactionTableView.TransactionModel transaction) {
+		transactionModels.add(transaction);
 	}
 	
 	@Override
@@ -77,6 +88,35 @@ public class TransactionService implements TransactionServiceInterface {
 	public ObservableList<AccountTableView.AccountModel> getAccountModelObservableList() {
 		return accountService.getAccountModelObservableList();
 	}
+	
+	public TransactionTableView.TransactionModel createTransactionModelFromTransaction(Transaction transaction) {
+		String accountName = accountService.getAccountNameByAccountId(transaction.getAccountId());
+		return new TransactionTableView.TransactionModel(
+				transaction.getId(),
+				transaction.getDate(),
+				transaction.getAmount(),
+				transaction.getDescription(),
+				transaction.getType(),
+				transaction.getAccountId(),
+				accountName
+		);
+	}
+	
+	public void updateTransaction(TransactionTableView.TransactionModel updatedTransactionModel) {
+		Transaction updatedTransaction = new Transaction(
+				updatedTransactionModel.getTransactionId(),
+				updatedTransactionModel.getTransactionAmount(),
+				updatedTransactionModel.getTransactionDescription(),
+				updatedTransactionModel.getTransactionDate(), // Convert String to LocalDate
+				updatedTransactionModel.getTransactionType(),
+				updatedTransactionModel.getTransactionAccountId()
+		);
+		
+		transRepo.updateTransaction(updatedTransaction);
+		
+	}
+	
+
 	
 	
 	

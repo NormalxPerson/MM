@@ -12,7 +12,7 @@ public class Transaction {
 	private final String type;
 	private final String accountId;
 
-	Transaction(String id, double amount, String description, LocalDate date, String type, String accountId) {
+	public Transaction(String id, double amount, String description, LocalDate date, String type, String accountId) {
 		this.id = id;
 		this.amount = amount;
 		this.description = description;

@@ -42,7 +42,6 @@ public class AccountSlidingForm extends SlidingForm<AccountTableView.AccountMode
 		Label accountTypeLabel = new Label("Account Type");
 		Label accountBalanceLabel = new Label("Account Balance");
 		
-		
 		accountNameField.getStyleClass().addAll("text-field", "md3-rounded-small"); // Apply text-field styles and rounded corners
 		bankNameField.getStyleClass().addAll("text-field", "md3-rounded-small"); // Apply text-field styles and rounded corners
 		accountTypeField.getStyleClass().add("md3-rounded-small"); // Example: rounded corners for ComboBox - adjust if needed
@@ -52,25 +51,20 @@ public class AccountSlidingForm extends SlidingForm<AccountTableView.AccountMode
 		VBox bankNameFieldBox = new VBox(2,bankNameLabel, bankNameField);
 		VBox typeFieldBox = new VBox(2, accountTypeLabel, accountTypeField);
 		VBox balanceFieldBox = new VBox(2, accountBalanceLabel, accountBalanceField);
-		
-		
 
 		this.getChildren().addAll(nameFieldBox, bankNameFieldBox, typeFieldBox, balanceFieldBox);
-	
 	}
 	
 	@Override
 	protected void loadModelDataIntoForm(AccountTableView.AccountModel accountModel) {
 		if (accountModel == null) {
 			clearFormFields();
-			return;
 		} else {
 		
 			accountNameField.setText(accountModel.getAccountName());
 			bankNameField.setText(accountModel.getBankName());
 			accountTypeField.setValue(accountModel.getAccountType());
-			accountBalanceField.setText(String.format(accountModel.getAccountBalance().toString()));
-		}
+			accountBalanceField.setText(String.format("%.2f", accountModel.getAccountBalance()));		}
 	}
 	
 	@Override

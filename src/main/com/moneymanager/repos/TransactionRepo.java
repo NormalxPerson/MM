@@ -11,4 +11,6 @@ public interface TransactionRepo {
 	int getTransactionCountByDate(String date);
 	void addTransactions(List<Transaction> transactions);
 	String getLastTransactionIdForDate(String date);
+	void addTransaction(Transaction transaction);
+	void updateTransaction(Transaction transaction);
 }

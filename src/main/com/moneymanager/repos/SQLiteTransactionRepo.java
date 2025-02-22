@@ -42,6 +42,12 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 	}
 	
 	@Override
+	public void addTransaction(Transaction transaction) {
+		addTransactions(List.of(transaction));
+	}
+	
+	
+	@Override
 	public int getTransactionCountByDate(String date) {
 		String sql = "SELECT COUNT(*) as count FROM transactions WHERE transactionDate = ?";
 		try (Connection connection = dbConnection.getConnection();
@@ -113,5 +119,28 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 		} catch (SQLException e) {
 			throw new RuntimeException("TransactionRepo.getLastTransactionIdForDateFailed to fetch last transaction ID for date: " + date, e);}
 		return null;
+	}
+	
+	@Override
+	public void updateTransaction(Transaction transaction) {
+		String sql = "UPDATE transactions SET transactionAmount = ?, transactionDescription = ?, transactionDate = ?, transactionType = ?, accountId = ? WHERE transactionId = ?";
+		
+		try (Connection connection = dbConnection.getConnection();
+		     PreparedStatement stmt = connection.prepareStatement(sql)) {
+			
+			stmt.setInt(1, (int) Math.round(transaction.getAmount() * 100)); // Convert to cents
+			stmt.setString(2, transaction.getDescription());
+			stmt.setString(3, transaction.getDate().toString()); // Store LocalDate as TEXT
+			stmt.setString(4, transaction.getType());
+			stmt.setString(5, transaction.getAccountId());
+			stmt.setString(6, transaction.getId());
+			
+			int rowsUpdated = stmt.executeUpdate();
+			if (rowsUpdated == 0) {
+				System.err.println("No transaction found with ID: " + transaction.getId());
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException("Failed to update transaction with ID: " + transaction.getId(), e);
+		}
 	}
 }

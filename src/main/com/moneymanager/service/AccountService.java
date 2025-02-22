@@ -83,9 +83,6 @@ public class AccountService {
         accountRepo.updateAccount(accountModel);
     }
     
-    public Account getAccountByAccountId(String accountId) {
-        return theSourceHashMapOfAccounts.get(accountId);
-    }
     
     public String getAccountNameByAccountId(String accountId) {
         return theSourceHashMapOfAccounts.get(accountId).getAccountName();
