@@ -77,11 +77,10 @@ public abstract class SlidingForm<T> extends VBox {
 		this.setManaged(false);
 		this.status = FormStatus.CLOSED;
 		
-		initializeLayout();
 	}
 	
 	protected void initializeLayout() {
-		this.getChildren().add(buttonBox);
+		//this.getChildren().add(buttonBox);
 		updateButtonBox();
 	}
 	

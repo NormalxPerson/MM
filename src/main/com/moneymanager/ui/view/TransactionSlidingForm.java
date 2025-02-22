@@ -33,6 +33,7 @@ public class TransactionSlidingForm extends SlidingForm<TransactionTableView.Tra
 		super();
 		addButton.setText("Add Transaction");
 		this.transactionService = transactionService;
+		initializeLayout();
 	}
 	
 	@Override

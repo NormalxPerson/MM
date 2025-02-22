@@ -25,6 +25,7 @@ public class AccountSlidingForm extends SlidingForm<AccountTableView.AccountMode
 		super();
 		addButton.setText("Add Account");
 		this.accountService = accountService;
+		initializeLayout();
 	}
 	
 	@Override
