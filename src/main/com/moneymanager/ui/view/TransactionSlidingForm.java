@@ -2,24 +2,16 @@ package com.moneymanager.ui.view;
 
 import com.moneymanager.service.TransactionService;
 import com.moneymanager.ui.event.AddingModelEvent;
-import com.moneymanager.ui.event.FormClosedEvent;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TransactionSlidingForm extends SlidingForm<TransactionTableView.TransactionModel> {
+public class TransactionSlidingForm extends AbstractSlidingForm<TransactionTableView.TransactionModel> {
 	
 	private TextField transactionAmountField;
 	private TextField transactionDescriptionField;
@@ -85,13 +77,9 @@ public class TransactionSlidingForm extends SlidingForm<TransactionTableView.Tra
 	}
 	
 	@Override
-	protected void onAddAction() {
+	public void onAddAction() {
 		setFormStatus(FormStatus.ADDING);
 		clearFormFields();
-		if (!this.isVisible()) {
-			this.setVisible(true);
-			this.setManaged(true);
-		}
 		Event.fireEvent(this, new AddingModelEvent());
 	}
 	
@@ -157,12 +145,23 @@ public class TransactionSlidingForm extends SlidingForm<TransactionTableView.Tra
 		return;
 	}
 	
-	public void showForm() {
-		setVisible(true);
-		setManaged(true);
-		setUpFields();
+	@Override
+	protected Map<String, String> captureFieldValues() {
+		return Map.of();
 	}
 	
+	@Override
+	protected Map<String, List<String>> getFieldConstraints() {
+		return Map.of();
+	}
+	
+	@Override
+	protected void restoreDefaultStyleClasses(Control field) {
+	
+	}
+	
+	
+	@Override
 	public void setUpFields() {
 		transactionAmountField.setPromptText("Amount");
 		transactionDescriptionField.setPromptText("Description");
@@ -172,6 +171,7 @@ public class TransactionSlidingForm extends SlidingForm<TransactionTableView.Tra
 		else {accountComboBox.setPromptText("Account"); }
 	}
 	
+	@Override
 	public void hideForm() {
 		setVisible(false);
 		setManaged(false);
@@ -185,6 +185,11 @@ public class TransactionSlidingForm extends SlidingForm<TransactionTableView.Tra
 		transactionDatePicker.setValue(LocalDate.now());
 		transactionTypeComboBox.getSelectionModel().select("EXPENSE");
 		accountComboBox.getSelectionModel().selectFirst();
+	}
+	
+	@Override
+	protected void removeBlankAccountModel() {
+	
 	}
 	
 	private Map<String, Control> getTransactionFieldMap() {

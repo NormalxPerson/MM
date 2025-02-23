@@ -6,21 +6,25 @@ import com.moneymanager.ui.event.FormClosedEvent;
 import javafx.collections.FXCollections;
 import javafx.event.Event;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-public class AccountSlidingForm extends SlidingForm<AccountTableView.AccountModel> {
+public class AccountSlidingForm extends AbstractSlidingForm<AccountTableView.AccountModel> {
 	private TextField accountNameField;
 	private TextField bankNameField;
 	private ComboBox<String> accountTypeField;
 	private TextField accountBalanceField;
 	
 	private AccountService accountService;
-
+	
+	
+	
 	public AccountSlidingForm(AccountService accountService) {
 		super();
 		addButton.setText("Add Account");
@@ -54,12 +58,17 @@ public class AccountSlidingForm extends SlidingForm<AccountTableView.AccountMode
 		VBox balanceFieldBox = new VBox(2, accountBalanceLabel, accountBalanceField);
 
 		this.getChildren().addAll(nameFieldBox, bankNameFieldBox, typeFieldBox, balanceFieldBox);
+		
+		fieldMap.put("accountName", accountNameField);
+		fieldMap.put("bankName", bankNameField);
+		fieldMap.put("accountType", accountTypeField);
+		fieldMap.put("accountBalance", accountBalanceField);
 	}
 	
 	@Override
 	protected void loadModelDataIntoForm(AccountTableView.AccountModel accountModel) {
 		if (accountModel == null) {
-			clearFormFields();
+			resetFormFields();
 		} else {
 		
 			accountNameField.setText(accountModel.getAccountName());
@@ -69,48 +78,101 @@ public class AccountSlidingForm extends SlidingForm<AccountTableView.AccountMode
 	}
 	
 	@Override
-	protected void onAddAction() {
-		
+	public void onAddAction() {
+		resetFormFields();
 		setUpForAddingModel();
 		this.setVisible(true);
 		this.setManaged(true);
 	}
 	
 	@Override
-	protected void onSaveAction() {
-		String accountName = accountNameField.getText();
-		String bankName = bankNameField.getText();
-		String accountType = accountTypeField.getValue();
-		String accountBalance = accountBalanceField.getText();
-		double accountBalanceDouble;
+	protected void onSaveAction() { // Implemented in AccountSlidingForm
+		Map<String, String> fieldValues = captureFieldValues(); // Call abstract method
+		Map<String, List<String>> constraints = getFieldConstraints(); // Call abstract method
 		
-		Map<String, String> errorMap = validateAccountFields(accountName, bankName, accountType, accountBalance);
-		if (!errorMap.isEmpty()) {
-			showValidationErrors(errorMap);
+		Map<String, String> oldValues = null; // Get old values before changes if needed for comparison
+		if (getFormStatus() == FormStatus.EDITING && currentModel != null) {
+			oldValues = captureCurrentFieldValues(); // Implement this method to capture old values
 		}
-		if (errorMap.isEmpty()) {
-			accountBalanceDouble = Double.parseDouble(accountBalance);
-			if (status == FormStatus.ADDING) {
-				removeBlankAccountModel();
-				this.currentModel = accountService.createAddAndGetNewAccountModel(accountName, bankName, accountType, accountBalanceDouble);
-				accountService.loadAccountModelsObservableList();
-				hideForm();
-			} else if (status == FormStatus.EDITING) {
-				Map<String, String> changes = hasAccountModelChanged(accountName, bankName, accountType, accountBalanceDouble);
-				if (!changes.isEmpty()) {
-					showChanges(changes);
-					
-					System.out.println(changes.keySet());
-					currentModel.setAccountName(accountName);
-					currentModel.setBankName(bankName);
-					currentModel.setAccountType(accountType);
-					currentModel.setAccountBalance(accountBalanceDouble);
-					
-					accountService.updateAccount(currentModel);
+		
+		Map<String, String> errors = validateFields(fieldValues, constraints);
+		
+		if (errors.isEmpty()) {
+			try {
+				String accountName = accountNameField.getText();
+				String bankName = bankNameField.getText();
+				String accountType = accountTypeField.getValue();
+				double accountBalance = Double.parseDouble(accountBalanceField.getText());
+				
+				if (getFormStatus() == FormStatus.ADDING) {
+					this.currentModel = accountService.createAddAndGetNewAccountModel(accountName, bankName, accountType, accountBalance );
+					accountService.loadAccountModelsObservableList();
+					resetFormFields(); // Clear form after successful add
+					hideForm();
+				} else if (getFormStatus() == FormStatus.EDITING && currentModel != null) {
+					if (oldValues != null) { // Compare only in EDITING mode and if oldValues were captured
+						Map<String, String> changes = hasModelChanged(oldValues, fieldValues); // Now calls the generic version and showChanges
+						if (!changes.isEmpty()) {
+							this.currentModel.setAccountName(accountName);
+							this.currentModel.setBankName(bankName);
+							this.currentModel.setAccountType(accountType);
+							this.currentModel.setAccountBalance(accountBalance);
+							System.out.println("Changes detected: " + changes);
+							
+						}
+						
+					}
 				}
+				Event.fireEvent(this, new FormClosedEvent()); // If you have such an event
+			} catch (IllegalArgumentException e) {
+				System.out.println("Validation Error: " + e.getMessage()); // Or handle more gracefully
 			}
+		} else {
+			showValidationErrors(errors, fieldMap);
 		}
 	}
+	
+	
+	@Override
+	protected Map<String, String> captureFieldValues() { // Implemented in AccountSlidingForm
+		Map<String, String> fieldValues = new HashMap<>();
+		fieldValues.put("accountName", accountNameField.getText());
+		fieldValues.put("bankName", bankNameField.getText());
+		fieldValues.put("accountType", accountTypeField.getValue());
+		fieldValues.put("accountBalance", accountBalanceField.getText());
+		return fieldValues;
+	}
+	
+	@Override
+	protected Map<String, List<String>> getFieldConstraints() { // Implemented in AccountSlidingForm
+		Map<String, List<String>> constraints = new HashMap<>();
+		constraints.put("accountName", List.of("required"));
+		constraints.put("bankName", List.of("required"));
+		constraints.put("accountType", List.of("required", "options:Checking,Savings,Credit Card,Investment"));
+		constraints.put("accountBalance", List.of("required", "double"));
+		return constraints;
+	}
+	
+	// ** New method to capture current field values ** (moved to be used with oldValues comparison)
+	private Map<String, String> captureCurrentFieldValues() {
+		Map<String, String> currentValues = new HashMap<>();
+		currentValues.put("accountName", accountNameField.getText());
+		currentValues.put("bankName", bankNameField.getText());
+		currentValues.put("accountType", accountTypeField.getValue());
+		currentValues.put("accountBalance", accountBalanceField.getText());
+		return currentValues;
+	}
+	
+	@Override
+	protected void restoreDefaultStyleClasses(Control field) {
+		if (field instanceof TextField) {
+			field.getStyleClass().addAll("text-field", "md3-rounded-small"); // Default styles for TextField
+		} else if (field instanceof ComboBox) {
+			field.getStyleClass().add("md3-rounded-small"); // Default styles for ComboBox
+		}
+		// Add more conditions for other Control types if needed in your forms
+	}
+	
 	
 	@Override
 	protected void onCancelAction() {
@@ -141,12 +203,12 @@ public class AccountSlidingForm extends SlidingForm<AccountTableView.AccountMode
 		return changes;
 	}
 	
-	private void clearFormFields() {
-		accountNameField.clear();
-		bankNameField.clear();
-		accountBalanceField.clear();
+	@Override
+	public void setUpFields() {
+	
 	}
 	
+	@Override
 	public void setUpForAddingModel() {
 		setFormStatus(FormStatus.ADDING);
 		updateSelectedModel(accountService.createAndGetBlankAccountModel());
@@ -158,22 +220,37 @@ public class AccountSlidingForm extends SlidingForm<AccountTableView.AccountMode
 		Event.fireEvent(this, new AddingModelEvent());
 	}
 	
-	private void removeBlankAccountModel() {
+	protected void removeBlankAccountModel() {
 		accountService.removeBlankAccountModel(this.currentModel);
 		this.currentModel = null;
 	}
-
+	
+	@Override
 	public void hideForm() {
-		
 		if (this.status == FormStatus.ADDING) {
 			removeBlankAccountModel();
 		}
-		resetFieldStyles();
 		clearFormFields();
 		setVisible(false);
 		setManaged(false);
 		this.status = FormStatus.CLOSED;
 		Event.fireEvent(this, new FormClosedEvent());
+	}
+	
+	@Override
+	protected void clearFormFields() {
+	
+	}
+	
+	private Map<String, String> captureModelValues(AccountTableView.AccountModel model) {
+		Map<String, String> modelValues = new HashMap<>();
+		if (model != null) {
+			modelValues.put("accountName", model.getAccountName());
+			modelValues.put("bankName", model.getBankName());
+			modelValues.put("accountType", model.getAccountType());
+			modelValues.put("accountBalance", String.valueOf(model.getAccountBalance()));
+		}
+		return modelValues;
 	}
 	
 	public Map<String, String> validateAccountFields(String accountName, String bankName, String accountType, String  balanceInput) {
@@ -245,32 +322,14 @@ public class AccountSlidingForm extends SlidingForm<AccountTableView.AccountMode
 		}
 	}
 	
-	private void resetFieldStyles() {
-		// Clear previous styles
-		accountNameField.setStyle("");
-		bankNameField.setStyle("");
-		accountTypeField.setStyle("");
-		accountBalanceField.setStyle("");
-		
-		accountNameField.getStyleClass().addAll("text-field", "md3-rounded-small"); // Apply text-field styles and rounded corners
-		bankNameField.getStyleClass().addAll("text-field", "md3-rounded-small"); // Apply text-field styles and rounded corners
-		accountTypeField.getStyleClass().add("md3-rounded-small"); // Example: rounded corners for ComboBox - adjust if needed
-		accountBalanceField.getStyleClass().addAll("text-field", "md3-rounded-small");
+	private void resetFormFields() {
+		accountNameField.clear();
+		bankNameField.clear();
+		accountTypeField.setValue(null);
+		accountBalanceField.clear();
+		resetFieldStyles(fieldMap.values()); // Use the generic resetFieldStyles from AbstractSlidingForm!
 	}
-	
-	public TextField getAccountNameField() {
-		return accountNameField;
-	}
-	
-	public TextField getBankNameField() {
-		return bankNameField;
-	}
-	
-	public ComboBox<String> getAccountTypeField() {
-		return accountTypeField;
-	}
-	
-	public TextField getAccountBalanceField() {return accountBalanceField;}
+
 
 
 	

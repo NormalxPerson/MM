@@ -1,5 +1,6 @@
 package com.moneymanager.ui.view;
 
+import com.moneymanager.ui.event.AddingModelEvent;
 import com.moneymanager.ui.event.FormClosedEvent;
 import javafx.event.Event;
 import javafx.geometry.Insets;
@@ -13,7 +14,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class SlidingForm<T> extends VBox {
+public abstract class AbstractSlidingForm<T> extends VBox {
 	public enum FormStatus {
 		CLOSED, EDITING, ADDING
 	}
@@ -31,11 +32,15 @@ public abstract class SlidingForm<T> extends VBox {
 	protected HBox leftButtonBox;
 	protected HBox rightButtonBox;
 	
-	public SlidingForm() {
+	protected Map<String, Control> fieldMap;
+	
+	public AbstractSlidingForm() {
 		this.setSpacing(10);
 		this.setPadding(new Insets(10));
 		this.setAlignment(Pos.CENTER);
 		this.getStyleClass().add("sliding-form");
+		
+		fieldMap = new HashMap<>();
 
 		addButton = new Button("Add");
 		saveButton = new Button("Save");
@@ -108,16 +113,33 @@ public abstract class SlidingForm<T> extends VBox {
 				break;
 		}
 	}
+	
+	public void setUpForAddingModel() {
+		setFormStatus(FormStatus.ADDING);
+		setUpFields();
+		Event.fireEvent(this, new AddingModelEvent());
+		
+	}
 
 	protected void updateSelectedModel(T model) {
 		this.currentModel = model;
 	}
+	
+	protected abstract void setUpFields();
 	
 	protected void setFormStatus(FormStatus status) {
 		this.status = status;
 		updateButtonBox();
 		if (status == FormStatus.CLOSED) {
 			currentModel = null;
+			hideForm();
+		}
+		if (status == FormStatus.ADDING) {
+			currentModel = null;
+			if (!this.isVisible()) {
+				this.setVisible(true);
+				this.setManaged(true);
+			}
 		}
 	}
 	
@@ -127,12 +149,23 @@ public abstract class SlidingForm<T> extends VBox {
 	
 	public abstract void hideForm();
 	
+	
+	protected abstract void clearFormFields();
+	
+	protected abstract void removeBlankAccountModel();
+	
+	
+	
 	protected abstract void loadModelDataIntoForm(T model);
 	
-	protected abstract void onAddAction();
+	public abstract void onAddAction();
 	protected abstract void onSaveAction();
 	protected abstract void onCancelAction();
 	protected abstract void onDeleteAction();
+	
+	protected abstract Map<String, String> captureFieldValues();
+	protected abstract Map<String, List<String>> getFieldConstraints();
+	
 	
 	protected Map<String, String> validateFields(Map<String, String> fieldValues, Map<String, List<String>> constraints) {
 		Map<String, String> errors = new HashMap<>();
@@ -166,10 +199,8 @@ public abstract class SlidingForm<T> extends VBox {
 	}
 	
 	protected void showValidationErrors(Map<String, String> errors, Map<String, Control> fieldMap) {
-		// Reset field styles
-		for (Control field : fieldMap.values()) {
-			field.setStyle("");
-		}
+		// Reset field styles before showing new errors
+		resetFieldStyles(fieldMap.values()); // Call the new generic reset method
 		
 		// Apply error styles
 		for (Map.Entry<String, String> entry : errors.entrySet()) {
@@ -180,16 +211,74 @@ public abstract class SlidingForm<T> extends VBox {
 	}
 	
 	protected Map<String, String> hasModelChanged(Map<String, String> oldValues, Map<String, String> newValues) {
-		Map<String, String> changes = new HashMap<>();
-		
-		for (String field : oldValues.keySet()) {
-			if (!oldValues.get(field).equals(newValues.get(field))) {
-				changes.put(field, "Changed " + field);
-			}
+		Map<String, String> changes = hasModelChangedGeneric(oldValues, newValues); // Call the generic version
+		if (!changes.isEmpty()) {
+			showChanges(changes, fieldMap, "green"); // Call the generic showChanges with green color
 		}
-		
 		return changes;
 	}
 	
+	// ** New Generic hasModelChanged method **
+	protected Map<String, String> hasModelChangedGeneric(Map<String, String> oldValues, Map<String, String> newValues) {
+		Map<String, String> changes = new HashMap<>();
+		
+		if (oldValues != null && newValues != null) { // Null checks for robustness
+			for (String field : oldValues.keySet()) {
+				if (newValues.containsKey(field) && !oldValues.get(field).equals(newValues.get(field))) {
+					changes.put(field, "Changed " + field);
+				}
+			}
+		}
+		return changes;
+	}
+	
+	/**
+	 * Generic method to show changes by applying a border style to fields that have changed.
+	 *
+	 * @param changes  A map where keys are field names and values are change descriptions (can be ignored for styling).
+	 * @param fieldMap A map linking field names to their corresponding JavaFX Control objects.
+	 * @param color    The color to use for the border to indicate a change (e.g., "green", "blue").
+	 */
+	protected void showChanges(Map<String, String> changes, Map<String, Control> fieldMap, String color) {
+		if (fieldMap != null) {
+			resetFieldStyles(fieldMap.values()); // Optionally reset styles first
+			String borderColorStyle = "-fx-border-color: " + color + "; -fx-border-width: 2px;"; // Dynamic color
+			for (String fieldName : changes.keySet()) {
+				if (fieldMap.containsKey(fieldName)) {
+					fieldMap.get(fieldName).setStyle(borderColorStyle); // Apply dynamic border color
+				}
+			}
+		}
+	}
+	
+	
+	/**
+	 * Resets the style of a collection of JavaFX Controls to their default appearance.
+	 * Subclasses should call this method at the beginning of validation or form reset processes.
+	 *
+	 * @param fields A collection of JavaFX Controls (TextFields, ComboBoxes, etc.) whose styles need to be reset.
+	 */
+	protected void resetFieldStyles(java.util.Collection<Control> fields) {
+		if (fields != null) {
+			for (Control field : fields) {
+				field.setStyle(""); // Clear inline styles
+				field.getStyleClass().clear(); // Clear all style classes
+				// Re-add default style classes - subclasses can customize this if needed
+				restoreDefaultStyleClasses(field);
+			}
+		}
+	}
+	
+	/**
+	 * Abstract method to be implemented by subclasses to define and restore the default style classes for a given Control.
+	 * This ensures that after resetting styles, the Controls return to their intended default look.
+	 *
+	 * @param field The JavaFX Control for which to restore default style classes.
+	 */
+	protected abstract void restoreDefaultStyleClasses(Control field);
+	
 }
+	
+	
+
 
