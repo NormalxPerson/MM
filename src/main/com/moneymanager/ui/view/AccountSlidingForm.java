@@ -5,11 +5,9 @@ import com.moneymanager.ui.event.AddingModelEvent;
 import com.moneymanager.ui.event.FormClosedEvent;
 import javafx.collections.FXCollections;
 import javafx.event.Event;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Control;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 
 import java.util.HashMap;
 import java.util.List;
@@ -330,7 +328,12 @@ public class AccountSlidingForm extends AbstractSlidingForm<AccountTableView.Acc
 		resetFieldStyles(fieldMap.values()); // Use the generic resetFieldStyles from AbstractSlidingForm!
 	}
 
-
+	public AccountTableView.AccountModel openAsDialog() {
+		Dialog<AccountTableView.AccountModel> dialog = new Dialog<>();
+		dialog.setTitle("Create Account");
+		dialog.initModality(Modality.APPLICATION_MODAL);
+	
+	}
 
 	
 }
