@@ -117,8 +117,8 @@ public class NavigationController implements Initializable{
 			
 			// Hide the FAB after opening a form.
 			fab.hideFab();
-			viewManager.getController().setFormForBlankModel();
-			System.out.println("In NavigationController: fab.hideFab() + viewManager.getController().setFormForBlankModel()");
+			viewManager.getController().showCreationDialog();
+			System.out.println("In NavigationController: fab.hideFab() + viewManager.getController().showCreationDialog()");
 		}
 	}
 	

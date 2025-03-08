@@ -48,7 +48,7 @@ public class TransactionViewController extends AbstractViewController implements
 	}
 	
 	@Override
-	public void setFormForBlankModel() {
+	public void showCreationDialog() {
 		transactionSlidingForm.onAddAction();
 	}
 	

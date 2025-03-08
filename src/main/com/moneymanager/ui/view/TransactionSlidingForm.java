@@ -6,6 +6,7 @@ import javafx.collections.FXCollections;
 import javafx.event.Event;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -161,7 +162,7 @@ public class TransactionSlidingForm extends AbstractSlidingForm<TransactionTable
 	}
 	
 	
-	@Override
+	
 	public void setUpFields() {
 		transactionAmountField.setPromptText("Amount");
 		transactionDescriptionField.setPromptText("Description");
@@ -186,11 +187,7 @@ public class TransactionSlidingForm extends AbstractSlidingForm<TransactionTable
 		transactionTypeComboBox.getSelectionModel().select("EXPENSE");
 		accountComboBox.getSelectionModel().selectFirst();
 	}
-	
-	@Override
-	protected void removeBlankAccountModel() {
-	
-	}
+
 	
 	private Map<String, Control> getTransactionFieldMap() {
 		return Map.of(
@@ -246,6 +243,19 @@ public class TransactionSlidingForm extends AbstractSlidingForm<TransactionTable
 		if (changes.containsKey("accountId")) {
 			accountComboBox.setStyle("-fx-border-color: green; -fx-border-width: 2px;");
 		}
+	}
+	
+	@Override
+	public void openAsDialog() {
+		Dialog<TransactionTableView.TransactionModel> dialog = new Dialog<>();
+		dialog.setTitle("Create Account");
+		dialog.initModality(Modality.APPLICATION_MODAL);
+		
+		dialog.getDialogPane().getButtonTypes().clear();
+		ButtonType createButtonType = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
+		dialog.getDialogPane().getButtonTypes().addAll(createButtonType, ButtonType.CANCEL);
+		
+		dialog.getDialogPane().setContent(this);
 	}
 	
 	

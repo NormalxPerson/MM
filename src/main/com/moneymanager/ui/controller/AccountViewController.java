@@ -79,11 +79,7 @@ public class AccountViewController extends AbstractViewController implements Ini
 		postInitialize();
 	}
 	
-	@Override
-	public void setFormForBlankModel() {
-		accountSlidingForm.setUpForAddingModel();
-	}
-	
+
 	@Override
 	protected void handleRowClick(TableRow<?> row, MouseEvent event) { // Implement abstract method
 		if (!row.isEmpty() && event.getClickCount() == 1 ) {

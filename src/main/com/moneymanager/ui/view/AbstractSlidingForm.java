@@ -58,15 +58,10 @@ public abstract class AbstractSlidingForm<T> extends VBox {
 		saveButton.setOnAction(e -> onSaveAction());
 		cancelButton.setOnAction(e -> onCancelAction());
 		deleteButton.setOnAction(e -> onDeleteAction());
+		closeButton.setOnAction(e -> onCloseAction());
 		
-		closeButton.setOnAction(event -> {
-			
-			this.status = FormStatus.CLOSED;
-			hideForm();
-			this.currentModel = null;
-			Event.fireEvent(this, new FormClosedEvent());
-		});
-		
+
+
 		leftButtonBox = new HBox(deleteButton);
 		leftButtonBox.setAlignment(Pos.CENTER_LEFT);
 		
@@ -83,6 +78,14 @@ public abstract class AbstractSlidingForm<T> extends VBox {
 		this.status = FormStatus.CLOSED;
 		
 	}
+	
+	protected void onCloseAction() {
+		this.status = FormStatus.CLOSED;
+		hideForm();
+		this.currentModel = null;
+		Event.fireEvent(this, new FormClosedEvent());
+	}
+	
 	
 	protected void initializeLayout() {
 		//this.getChildren().add(buttonBox);
@@ -106,7 +109,6 @@ public abstract class AbstractSlidingForm<T> extends VBox {
 				rightButtonBox.getChildren().addAll(addButton, saveButton, closeButton);
 				break;
 			case ADDING:
-				rightButtonBox.getChildren().addAll(saveButton, cancelButton);
 				break;
 			case CLOSED:
 				rightButtonBox.getChildren().addAll(saveButton, closeButton);
@@ -116,16 +118,16 @@ public abstract class AbstractSlidingForm<T> extends VBox {
 	
 	public void setUpForAddingModel() {
 		setFormStatus(FormStatus.ADDING);
-		setUpFields();
+		openAsDialog();
 		Event.fireEvent(this, new AddingModelEvent());
 		
 	}
+	
+	protected abstract void openAsDialog();
 
 	protected void updateSelectedModel(T model) {
 		this.currentModel = model;
 	}
-	
-	protected abstract void setUpFields();
 	
 	protected void setFormStatus(FormStatus status) {
 		this.status = status;
@@ -151,10 +153,6 @@ public abstract class AbstractSlidingForm<T> extends VBox {
 	
 	
 	protected abstract void clearFormFields();
-	
-	protected abstract void removeBlankAccountModel();
-	
-	
 	
 	protected abstract void loadModelDataIntoForm(T model);
 	

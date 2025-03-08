@@ -52,7 +52,7 @@ public abstract class AbstractViewController implements BaseViewController {
 	}
 	
 	@Override
-	public void setFormForBlankModel() {
+	public void showCreationDialog() {
 		slidingForm.setUpForAddingModel();
 	}
 	

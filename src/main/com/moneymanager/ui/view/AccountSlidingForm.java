@@ -1,10 +1,11 @@
 package com.moneymanager.ui.view;
 
 import com.moneymanager.service.AccountService;
-import com.moneymanager.ui.event.AddingModelEvent;
 import com.moneymanager.ui.event.FormClosedEvent;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -202,32 +203,7 @@ public class AccountSlidingForm extends AbstractSlidingForm<AccountTableView.Acc
 	}
 	
 	@Override
-	public void setUpFields() {
-	
-	}
-	
-	@Override
-	public void setUpForAddingModel() {
-		setFormStatus(FormStatus.ADDING);
-		updateSelectedModel(accountService.createAndGetBlankAccountModel());
-		loadModelDataIntoForm(this.currentModel);
-		if (!this.isVisible()) {
-			this.setVisible(true);
-			this.setManaged(true);
-		}
-		Event.fireEvent(this, new AddingModelEvent());
-	}
-	
-	protected void removeBlankAccountModel() {
-		accountService.removeBlankAccountModel(this.currentModel);
-		this.currentModel = null;
-	}
-	
-	@Override
 	public void hideForm() {
-		if (this.status == FormStatus.ADDING) {
-			removeBlankAccountModel();
-		}
 		clearFormFields();
 		setVisible(false);
 		setManaged(false);
@@ -235,9 +211,13 @@ public class AccountSlidingForm extends AbstractSlidingForm<AccountTableView.Acc
 		Event.fireEvent(this, new FormClosedEvent());
 	}
 	
+	
 	@Override
 	protected void clearFormFields() {
-	
+		accountNameField.clear();
+		bankNameField.clear();
+		accountTypeField.setValue(null);
+		accountBalanceField.clear();
 	}
 	
 	private Map<String, String> captureModelValues(AccountTableView.AccountModel model) {
@@ -328,11 +308,51 @@ public class AccountSlidingForm extends AbstractSlidingForm<AccountTableView.Acc
 		resetFieldStyles(fieldMap.values()); // Use the generic resetFieldStyles from AbstractSlidingForm!
 	}
 
-	public AccountTableView.AccountModel openAsDialog() {
+	@Override
+	public void openAsDialog() {
 		Dialog<AccountTableView.AccountModel> dialog = new Dialog<>();
 		dialog.setTitle("Create Account");
 		dialog.initModality(Modality.APPLICATION_MODAL);
-	
+		
+		dialog.getDialogPane().getButtonTypes().clear();
+		ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+		dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, ButtonType.CANCEL);
+		
+		Node saveButtonNode = dialog.getDialogPane().lookupButton(saveButtonType);
+		saveButtonNode.addEventFilter(ActionEvent.ACTION, event -> {
+		});
+		
+		dialog.getDialogPane().setContent(this);
+		
+		
+		dialog.setResultConverter(dialogButton -> {
+			if (dialogButton == saveButtonType) {
+				onSaveAction();
+				
+				// Validate fields
+				/*String accountName = accountNameField.getText();
+				String bankName = bankNameField.getText();
+				String accountType = accountTypeField.getValue();
+				String balanceInput = accountBalanceField.getText();
+				
+				Map<String, String> errors = validateAccountFields(accountName, bankName, accountType, balanceInput);
+				
+				if (errors.isEmpty()) {
+					return accountService.createAddAndGetNewAccountModel(
+							accountName,
+							bankName,
+							accountType,
+							Double.parseDouble(balanceInput)
+					);*/
+				
+			} else if (dialogButton == ButtonType.CANCEL) {
+				onCloseAction();
+			}
+			return null;
+		});
+		
+		dialog.showAndWait();
+		dialog.getResult();
 	}
 
 	
