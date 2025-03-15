@@ -1,18 +1,15 @@
 package com.moneymanager.ui.view;
 
 import com.moneymanager.service.TransactionService;
-import com.moneymanager.ui.event.AddingModelEvent;
 import javafx.collections.FXCollections;
-import javafx.event.Event;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 
 import java.time.LocalDate;
-import java.util.List;
 import java.util.Map;
 
-public class TransactionSlidingForm extends AbstractSlidingForm<TransactionTableView.TransactionModel> {
+public class TransactionForm extends AbstractForm<TransactionTableView.TransactionModel> {
 	
 	private TextField transactionAmountField;
 	private TextField transactionDescriptionField;
@@ -22,14 +19,13 @@ public class TransactionSlidingForm extends AbstractSlidingForm<TransactionTable
 
 	private TransactionService transactionService;
 	
-	public TransactionSlidingForm(TransactionService transactionService) {
+	public TransactionForm(TransactionService transactionService, FloatingActionButton floatingActionButton) {
 		super();
-		addButton.setText("Add Transaction");
 		this.transactionService = transactionService;
 		initializeLayout();
 	}
 	
-	@Override
+	
 	protected void initializeLayout() {
 		transactionAmountField = new TextField("Amount");
 		transactionDescriptionField = new TextField("Description");
@@ -77,16 +73,10 @@ public class TransactionSlidingForm extends AbstractSlidingForm<TransactionTable
 		}
 	}
 	
-	@Override
-	public void onAddAction() {
-		setFormStatus(FormStatus.ADDING);
-		clearFormFields();
-		Event.fireEvent(this, new AddingModelEvent());
-	}
 	
 	@Override
 	protected void onSaveAction() {
-		double amount = Double.parseDouble(transactionAmountField.getText());
+/*		double amount = Double.parseDouble(transactionAmountField.getText());
 		String description = transactionDescriptionField.getText();
 		String date = transactionDatePicker.getValue().toString();
 		String type = transactionTypeComboBox.getValue();
@@ -132,34 +122,18 @@ public class TransactionSlidingForm extends AbstractSlidingForm<TransactionTable
 			transactionService.addNewTransactionModelToTable(this.currentModel);
 		}
 		
-		hideForm();
+		hideForm();*/
 	}
 
-	
-	@Override
-	protected void onCancelAction() {
-		hideForm();
-	}
+
 	
 	@Override
 	protected void onDeleteAction() {
 		return;
 	}
+
 	
-	@Override
-	protected Map<String, String> captureFieldValues() {
-		return Map.of();
-	}
-	
-	@Override
-	protected Map<String, List<String>> getFieldConstraints() {
-		return Map.of();
-	}
-	
-	@Override
-	protected void restoreDefaultStyleClasses(Control field) {
-	
-	}
+
 	
 	
 	
@@ -170,14 +144,6 @@ public class TransactionSlidingForm extends AbstractSlidingForm<TransactionTable
 		transactionTypeComboBox.setValue("EXPENSE");
 		if (!transactionService.getAccountModelObservableList().isEmpty()) { accountComboBox.getSelectionModel().selectFirst(); }
 		else {accountComboBox.setPromptText("Account"); }
-	}
-	
-	@Override
-	public void hideForm() {
-		setVisible(false);
-		setManaged(false);
-		clearFormFields();
-
 	}
 	
 	public void clearFormFields() {
@@ -199,27 +165,6 @@ public class TransactionSlidingForm extends AbstractSlidingForm<TransactionTable
 		);
 	}
 	
-	private Map<String, String> hasTransactionModelChanged(double amount, String description, String date, String type, String accountId) {
-		
-		Map<String, String> oldValues = Map.of(
-				"amount", String.valueOf(currentModel.getTransactionAmount()),
-				"description", currentModel.getTransactionDescription(),
-				"date", currentModel.getTransactionDate().toString(),
-				"type", currentModel.getTransactionType(),
-				"accountId", currentModel.getTransactionAccountId()
-				
-		);
-		
-		Map<String, String> newValues = Map.of(
-				"amount", String.valueOf(amount),
-				"description", description,
-				"date", date,
-				"type", type,
-				"accountId", accountId
-		);
-		
-		return hasModelChanged(oldValues, newValues);
-	}
 	
 	private void showChanges(Map<String, String> changes) {
 		transactionAmountField.setStyle("");
@@ -246,7 +191,7 @@ public class TransactionSlidingForm extends AbstractSlidingForm<TransactionTable
 	}
 	
 	@Override
-	public void openAsDialog() {
+	public void openCreationDialog() {
 		Dialog<TransactionTableView.TransactionModel> dialog = new Dialog<>();
 		dialog.setTitle("Create Account");
 		dialog.initModality(Modality.APPLICATION_MODAL);
@@ -257,7 +202,7 @@ public class TransactionSlidingForm extends AbstractSlidingForm<TransactionTable
 		
 		dialog.getDialogPane().setContent(this);
 	}
-	
+
 	
 	
 }

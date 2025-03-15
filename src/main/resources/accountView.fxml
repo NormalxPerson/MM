@@ -5,7 +5,7 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import com.moneymanager.ui.view.AccountSlidingForm?>
+<?import com.moneymanager.ui.view.AccountForm?>
 
 <VBox xmlns="http://javafx.com/javafx" styleClass="content-area" xmlns:fx="http://javafx.com/fxml" fx:controller="com.moneymanager.ui.controller.AccountViewController">
    <children>

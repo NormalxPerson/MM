@@ -1,34 +1,34 @@
 package com.moneymanager.ui.controller;
 
-import com.moneymanager.ui.event.FormOpenedEvent;
-import com.moneymanager.ui.view.AbstractSlidingForm;
-import javafx.event.Event;
+import com.moneymanager.ui.event.FormEvent;
+import com.moneymanager.ui.view.AbstractForm;
+import com.moneymanager.ui.view.FloatingActionButton;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import org.slf4j.helpers.FormattingTuple;
 
-public abstract class AbstractViewController implements BaseViewController {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public abstract class AbstractViewController implements Initializable, BaseViewController {
 	
-	protected AbstractSlidingForm slidingForm; // Declare slidingForm here, subclasses will initialize it
-	protected TableView tableView; // Declare tableView here, subclasses will initialize it
-	protected VBox container; // Declare container here, subclasses will initialize it
+	protected AbstractForm editingForm;
+	protected AbstractForm creationDialogForm;
+	protected TableView tableView;
+	protected VBox container;
+	protected FloatingActionButton floatingActionButton;
 	
+	public void initialize(URL location, ResourceBundle resources) {
+	}
 	
 	protected void setupRowSelection() {
 		tableView.setRowFactory(tv -> {
 			TableRow<?> row = new TableRow<>(); // Use wildcard as type is generic
 			row.setOnMouseClicked(event -> {
-				if (slidingForm.getFormStatus() == AbstractSlidingForm.FormStatus.ADDING) {
-					// Prevent selection of any row while adding
-					event.consume(); // Consume the event to stop further processing
-					selectBlankRow();
-					return;
-				}
 				if (!row.isEmpty() && event.getClickCount() == 1) {
-					if (slidingForm.getFormStatus().equals(AbstractSlidingForm.FormStatus.CLOSED)) {
-						container.fireEvent(new FormOpenedEvent()); // Use container from abstract class
-					}
 					handleRowClick(row, event);
 				}
 			});
@@ -36,13 +36,22 @@ public abstract class AbstractViewController implements BaseViewController {
 		});
 	}
 	
-	// Abstract method to handle row click in subclasses
 	protected abstract void handleRowClick(TableRow<?> row, MouseEvent event);
+	
+	protected void setFloatingActionButton(FloatingActionButton floatingActionButton) {
+		this.floatingActionButton = floatingActionButton;
+	}
+	
+	protected void setUpHandlers() {
+		editingForm.addEventHandler(FormEvent.SAVE, this::handleSaveEvent);
+		editingForm.addEventHandler(FormEvent.DELETE, this::handleDeleteEvent);
+		editingForm.addEventHandler(FormEvent.CLOSE, this::handleCloseEvent);
+	}
 	
 	
 	@Override
 	public void hideForm() {
-		slidingForm.hideForm();
+		editingForm.hideForm();
 	}
 	
 	
@@ -53,18 +62,14 @@ public abstract class AbstractViewController implements BaseViewController {
 	
 	@Override
 	public void showCreationDialog() {
-		slidingForm.setUpForAddingModel();
-	}
-	
-	@Override
-	public void selectBlankRow() {
-		int row = tableView.getItems().size() - 1;
-		if (row >= 0) {
-			tableView.getSelectionModel().select(row);
-		}
-	}
+		//creationDialogForm.resetFormFields();
+		creationDialogForm.openCreationDialog();	}
 	
 	public VBox getContainer() { // Generic getContainer method
 		return this.container;
 	}
+	
+	protected abstract <T> void handleSaveEvent(FormEvent<T> formSaveEvent);
+	protected abstract <T> void handleDeleteEvent(FormEvent<T> formDeleteEvent);
+	protected abstract <T> void handleCloseEvent(FormEvent<T> formCloseEvent);
 }

@@ -2,12 +2,8 @@ package com.moneymanager.ui.controller;
 
 import com.moneymanager.service.AccountService;
 import com.moneymanager.service.TransactionService;
-import com.moneymanager.ui.event.AddingModelEvent;
-import com.moneymanager.ui.event.FormClosedEvent;
-import com.moneymanager.ui.event.FormOpenedEvent;
 import com.moneymanager.ui.view.FloatingActionButton;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -63,7 +59,6 @@ public class NavigationController implements Initializable{
 		BorderPane.setMargin(contentArea, new Insets(5));
 		
 		//Adding Event Handler to Content Area.
-		contentArea.addEventHandler(Event.ANY, this::handle);
 		
 		
 		fab.setOnAction(new EventHandler<ActionEvent>() {
@@ -91,18 +86,8 @@ public class NavigationController implements Initializable{
 				viewManager.switchTo(viewName);
 			}
 			// Optionally, show the FAB when switching views.
-			fab.showFab();
 		});
-		
-/*		contentArea.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-			if (isNowFocused && navigationGroup.getSelectedToggle() != null) {
-				((ToggleButton) navigationGroup.getSelectedToggle()).setSelected(true);
-			}
-		});*/
-		
-		
-		
-		// Set default selection.
+
 		// FAB set up
 		StackPane.setAlignment(fab, Pos.BOTTOM_RIGHT);
 		fab.setTranslateX(-20); // Move 20 pixels to the left
@@ -113,12 +98,7 @@ public class NavigationController implements Initializable{
 	private void handleFabAction(ActionEvent event) {
 		// Use the currently selected view name to determine which view's controller to notify.
 		if (navigationGroup.getSelectedToggle() != null && viewManager.getController() != null) {
-			//viewManager.getController().showForm();
-			
-			// Hide the FAB after opening a form.
-			fab.hideFab();
 			viewManager.getController().showCreationDialog();
-			System.out.println("In NavigationController: fab.hideFab() + viewManager.getController().showCreationDialog()");
 		}
 	}
 	
@@ -135,6 +115,7 @@ public class NavigationController implements Initializable{
 		
 		AccountViewController accountsController = loader.getController();
 		accountsController.setAccountService(accountService);
+		accountsController.setFloatingActionButton(this.fab);
 		this.viewManager.registerView(accountsButton.getUserData().toString(), accountsController.getAccountContainer(), accountsController);
 		
 		FXMLLoader loader2 = new FXMLLoader(getClass().getResource("/transactionView.fxml"));
@@ -146,6 +127,7 @@ public class NavigationController implements Initializable{
 		}
 		TransactionViewController transactionsController = loader2.getController();
 		transactionsController.setTransactionService(transactionService);
+		transactionsController.setFloatingActionButton(this.fab);
 		this.viewManager.registerView(transactionsButton.getUserData().toString(), transactionsController.getTransactionContainer(), transactionsController);
 
 		
@@ -159,22 +141,5 @@ public class NavigationController implements Initializable{
 	public void setTransactionService(TransactionService transactionService) { this.transactionService = transactionService;}
 	
 	
-	public void handle(Event event) {
-		if (event.getEventType() == FormClosedEvent.FORM_CLOSED) {
-			fab.showFab();
-			viewManager.getController().unselectRow();
-			System.out.println("FormClosedEvent received in NavigationController: showing FAB");
-		}
-		else if (event.getEventType() == FormOpenedEvent.FORM_OPENED) {
-			fab.hideFab();
-			System.out.println("FormOpenedEvent received in NavigationController: hiding FAB");
-		}
-		else if (event.getEventType() == AddingModelEvent.ADDING_MODEL) {
-			viewManager.getController().selectBlankRow();
-		
-		}
-		
-		
-	}
 	
 }

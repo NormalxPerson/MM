@@ -54,19 +54,7 @@ public class AccountService {
         System.out.println(newAccount.toString());
         accountRepo.addAccount(newAccount);
     }
-    
-    public AccountTableView.AccountModel createAndGetBlankAccountModel() {
-        AccountTableView.AccountModel blankAccountModel = new AccountTableView.AccountModel("", "", "", 0.00, "");
-	    
-	    accountModelObservableList.add(blankAccountModel);
 
-        return blankAccountModel;
-    }
-    
-    public void removeBlankAccountModel(AccountTableView.AccountModel accountModel) {
-        accountModelObservableList.remove(accountModel);
-    }
-    
     public void addModelToAccountTableView(AccountTableView.AccountModel accountModel) {
         
         accountModelObservableList.add(accountModel);

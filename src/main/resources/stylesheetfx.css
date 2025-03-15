@@ -191,6 +191,16 @@
     -fx-opacity: 0.6; /* Reduce opacity for disabled state */
 }
 
+.error-border {
+    -fx-border-color: red;
+    -fx-border-width: 2px;
+}
+
+.success-border {
+    -fx-border-color: green;
+    -fx-border-width: 2px;
+}
+
 
 /* **TABLE VIEW (MD3 Data Table Style)** */
 .table-view {

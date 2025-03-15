@@ -1,9 +1,8 @@
 package com.moneymanager.ui.controller;
 
 import com.moneymanager.service.TransactionService;
-import com.moneymanager.ui.event.FormOpenedEvent;
-import com.moneymanager.ui.view.AbstractSlidingForm;
-import com.moneymanager.ui.view.TransactionSlidingForm;
+import com.moneymanager.ui.event.FormEvent;
+import com.moneymanager.ui.view.TransactionForm;
 import com.moneymanager.ui.view.TransactionTableView;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -22,7 +21,7 @@ public class TransactionViewController extends AbstractViewController implements
 	private VBox transactionContainer;
 	
 	private TransactionTableView transactionTableView;
-	private TransactionSlidingForm transactionSlidingForm;
+	private TransactionForm transactionSlidingForm;
 	private TransactionService transactionService;
 	
 	private TransactionTableView.TransactionModel selectedTransactionModel;
@@ -40,8 +39,8 @@ public class TransactionViewController extends AbstractViewController implements
 	
 	public void postInitialize() {
 		refreshTransactionTable(transactionService.getObservableTransactionModelsList());
-		transactionSlidingForm = new TransactionSlidingForm(transactionService);
-		this.slidingForm = this.transactionSlidingForm;
+		transactionSlidingForm = new TransactionForm(transactionService, floatingActionButton);
+		this.editingForm = this.transactionSlidingForm;
 		transactionContainer.getChildren().addAll(transactionTableView, transactionSlidingForm);
 		VBox.setVgrow(transactionTableView, Priority.ALWAYS);
 		setupRowSelection();
@@ -49,21 +48,24 @@ public class TransactionViewController extends AbstractViewController implements
 	
 	@Override
 	public void showCreationDialog() {
-		transactionSlidingForm.onAddAction();
+		System.out.println("showCreationDialog");
 	}
 	
 	@Override
-	protected void handleRowClick(TableRow<?> row, MouseEvent event) {
-		if (!row.isEmpty() && event.getClickCount() == 1 ) {
-			if (slidingForm.getFormStatus().equals(AbstractSlidingForm.FormStatus.CLOSED)) {
-				transactionContainer.fireEvent(new FormOpenedEvent());
-			}
-			this.selectedTransactionModel = (TransactionTableView.TransactionModel) row.getItem(); // Cast to TransactionModel
-			// handle click
-			System.out.println("Clicked row: " + selectedTransactionModel);
-			transactionSlidingForm.showForm(AbstractSlidingForm.FormStatus.EDITING, selectedTransactionModel);
-		}
+	protected <T> void handleSaveEvent(FormEvent<T> formSaveEvent) {
+	
 	}
+	
+	@Override
+	protected <T> void handleDeleteEvent(FormEvent<T> formDeleteEvent) {
+	
+	}
+	
+	@Override
+	protected <T> void handleCloseEvent(FormEvent<T> formCloseEvent) {
+	
+	}
+	
 	
 	public void refreshTransactionTable(ObservableList<TransactionTableView.TransactionModel> transactionModels) {
 		transactionTableView.populateTransactionTable(transactionModels);
@@ -74,6 +76,14 @@ public class TransactionViewController extends AbstractViewController implements
 	public void setTransactionService(TransactionService transactionService) {
 		this.transactionService = transactionService;
 		postInitialize();
+	}
+	
+	@Override
+	protected void handleRowClick(TableRow<?> row, MouseEvent event) { // Implement abstract method
+		if (!row.isEmpty() && event.getClickCount() == 1 ) {
+			System.out.println("Clicked: " + row.getItem());
+			transactionSlidingForm.setCurrentModel( (TransactionTableView.TransactionModel) row.getItem()); // Cast to AccountModel
+		}
 	}
 }
 
