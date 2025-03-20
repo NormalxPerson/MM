@@ -82,7 +82,7 @@ public class TransactionService implements TransactionServiceInterface {
 	}
 	
 	private TransactionTableView.TransactionModel createNewTransactionModel(Transaction transaction) {
-		return new TransactionTableView.TransactionModel(transaction.getId(), transaction.getDate(), transaction.getAmount(), transaction.getDescription(), transaction.getType(), transaction.getAccountId(), accountService.getAccountNameByAccountId(transaction.getAccountId()));
+		return new TransactionTableView.TransactionModel(transaction.getId(), transaction.getDate(), transaction.getAmount(), transaction.getDescription(), transaction.getType());
 	}
 	
 	public ObservableList<AccountTableView.AccountModel> getAccountModelObservableList() {

@@ -5,6 +5,7 @@ import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.*;
+import javafx.util.Callback;
 
 import java.util.List;
 
@@ -24,8 +25,9 @@ public class AccountTableView extends TableView<AccountTableView.AccountModel> {
 		TableColumn<AccountModel, String> accountNameColumn = new TableColumn<>("Account Name");
 		accountNameColumn.setCellValueFactory(cellData -> cellData.getValue().accountNameProperty());
 		
-		TableColumn<AccountModel, String> accountTypeColumn = new TableColumn<>("Account Type");
+		TableColumn<AccountModel, AccountModel.AccountType> accountTypeColumn = new TableColumn<>("Account Type");
 		accountTypeColumn.setCellValueFactory(cellData -> cellData.getValue().accountTypeProperty());
+		accountTypeColumn.setCellFactory(createAccountTypeCellFactory());
 		
 		TableColumn<AccountModel, Double> accountBalanceColumn = new TableColumn<>("Balance");
 		accountBalanceColumn.setCellValueFactory(cellData -> cellData.getValue().accountBalanceProperty().asObject());
@@ -41,6 +43,23 @@ public class AccountTableView extends TableView<AccountTableView.AccountModel> {
 		getColumns().addAll(List.of(accountNameColumn, accountTypeColumn, accountBalanceColumn));
 		
 	}
+	
+	private Callback<TableColumn<AccountModel, AccountModel.AccountType>, TableCell<AccountModel, AccountModel.AccountType>> createAccountTypeCellFactory() {
+		return column -> { // This is the Callback
+			return new TableCell<>() {
+				@Override
+				protected void updateItem(AccountModel.AccountType item, boolean empty) {
+					super.updateItem(item, empty);
+					if (empty || item == null) {
+						setText(null);
+					} else {
+						setText(item.getDisplayName()); // Use the display name
+					}
+				}
+			};
+		};
+	}
+	
 	
 	
 	
@@ -66,16 +85,37 @@ public class AccountTableView extends TableView<AccountTableView.AccountModel> {
 	
 	
 	public static class AccountModel {
+		public enum AccountType {
+			DEBT("Debit"),
+			CREDIT("Credit");
+			
+			private final String displayName;
+			
+			AccountType(String displayName) {
+				this.displayName = displayName;
+			}
+			
+			public String getDisplayName() {
+				return displayName;
+			}
+			
+			@Override
+			public String toString() {
+				return displayName;
+			}
+		
+		
+		}
 		private StringProperty accountName;
 		private StringProperty bankName;
-		private StringProperty accountType;
+		private ObjectProperty<AccountType> accountType;
 		private DoubleProperty accountBalance;
 		private StringProperty accountId;
 	
 		public AccountModel(String accountName, String bankName, String accountType, Double accountBalance, String accountId) {
 			this.accountName = new SimpleStringProperty(accountName);
 			this.bankName = new SimpleStringProperty(bankName);
-			this.accountType = new SimpleStringProperty(accountType);
+			this.accountType = new SimpleObjectProperty<>(AccountType.valueOf(accountType.toUpperCase()));
 			this.accountBalance = new SimpleDoubleProperty(accountBalance);
 			this.accountId = new SimpleStringProperty(accountId);
 		}
@@ -88,9 +128,9 @@ public class AccountTableView extends TableView<AccountTableView.AccountModel> {
 		public void setBankName(String bankName) { this.bankName.set(bankName);}
 		public StringProperty bankNameProperty() { return bankName;}
 		
-		public String getAccountType() { return accountType.get();}
-		public void setAccountType(String accountType) { this.accountType.set(accountType);}
-		public StringProperty accountTypeProperty() { return accountType;}
+		public AccountType getAccountType() { return accountType.get();}
+		public void setAccountType(AccountType accountType) { this.accountType.set(accountType);}
+		public ObjectProperty<AccountType> accountTypeProperty() { return accountType;}
 		
 		public Double getAccountBalance() { return accountBalance.get();}
 		public void setAccountBalance(Double accountBalance) {this.accountBalance.set(accountBalance);}
@@ -99,10 +139,30 @@ public class AccountTableView extends TableView<AccountTableView.AccountModel> {
 		public String getAccountId() { return accountId.get();}
 		public void setAccountId(String accountId) { this.accountId.set(accountId);}
 		public StringProperty accountIdProperty() { return accountId;}
+		
+		public void makeChanges(String change, Object value) {
+			if (change.equalsIgnoreCase("accountName")) {
+				setAccountName(String.valueOf(value));
+			} else if (change.equalsIgnoreCase("bankName")) {
+				setBankName(String.valueOf(value));
+			} else if (change.equalsIgnoreCase("accountType")) {
+				setAccountType((AccountType) value);
+			} else if (change.equalsIgnoreCase("accountBalance")) {
+				double accountBalance = 0.0;
+				String balanceStr = (String) value;
+				accountBalance = Double.parseDouble(balanceStr);
+				setAccountBalance(accountBalance);
+			}
+			
+		}
+		
+		
+		
 		@Override
 		public String toString() {
 			return accountName.get(); // Display account name in the ComboBox
 		}
+		
 		
 	
 	

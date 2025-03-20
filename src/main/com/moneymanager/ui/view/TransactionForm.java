@@ -124,17 +124,16 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 		
 		hideForm();*/
 	}
-
-
+	
+	@Override
+	protected void setupValidators() {
+	
+	}
 	
 	@Override
 	protected void onDeleteAction() {
-		return;
+	
 	}
-
-	
-
-	
 	
 	
 	public void setUpFields() {

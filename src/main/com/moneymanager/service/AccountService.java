@@ -31,11 +31,10 @@ public class AccountService {
         accountModelObservableList.clear();
         
         for (Account account : theSourceHashMapOfAccounts.values()) {
-            AccountTableView.AccountModel accountModel = new AccountTableView.AccountModel(account.getAccountName(), account.getBankName(), account.getAccountType(), account.getBalance(), account.getAccountId());
+            AccountTableView.AccountModel accountModel = new AccountTableView.AccountModel(account.getAccountName(), account.getBankName(), account.getAccountType().name(), account.getBalance(), account.getAccountId());
             accountModelObservableList.add(accountModel);
         }
     }
-    
     public void updateBalance(String accountId, double amount) {
         Account account = theSourceHashMapOfAccounts.get(accountId);
         System.out.println("Updating account balance: AccountService.updateBalance: Old Balance: " + account.getBalance() + ", Transaction Amount: " + amount);
@@ -47,18 +46,7 @@ public class AccountService {
         accountRepo.updateAccountBalance(account);
         
     }
-    
-    public void createAccount(AccountTableView.AccountModel accountModel) {
-        System.out.println(accountModel.toString());
-        Account newAccount = new Account(accountModel.getAccountName(), accountModel.getBankName(), accountModel.getAccountType(), accountModel.getAccountBalance());
-        System.out.println(newAccount.toString());
-        accountRepo.addAccount(newAccount);
-    }
 
-    public void addModelToAccountTableView(AccountTableView.AccountModel accountModel) {
-        
-        accountModelObservableList.add(accountModel);
-    }
     
     public AccountTableView.AccountModel createAddAndGetNewAccountModel(String accountName, String bankName, String accountType, Double balance) {
         String  id = String.valueOf(accountModelObservableList.size() + 1);
@@ -85,8 +73,22 @@ public class AccountService {
     }
     
     public AccountTableView.AccountModel createModelFromAccount(Account account) {
-	    return new AccountTableView.AccountModel(account.getAccountName(), account.getBankName(), account.getAccountType(), account.getBalance(), account.getAccountId());
+	    return new AccountTableView.AccountModel(account.getAccountName(), account.getBankName(), account.getAccountType().name(), account.getBalance(), account.getAccountId());
      
+    }
+    
+    public int deleteAccountById(AccountTableView.AccountModel accountModel) {
+        if (accountModelObservableList.contains(accountModel)) {
+            accountModelObservableList.remove(accountModel);
+            int rowDeleted = accountRepo.deleteAccountById(accountModel.getAccountId());
+            
+            if (rowDeleted == 1 && theSourceHashMapOfAccounts.containsValue(accountModel)) {
+                System.out.println("Deleted account with ID: " + accountModel.getAccountId());
+                theSourceHashMapOfAccounts.remove(accountModel.getAccountName());
+                return rowDeleted;
+            }
+        }
+        return 0;
     }
 
 

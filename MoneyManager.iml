@@ -38,7 +38,6 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="JavaFx-17" level="application" />
     <orderEntry type="library" name="mockito5.12" level="application" />
     <orderEntry type="module-library">
       <library>
@@ -54,5 +53,6 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="controlsfx-11.2" level="project" />
+    <orderEntry type="library" name="javafx-17.0" level="project" />
   </component>
 </module>

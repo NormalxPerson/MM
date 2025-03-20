@@ -34,6 +34,7 @@ public abstract class AbstractViewController implements Initializable, BaseViewC
 			});
 			return row;
 		});
+		setUpHandlers();
 	}
 	
 	protected abstract void handleRowClick(TableRow<?> row, MouseEvent event);
@@ -62,12 +63,8 @@ public abstract class AbstractViewController implements Initializable, BaseViewC
 	
 	@Override
 	public void showCreationDialog() {
-		//creationDialogForm.resetFormFields();
 		creationDialogForm.openCreationDialog();	}
 	
-	public VBox getContainer() { // Generic getContainer method
-		return this.container;
-	}
 	
 	protected abstract <T> void handleSaveEvent(FormEvent<T> formSaveEvent);
 	protected abstract <T> void handleDeleteEvent(FormEvent<T> formDeleteEvent);

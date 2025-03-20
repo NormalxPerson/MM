@@ -11,7 +11,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class SQLiteAccountRepo implements AccountRepo {
     private final DatabaseConnection dbConnection;
@@ -111,7 +110,7 @@ public class SQLiteAccountRepo implements AccountRepo {
                         stmt.setString(1, account.getAccountName());
                         stmt.setString(2, account.getBankName());
                         stmt.setDouble(3, balanceInCents);
-                        stmt.setString(4, account.getAccountType().toUpperCase());
+                        stmt.setString(4, account.getAccountType().name());
                         
                         stmt.executeUpdate();
                         System.out.println("Successfully added account: " + account.getAccountName());
@@ -147,7 +146,7 @@ public class SQLiteAccountRepo implements AccountRepo {
             stmt.setString(1, account.getAccountName());
             stmt.setString(2, account.getBankName());
             stmt.setDouble(3, balanceInCents);
-            stmt.setString(4, account.getAccountType());
+            stmt.setString(4, account.getAccountType().name());
             stmt.setInt(5, Integer.parseInt(account.getAccountId()));
             
             int rowsUpdated = stmt.executeUpdate();
@@ -158,5 +157,20 @@ public class SQLiteAccountRepo implements AccountRepo {
         } catch (SQLException e) {
             throw new RuntimeException("Failed to update account", e);
         }
+    }
+    
+    public int deleteAccountById(String accountId) {
+        int id = Integer.parseInt(accountId);
+        String sql = "DELETE FROM accounts WHERE accountId = ?";
+        try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            
+            return stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to delete account", e);
+        }
+    
+        
+    
     }
 }

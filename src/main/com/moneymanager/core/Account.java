@@ -4,17 +4,39 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Account {
+	
+	public enum AccountType {
+		DEBT("Debit"),
+		CREDIT("Credit");
+		
+		private final String displayName;
+		
+		AccountType(String displayName) {
+			this.displayName = displayName;
+		}
+		
+		public String getDisplayName() {
+			return displayName;
+		}
+		
+		@Override
+		public String toString() {
+			return displayName;
+		}
+	}
+	
 	private String accountName;
 	private String bankName;
-	private String accountType;
+	private AccountType accountType;
 	private String accountId;
 	private double balance;
 	private List<Transaction> transactionList;
 
 	public Account(String accountName, String bankName, String accountType, double balance) {
+		
 		this.accountName = accountName;
 		this.bankName = bankName;
-		this.accountType = accountType;
+		this.accountType = AccountType.valueOf(accountType.toUpperCase());
 		this.balance = balance;
 		this.transactionList = new ArrayList<>();
 	}
@@ -22,7 +44,7 @@ public class Account {
 	public Account(String accountId, String accountName, String bankName, String accountType, double balance) {
 		this.accountName = accountName;
 		this.bankName = bankName;
-		this.accountType = accountType;
+		this.accountType = AccountType.valueOf(accountType.toUpperCase());
 		this.accountId = accountId;
 		this.balance = balance;
 	}
@@ -47,7 +69,7 @@ public class Account {
 		return bankName;
 	}
 
-	public String getAccountType() {
+	public AccountType getAccountType() {
 		return accountType;
 	}
 	

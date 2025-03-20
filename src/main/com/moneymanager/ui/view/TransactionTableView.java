@@ -90,6 +90,16 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 			this.transactionAccountName = new SimpleStringProperty(accountName);
 		}
 		
+		public TransactionModel(String transactionId, LocalDate date, double amount, String description, String type) {
+			this.transactionId = new SimpleStringProperty(transactionId);
+			this.transactionAmount = new SimpleDoubleProperty(amount);
+			this.transactionDescription = new SimpleStringProperty(description);
+			this.transactionDate = new SimpleObjectProperty<>(date);
+			this.TransactionType = new SimpleStringProperty(type);
+		}
+		
+		
+		
 		public String getTransactionId() {return transactionId.get();}
 		public void setTransactionId(String transactionId) {this.transactionId.set(transactionId);}
 		public StringProperty transactionIdProperty() {return transactionId;}

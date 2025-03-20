@@ -1,23 +1,20 @@
 package com.moneymanager.ui.view;
 
-import com.moneymanager.service.AccountService;
 import com.moneymanager.ui.event.FormEvent;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.Validator;
-import org.controlsfx.validation.decoration.GraphicValidationDecoration;
-import org.controlsfx.validation.decoration.ValidationDecoration;
 
 import java.util.Map;
 
 public class AccountForm extends AbstractForm<AccountTableView.AccountModel> {
 	private TextField accountNameField;
 	private TextField bankNameField;
-	private ComboBox<String> accountTypeField;
+	private ComboBox<AccountTableView.AccountModel.AccountType> accountTypeField;
 	private TextField accountBalanceField;
 	
 	
@@ -33,15 +30,30 @@ public class AccountForm extends AbstractForm<AccountTableView.AccountModel> {
 		accountTypeField = new ComboBox<>();
 		accountBalanceField = new TextField();
 		
-		accountTypeField.setItems(FXCollections.observableArrayList("DEBT", "CREDIT"));
+		accountTypeField.setItems(FXCollections.observableArrayList(AccountTableView.AccountModel.AccountType.values()));
+		
+		// Add StringConverter for AccountType
+		accountTypeField.setConverter(new StringConverter<AccountTableView.AccountModel.AccountType>() {
+			@Override
+			public String toString(AccountTableView.AccountModel.AccountType object) {
+				return object != null ? object.getDisplayName() : "";
+			}
+			
+			@Override
+			public AccountTableView.AccountModel.AccountType fromString(String string) {
+				// Find the AccountType that matches this display name
+				for (AccountTableView.AccountModel.AccountType type : AccountTableView.AccountModel.AccountType.values()) {
+					if (type.getDisplayName().equals(string)) {
+						return type;
+					}
+				}
+				// Default to DEBT if no match is found
+				return AccountTableView.AccountModel.AccountType.DEBT;
+			}
+		});
+		
 		accountTypeField.getSelectionModel().selectFirst();
 		
-/*		validationSupport.registerValidator(accountNameField, Validator.createEmptyValidator("Account name is required"));
-		validationSupport.registerValidator(bankNameField, Validator.createEmptyValidator("Bank name is required"));
-		validationSupport.registerValidator(accountTypeField,Validator.createEmptyValidator("Account type is required"));
-		validationSupport.registerValidator(accountBalanceField, Validator.combine(Validator.createEmptyValidator("Account balance is required"),
-																Validator.createRegexValidator("Balance must be a number", "\\d+(\\.\\d+)?", Severity.ERROR)));
-		*/
 		Label accountNameLabel = new Label("Account Name");
 		Label bankNameLabel = new Label("Bank Name");
 		Label accountTypeLabel = new Label("Account Type");
@@ -54,14 +66,14 @@ public class AccountForm extends AbstractForm<AccountTableView.AccountModel> {
 
 		this.getChildren().addAll(nameFieldBox, bankNameFieldBox, typeFieldBox, balanceFieldBox);
 		
-		registerField("accountName", accountNameField);
-		registerField("bankName", bankNameField);
-		registerField("accountType", accountTypeField);
-		registerField("accountBalance", accountBalanceField);
+		registerField("accountName", accountNameField, nameFieldBox);
+		registerField("bankName", bankNameField, bankNameFieldBox);
+		registerField("accountType", accountTypeField, typeFieldBox);
+		registerField("accountBalance", accountBalanceField, balanceFieldBox);
 		
 	}
 	
-	private void setupValidators() {
+	protected void setupValidators() {
 		// Register validators with the ValidationSupport system
 		validationSupport.registerValidator(
 				accountNameField,
@@ -104,8 +116,7 @@ public class AccountForm extends AbstractForm<AccountTableView.AccountModel> {
 		}
 		
 		// Reset modification flags since we just loaded data
-		resetModifiedFlags();
-		
+		fieldChangeTracker.resetModifications();
 		// Validate the form
 		validationSupport.revalidate();
 	}
@@ -186,14 +197,12 @@ public class AccountForm extends AbstractForm<AccountTableView.AccountModel> {
 		Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
 		confirmDialog.setTitle("Confirm Deletion");
 		confirmDialog.setHeaderText("Delete Account");
-		confirmDialog.setContentText("Are you sure you want to delete this account?");
+		confirmDialog.setContentText("Are you sure you want to delete: " + currentModel.getAccountName() + "?");
 		
 		confirmDialog.showAndWait().ifPresent(response -> {
 			if (response == ButtonType.OK) {
 				// Fire delete event
-				FormEvent<AccountTableView.AccountModel> deleteEvent =
-						new FormEvent<>(FormEvent.DELETE, currentModel);
-				fireEvent(deleteEvent);
+				fireDeleteEvent();
 			}
 		});
 	}
@@ -205,6 +214,14 @@ public class AccountForm extends AbstractForm<AccountTableView.AccountModel> {
 		
 		// Check if form is valid and modified
 		if (isSaveable.get()) {
+			System.out.println(this.currentModel.toString());
+/*			for (Control field : fieldMap.values()) {
+				System.out.println(field.toString());
+			}*/
+			
+			for (Object obj : fieldChangeTracker.getModifiedValues().values()) {
+				System.out.println(obj.toString());
+			}
 			// Let fireSaveEvent handle collecting values and firing the event
 			fireSaveEvent();
 		} else if (!isValid.get()) {

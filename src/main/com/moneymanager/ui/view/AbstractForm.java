@@ -1,6 +1,8 @@
 package com.moneymanager.ui.view;
 
 import com.moneymanager.ui.event.FormEvent;
+import com.moneymanager.ui.validation.FieldChangeTracker;
+import com.moneymanager.ui.validation.FormValidationSupport;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
@@ -25,7 +27,8 @@ import java.util.Map;
 
 public abstract class AbstractForm<T> extends VBox {
 	
-	protected ValidationSupport validationSupport;
+	protected FormValidationSupport validationSupport;
+	protected FieldChangeTracker fieldChangeTracker;
 
 	protected T currentModel;
 	protected BooleanProperty isModified = new SimpleBooleanProperty(false);
@@ -35,17 +38,16 @@ public abstract class AbstractForm<T> extends VBox {
 	protected Button saveButton;
 	protected Button closeButton;
 	protected Button deleteButton;
-	//private FloatingActionButton fabButton;
 	protected HBox buttonBox;
 	protected HBox leftButtonBox;
 	protected HBox rightButtonBox;
+	
 	protected ObservableMap<String, Control> fieldMap = FXCollections.observableHashMap();
-	protected ObservableMap<String, BooleanProperty> fieldModifiedMap = FXCollections.observableHashMap();
+	protected Map<String, VBox> fieldContainerMap = new HashMap<>();
 	
 	protected AbstractForm() {
 		setupLayout();
-		validationSupport = new ValidationSupport();
-		setupValidation();
+		initializeValidationAndTracking();
 		createButtons();
 		setupSaveableBinding();
 		
@@ -60,96 +62,16 @@ public abstract class AbstractForm<T> extends VBox {
 		this.setAlignment(Pos.TOP_LEFT);
 		this.getStyleClass().add("form-container");
 	}
-
-	private void updateModifiedBinding() {
-		if (isModified.isBound()) {
-			isModified.unbind();
-		}
-		
-		if (fieldModifiedMap.isEmpty()) {
-			isModified.set(false);
-			return;
-		}
-		
-		List<BooleanProperty> props = new ArrayList<>(fieldModifiedMap.values());
-		
-		// For a single field, directly bind to its property
-		if (props.size() == 1) {
-			isModified.bind(props.get(0));
-			return;
-		}
-		
-		// For multiple fields, use Bindings utility class
-		BooleanBinding result = Bindings.or(props.get(0), props.get(1));
-		
-		// Add remaining properties
-		for (int i = 2; i < props.size(); i++) {
-			result = Bindings.or(result, props.get(i));
-		}
-		
-		// Bind to the combined result
-		isModified.bind(result);
-	}
 	
-	protected void resetModifiedFlags() {
-		// Unbind isModified first if needed
-		if (isModified.isBound()) {
-			BooleanProperty newProp = new SimpleBooleanProperty(false);
-			isModified = newProp;
-		} else {
-			isModified.set(false);
-		}
+	private void initializeValidationAndTracking() {
+		validationSupport = new FormValidationSupport();
+		fieldChangeTracker = new FieldChangeTracker();
 		
-		// Reset all field flags
-		for (BooleanProperty prop : fieldModifiedMap.values()) {
-			if (!prop.isBound()) {
-				prop.set(false);
-			}
-		}
-		
-		// Rebuild the binding
-		updateModifiedBinding();
-	}
-	
-	protected void setupValidation() {
-		validationSupport.validationResultProperty().addListener((o, oldValue, newValue) -> {
+		validationSupport.validationResultProperty().addListener((observable, oldValue, newValue) -> {
 			isValid.set(newValue.getErrors().isEmpty());
 		});
-		// Create custom validation decorator with border-only styling
-		ValidationDecoration customValidation = new ValidationDecoration() {
-			@Override
-			public void applyRequiredDecoration(Control target) {
-				// Skip required decoration
-			}
-			
-			@Override
-			public void applyValidationDecoration(ValidationMessage message) {
-				Control control = message.getTarget();
-				if (message.getSeverity() == Severity.ERROR) {
-					if (!control.getStyleClass().contains("error-border")) {
-						control.getStyleClass().add("error-border");
-					}
-				}
-			}
-			/*        validationSupport.setValidationDecorator(
-            new StyleClassValidationDecoration("validation-error", null)
-        );*/
-			@Override
-			public void removeDecorations(Control target) {
-				target.getStyleClass().remove("error-border");
-			}
-			
-			public void applySuccessDecoration(Control target) {
-				target.getStyleClass().remove("error-border");
-				if (!target.getStyleClass().contains("success-border")) {
-					target.getStyleClass().add("success-border");
-				}
-			}
-		};
-//		validationSupport.validationResultProperty().addListener(obs, oldVal, newVal) -> validProperty.set(!newVal.getErrors().isEmpty()));
 		
-		// Set the custom decorator
-		validationSupport.setValidationDecorator(customValidation);
+		isModified.bind(fieldChangeTracker.anyFieldModifiedProperty());
 	}
 	
 	private void createButtons(){
@@ -163,9 +85,7 @@ public abstract class AbstractForm<T> extends VBox {
 		
 		saveButton.setOnAction(e -> fireSaveEvent());
 		deleteButton.setOnAction(e -> onDeleteAction());
-		closeButton.setOnAction(e -> onCloseAction());
-		
-		
+		closeButton.setOnAction(e -> fireCloseEvent());
 		
 		leftButtonBox = new HBox(deleteButton);
 		leftButtonBox.setAlignment(Pos.CENTER_LEFT);
@@ -179,93 +99,50 @@ public abstract class AbstractForm<T> extends VBox {
 		this.getChildren().add(buttonBox);
 	}
 	
-	protected void registerField(String fieldName, Control field) {
+	private void setupSaveableBinding() {
+		isSaveable = isValid.and(isModified);
+		saveButton.disableProperty().bind(isSaveable.not());
+	}
+	
+	protected void registerField(String fieldName, Control field, VBox container) {
+		validationSupport.registerField(field,container);
+		fieldChangeTracker.registerField(fieldName,field);
+		
 		fieldMap.put(fieldName, field);
-		
-		BooleanProperty fieldModified = new SimpleBooleanProperty(false);
-		fieldModifiedMap.put(fieldName, fieldModified);
-		
-		if (field instanceof TextField textField) {
-			textField.textProperty().addListener((obs, oldValue, newValue) -> {
-				fieldModified.set(true);
-				validationSupport.revalidate();
-			});
-		} else if (field instanceof ComboBox<?> comboBox) {
-			comboBox.valueProperty().addListener((obs, oldVal, newVal) -> {
-				fieldModified.set(true);
-				validationSupport.revalidate();
-			});
-		} // Add other control types as needed
-		
-		updateModifiedBinding();
-		
+		fieldContainerMap.put(fieldName, container);
+	}
+	
+	protected void registerField(String fieldName, Control field) {
+		if (field.getParent() instanceof VBox container) {
+			registerField(fieldName, field, container);
+		} else {
+			throw new IllegalArgumentException("Field must be in a VBox container for error label placement");
+		}
 	}
 	
 	protected void fireSaveEvent() {
 		// Check if form is valid and modified
 		if (isSaveable.get()) {
 			// Collect current field values
-			Map<String, Object> values = getModifiedFieldValues();
+			Map<String, Object> values = fieldChangeTracker.getModifiedValues();
 			
 			// Create and fire the save event with field values
 			FormEvent<T> saveEvent = new FormEvent<>(FormEvent.SAVE, currentModel, values);
 			fireEvent(saveEvent);
 			// Reset modified flags after firing event
-			resetModifiedFlags();
-		}
+			fieldChangeTracker.resetModifications();		}
 	}
 	
-	// Helper method to collect all field values
-	protected Map<String, Object> collectFieldValues() {
-		Map<String, Object> values = new HashMap<>();
-		
-		for (Map.Entry<String, Control> entry : fieldMap.entrySet()) {
-			String fieldName = entry.getKey();
-			Control control = entry.getValue();
-			if (fieldModifiedMap.containsKey(fieldName)) {
-				if (control instanceof TextField textField) {
-					values.put(fieldName, textField.getText());
-				} else if (control instanceof ComboBox<?> comboBox) {
-					values.put(fieldName, comboBox.getValue());
-				} else if (control instanceof DatePicker datePicker) {
-					values.put(fieldName, datePicker.getValue());
-				} else if (control instanceof CheckBox checkBox) {
-					values.put(fieldName, checkBox.isSelected());
-				}
-				// Add more control types as needed
-			}
-		}
-		
-		return values;
+	protected void fireDeleteEvent() {
+		FormEvent<T> deleteEvent = new FormEvent<>(FormEvent.DELETE, currentModel);
+		fireEvent(deleteEvent);
 	}
 	
-	public Map<String, Object> getModifiedFieldValues() {
-		Map<String, Object> modifiedValues = new HashMap<>();
-		
-		for (Map.Entry<String, BooleanProperty> entry : fieldModifiedMap.entrySet()) {
-			String fieldName = entry.getKey();
-			BooleanProperty modifiedProperty = entry.getValue();
-			
-			if (modifiedProperty.get()) {
-				Control control = fieldMap.get(fieldName);
-				if (control != null) {
-					if (control instanceof TextField textField) {
-						modifiedValues.put(fieldName, textField.getText());
-					} else if (control instanceof ComboBox<?> comboBox) {
-						modifiedValues.put(fieldName, comboBox.getValue());
-					} else if (control instanceof DatePicker datePicker) {
-						modifiedValues.put(fieldName, datePicker.getValue());
-					} else if (control instanceof CheckBox checkBox) {
-						modifiedValues.put(fieldName, checkBox.isSelected());
-					}
-					// Add other control types as needed
-				}
-			}
-		}
-		
-		return modifiedValues;
+	public void fireCloseEvent() {
+		FormEvent<T> closeEvent = new FormEvent<>(FormEvent.CLOSE, currentModel);
+		fireEvent(closeEvent);
+		hideForm();
 	}
-	
 	
 	public void setCurrentModel(T selectedModel) {
 		this.currentModel = selectedModel;
@@ -274,31 +151,26 @@ public abstract class AbstractForm<T> extends VBox {
 			this.setManaged(true);
 		}
 		loadModelDataIntoForm(selectedModel);
+		
+		fieldChangeTracker.resetModifications();
+		validationSupport.revalidate();
 	}
 	
 	public Control getField(String fieldName) {
 		return fieldMap.get(fieldName);
 	}
 	
-	private void setupSaveableBinding() {
-		// Combine isValid and isModified into a single binding
-		isSaveable = isValid.and(isModified);
-		
-		// Bind save button's disabled state to NOT saveable
-		saveButton.disableProperty().bind(isSaveable.not());
-	}
 	public abstract void openCreationDialog();
 	
-	protected void onCloseAction() {
-		hideForm();
-	
-	}
 	public void hideForm() {
+		this.currentModel = null;
 		this.setVisible(false);
 		this.setManaged(false);
+		fieldChangeTracker.resetModifications();
 	}
-	
 	protected abstract void onSaveAction();
+	
+	protected abstract void setupValidators();
 	protected abstract void onDeleteAction();
 	protected abstract void loadModelDataIntoForm(T model);
 	
