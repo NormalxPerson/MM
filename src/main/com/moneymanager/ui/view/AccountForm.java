@@ -125,71 +125,62 @@ public class AccountForm extends AbstractForm<AccountTableView.AccountModel> {
 	
 	@Override
 	public void openCreationDialog() {
-		Dialog<Map<String, String>> dialog = new Dialog<>();
-		dialog.setTitle("Create Account");
+		this.setVisible(true);
+		this.setManaged(true);
+		loadModelDataIntoForm(null);
+		
+		Dialog<AccountTableView.AccountModel> dialog = new Dialog<>();
+		dialog.setTitle("Create a New Account");
 		
 		// Create Save and Cancel buttons
 		ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
 		ButtonType cancelButtonType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
 		dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, cancelButtonType);
 		
-
 		
 		dialog.getDialogPane().setContent(this); // Set form UI inside dialog
 		
 		// Get the Save button and validate before allowing close
 		Button saveButton = (Button) dialog.getDialogPane().lookupButton(saveButtonType);
-		saveButton.addEventFilter(ActionEvent.ACTION, event -> {
-			//	Map<String, String> errors = tempForm.validateFields(tempForm.captureFieldValues(), tempForm.getFieldConstraints());
-/*			//if (!errors.isEmpty()) {
-				for (String fieldName : errors.keySet()) {
-					Control field = tempForm.fieldMap.get(fieldName);
-					if (field != null && !field.getStyleClass().contains("error-border")) {
-							field.getStyleClass().add("error-border");
-					}
-				}
-			}
-				//showValidationErrors(errors, fieldMap); // Show errors if validation fails
-				event.consume(); // Prevent dialog from closing
-			
-		});
+		saveButton.disableProperty().bind(isValid.not());
 		
-		// Handle dialog result
-		//dialog.setResultConverter(dialogButton -> {
+		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == saveButtonType) {
-				// Get user input
-				Map<String, String> fieldValues = tempForm.captureFieldValues();
-				//String accountName = accountNameField.getText();
-				//String bankName = bankNameField.getText();
-				//String accountType = accountTypeField.getValue();
-				//double accountBalance = Double.parseDouble(accountBalanceField.getText());
+				// Get values from fields
+				String accountName = accountNameField.getText();
+				String bankName = bankNameField.getText();
+				AccountTableView.AccountModel.AccountType accountType = accountTypeField.getValue();
+				double accountBalance = Double.parseDouble(accountBalanceField.getText());
 				
-				// Create and return the new AccountModel
-				//return new AccountTableView.AccountModel(accountName, bankName, accountType, accountBalance, "");
-				return fieldValues;
+				// Create and return a new AccountModel (without an ID, will be set by service)
+				return new AccountTableView.AccountModel(
+						accountName,
+						bankName,
+						accountType.name(),
+						accountBalance,
+						""  // ID will be assigned by the service
+				);
 			}
-			return null; // Return null if canceled
+			return null;
 		});
 		
-		// Show dialog and get result
-		dialog.showAndWait().ifPresent(fieldValues -> {
-			if (fieldValues != null) {
-				// Add new model to the observable list
-				accountService.createAddAndGetNewAccountModel(
-						fieldValues.get("accountName"),
-						fieldValues.get("bankName"),
-						fieldValues.get("accountType"),
-						Double.parseDouble(fieldValues.get("accountBalance"))
-				);
-				accountService.loadAccountModelsObservableList(); // Refresh account list
-			}
-		*/
+		fieldChangeTracker.resetModifications();
+		
+		dialog.showAndWait().ifPresent(newAccount -> {
+			// Fire a custom save event with the new account data
+			FormEvent<AccountTableView.AccountModel> createEvent =
+					new FormEvent<>(FormEvent.SAVE, null, fieldChangeTracker.getModifiedValues());
+			fireEvent(createEvent);
 		});
- 
+	
+		
 	}
 	
 	
+	@Override
+	protected void onSaveAction() {
 	
+	}
 	
 	@Override
 	protected void onDeleteAction() {
@@ -207,29 +198,6 @@ public class AccountForm extends AbstractForm<AccountTableView.AccountModel> {
 		});
 	}
 	
-	@Override
-	protected void onSaveAction() {
-		// First validate the form
-		validationSupport.revalidate();
-		
-		// Check if form is valid and modified
-		if (isSaveable.get()) {
-			System.out.println(this.currentModel.toString());
-/*			for (Control field : fieldMap.values()) {
-				System.out.println(field.toString());
-			}*/
-			
-			for (Object obj : fieldChangeTracker.getModifiedValues().values()) {
-				System.out.println(obj.toString());
-			}
-			// Let fireSaveEvent handle collecting values and firing the event
-			fireSaveEvent();
-		} else if (!isValid.get()) {
-			System.out.println("Please correct the validation errors");
-		} else if (!isModified.get()) {
-			System.out.println("No changes to save");
-		}
-	}
 	
 	
 }

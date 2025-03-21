@@ -112,14 +112,6 @@ public abstract class AbstractForm<T> extends VBox {
 		fieldContainerMap.put(fieldName, container);
 	}
 	
-	protected void registerField(String fieldName, Control field) {
-		if (field.getParent() instanceof VBox container) {
-			registerField(fieldName, field, container);
-		} else {
-			throw new IllegalArgumentException("Field must be in a VBox container for error label placement");
-		}
-	}
-	
 	protected void fireSaveEvent() {
 		// Check if form is valid and modified
 		if (isSaveable.get()) {

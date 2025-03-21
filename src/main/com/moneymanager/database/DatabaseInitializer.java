@@ -33,7 +33,7 @@ public class DatabaseInitializer {
 				headerPattern TEXT NOT NULL,
 				columnMappings TEXT NOT NULL,
 				dateFormat TEXT,
-				FOREIGN KEY (accountId) REFERENCES accounts(accountId) ON DELETE CASCADE
+				FOREIGN KEY (accountId) REFERENCES accounts(accountId) ON DELETE set NULL
 			);""";
 	
 	public static void initializeDatabase(Connection dbConnection) throws SQLException {
