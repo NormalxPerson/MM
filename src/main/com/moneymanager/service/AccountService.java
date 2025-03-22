@@ -82,9 +82,9 @@ public class AccountService {
             accountModelObservableList.remove(accountModel);
             int rowDeleted = accountRepo.deleteAccountById(accountModel.getAccountId());
             
-            if (rowDeleted == 1 && theSourceHashMapOfAccounts.containsValue(accountModel)) {
+            if (rowDeleted == 1 && theSourceHashMapOfAccounts.containsKey(accountModel.getAccountId())) {
                 System.out.println("Deleted account with ID: " + accountModel.getAccountId());
-                theSourceHashMapOfAccounts.remove(accountModel.getAccountName());
+                theSourceHashMapOfAccounts.remove(accountModel.getAccountId());
                 return rowDeleted;
             }
         }
