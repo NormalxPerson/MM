@@ -98,6 +98,7 @@ public class NavigationController implements Initializable{
 	private void handleFabAction(ActionEvent event) {
 		// Use the currently selected view name to determine which view's controller to notify.
 		if (navigationGroup.getSelectedToggle() != null && viewManager.getController() != null) {
+			viewManager.getController().hideForm();
 			viewManager.getController().showCreationDialog();
 		}
 	}

@@ -48,11 +48,16 @@ public class AccountService {
     }
 
     
-    public AccountTableView.AccountModel createAddAndGetNewAccountModel(String accountName, String bankName, String accountType, Double balance) {
-        String  id = String.valueOf(accountModelObservableList.size() + 1);
-        Account newAccount = new Account(id, accountName, bankName, accountType, balance);
-        accountRepo.addAccount(newAccount);
-	    return createModelFromAccount(newAccount);
+    public AccountTableView.AccountModel createAndAddAccount(String accountName, String bankName, String accountType, Double balance) {
+        Account newAccount = new Account(accountName, bankName, accountType, balance);
+        String newId = accountRepo.addAccountAndReturnId(newAccount);
+        newAccount.setAccountId(newId);
+        
+        theSourceHashMapOfAccounts.put(newId,newAccount);
+        
+        AccountTableView.AccountModel newAccountModel = createModelFromAccount(newAccount);
+        accountModelObservableList.add(newAccountModel);
+	    return newAccountModel;
     }
     
     public void updateAccount(AccountTableView.AccountModel accountModel) {

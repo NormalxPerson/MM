@@ -131,9 +131,9 @@ public abstract class AbstractForm<T> extends VBox {
 	}
 	
 	public void fireCloseEvent() {
+		hideForm();
 		FormEvent<T> closeEvent = new FormEvent<>(FormEvent.CLOSE, currentModel);
 		fireEvent(closeEvent);
-		hideForm();
 	}
 	
 	public void setCurrentModel(T selectedModel) {

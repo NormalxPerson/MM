@@ -47,12 +47,13 @@ public abstract class AbstractViewController implements Initializable, BaseViewC
 		editingForm.addEventHandler(FormEvent.SAVE, this::handleSaveEvent);
 		editingForm.addEventHandler(FormEvent.DELETE, this::handleDeleteEvent);
 		editingForm.addEventHandler(FormEvent.CLOSE, this::handleCloseEvent);
+		creationDialogForm.addEventHandler(FormEvent.SAVE, this::handleNewSaveEvent);
 	}
 	
 	
 	@Override
 	public void hideForm() {
-		editingForm.hideForm();
+		editingForm.fireCloseEvent();
 	}
 	
 	
@@ -63,10 +64,13 @@ public abstract class AbstractViewController implements Initializable, BaseViewC
 	
 	@Override
 	public void showCreationDialog() {
-		creationDialogForm.openCreationDialog();	}
+		tableView.getSelectionModel().clearSelection();
+		creationDialogForm.openCreationDialog();
+	}
 	
 	
 	protected abstract <T> void handleSaveEvent(FormEvent<T> formSaveEvent);
 	protected abstract <T> void handleDeleteEvent(FormEvent<T> formDeleteEvent);
 	protected abstract <T> void handleCloseEvent(FormEvent<T> formCloseEvent);
+	protected abstract <T> void handleNewSaveEvent(FormEvent<T> formNewSaveEvent);
 }

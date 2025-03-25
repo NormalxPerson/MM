@@ -139,6 +139,37 @@ public class SQLiteAccountRepo implements AccountRepo {
         }
     }
     
+    @Override
+    public String addAccountAndReturnId(Account account) {
+        String sql = "INSERT INTO accounts (accountName, bankName, accountBalance, accountType) VALUES (?, ?, ?, ?)";
+        int balanceInCents = (int) Math.round(account.getBalance() * 100);
+        
+        try (Connection connection = dbConnection.getConnection();
+             PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+            
+            stmt.setString(1, account.getAccountName());
+            stmt.setString(2, account.getBankName());
+            stmt.setDouble(3, balanceInCents);
+            stmt.setString(4, account.getAccountType().name());
+            
+            int affectedRows = stmt.executeUpdate();
+            if (affectedRows == 0) {
+                throw new SQLException("Creating account failed, no rows affected.");
+            }
+            
+            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    System.out.println("Successfully added account: " + account.getAccountName() + " with ID: " + generatedKeys.getInt(1));
+                    return String.valueOf(generatedKeys.getInt(1));
+                } else {
+                    throw new SQLException("Creating account failed, no ID obtained.");
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Failed to add account", e);
+        }
+    }
+    
     public void updateAccount(AccountTableView.AccountModel account) {
         String sql = "UPDATE accounts SET accountName = ?, bankName = ?, accountBalance = ?, accountType = ? WHERE accountId = ?";
         int balanceInCents = (int) Math.round(account.getAccountBalance() * 100);

@@ -22,6 +22,7 @@ public class TransactionViewController extends AbstractViewController implements
 	
 	private TransactionTableView transactionTableView;
 	private TransactionForm transactionSlidingForm;
+	private TransactionForm transactionCreationForm;
 	private TransactionService transactionService;
 	
 	private TransactionTableView.TransactionModel selectedTransactionModel;
@@ -30,6 +31,8 @@ public class TransactionViewController extends AbstractViewController implements
 	public TransactionViewController() {
 		this.transactionTableView = new TransactionTableView();
 		this.tableView = this.transactionTableView;
+		
+		
 	}
 	
 	@Override
@@ -41,6 +44,9 @@ public class TransactionViewController extends AbstractViewController implements
 		refreshTransactionTable(transactionService.getObservableTransactionModelsList());
 		transactionSlidingForm = new TransactionForm(transactionService, floatingActionButton);
 		this.editingForm = this.transactionSlidingForm;
+		
+		this.transactionCreationForm = new TransactionForm(transactionService, floatingActionButton);
+		this.creationDialogForm = this.transactionCreationForm;
 		transactionContainer.getChildren().addAll(transactionTableView, transactionSlidingForm);
 		VBox.setVgrow(transactionTableView, Priority.ALWAYS);
 		setupRowSelection();
@@ -63,6 +69,11 @@ public class TransactionViewController extends AbstractViewController implements
 	
 	@Override
 	protected <T> void handleCloseEvent(FormEvent<T> formCloseEvent) {
+	
+	}
+	
+	@Override
+	protected <T> void handleNewSaveEvent(FormEvent<T> formNewSaveEvent) {
 	
 	}
 	

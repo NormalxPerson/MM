@@ -6,7 +6,7 @@ import java.util.List;
 public class Account {
 	
 	public enum AccountType {
-		DEBT("Debit"),
+		DEBIT("Debit"),
 		CREDIT("Credit");
 		
 		private final String displayName;
@@ -52,6 +52,8 @@ public class Account {
 	public void setBalance(double balance) {
 		this.balance = balance;
 	}
+	
+	public void setAccountId(String accountId) { this.accountId = accountId; }
 
 	public String getAccountId() {
 		return accountId;

@@ -48,7 +48,7 @@ public class AccountForm extends AbstractForm<AccountTableView.AccountModel> {
 					}
 				}
 				// Default to DEBT if no match is found
-				return AccountTableView.AccountModel.AccountType.DEBT;
+				return AccountTableView.AccountModel.AccountType.DEBIT;
 			}
 		});
 		
@@ -105,7 +105,7 @@ public class AccountForm extends AbstractForm<AccountTableView.AccountModel> {
 			// Clear all fields for a new account
 			accountNameField.clear();
 			bankNameField.clear();
-			accountTypeField.getSelectionModel().selectFirst();
+			accountTypeField.getSelectionModel().clearSelection();
 			accountBalanceField.clear();
 		} else {
 			// Load data from existing account
@@ -131,6 +131,8 @@ public class AccountForm extends AbstractForm<AccountTableView.AccountModel> {
 		this.getChildren().remove(buttonBox);
 		
 		loadModelDataIntoForm(null);
+		//fix because i get field values from modified fields only.
+		accountTypeField.getSelectionModel().selectFirst();
 		
 		Dialog<AccountTableView.AccountModel> dialog = new Dialog<>();
 		dialog.setTitle("Create a New Account");
@@ -147,33 +149,20 @@ public class AccountForm extends AbstractForm<AccountTableView.AccountModel> {
 		Button saveButton = (Button) dialog.getDialogPane().lookupButton(saveButtonType);
 		saveButton.disableProperty().bind(isSaveable.not());
 		
-		dialog.setResultConverter(dialogButton -> {
-			if (dialogButton == saveButtonType) {
-				// Get values from fields
-				String accountName = accountNameField.getText();
-				String bankName = bankNameField.getText();
-				AccountTableView.AccountModel.AccountType accountType = accountTypeField.getValue();
-				double accountBalance = Double.parseDouble(accountBalanceField.getText());
-				
-				// Create and return a new AccountModel (without an ID, will be set by service)
-				return new AccountTableView.AccountModel(
-						accountName,
-						bankName,
-						accountType.name(),
-						accountBalance,
-						""  // ID will be assigned by the service
-				);
+		saveButton.addEventFilter(ActionEvent.ACTION, event -> {
+			if (isSaveable.get()) {
+				Map<String, Object> values = fieldChangeTracker.getModifiedValues();
+				FormEvent<AccountTableView.AccountModel> createEvent =
+						new FormEvent<>(FormEvent.NEWSAVE, null, values);
+				fireEvent(createEvent);
+				fieldChangeTracker.resetModifications();
+			} else {
+				// Prevent dialog from closing if validation fails
+				event.consume();
 			}
-			return null;
 		});
 		
-		fieldChangeTracker.resetModifications();
-		dialog.showAndWait().ifPresent(newAccount -> {
-			// Fire a custom save event with the new account data
-			FormEvent<AccountTableView.AccountModel> createEvent =
-					new FormEvent<>(FormEvent.SAVE, null, fieldChangeTracker.getModifiedValues());
-			fireEvent(createEvent);
-		});
+		dialog.showAndWait();
 	
 		
 	}

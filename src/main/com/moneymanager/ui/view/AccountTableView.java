@@ -86,7 +86,7 @@ public class AccountTableView extends TableView<AccountTableView.AccountModel> {
 	
 	public static class AccountModel {
 		public enum AccountType {
-			DEBT("Debit"),
+			DEBIT("Debit"),
 			CREDIT("Credit");
 			
 			private final String displayName;

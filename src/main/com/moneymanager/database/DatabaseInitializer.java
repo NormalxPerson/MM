@@ -23,7 +23,7 @@ public class DatabaseInitializer {
 				bankName TEXT NOT NULL,
 				accountBalance integer NOT NULL,
 				accountType TEXT NOT NULL,
-				CONSTRAINT valid_account_type CHECK(accountType IN ('DEBT', 'CREDIT'))
+				CONSTRAINT valid_account_type CHECK(accountType IN ('DEBIT', 'CREDIT'))
 			);""";
 	
 	private static final String CREATE_CSV_STRATEGIES_TABLE = """

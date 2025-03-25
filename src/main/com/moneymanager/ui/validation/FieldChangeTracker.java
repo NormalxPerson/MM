@@ -101,7 +101,7 @@ public class FieldChangeTracker {
 			return textField.getText();
 		}
 		else if (field instanceof ComboBox<?> comboBox) {
-			return comboBox.getValue();
+			return comboBox.getSelectionModel().getSelectedItem();
 		}
 		else if (field instanceof DatePicker datePicker) {
 			return datePicker.getValue();

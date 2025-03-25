@@ -74,6 +74,39 @@ public class AccountViewController extends AbstractViewController {
 		}
 	}
 	
+	@Override
+	protected <T> void handleNewSaveEvent(FormEvent<T> formNewSaveEvent) {
+		if (formNewSaveEvent.getEventType() == FormEvent.NEWSAVE) {
+			Map<String, Object> fieldValues = formNewSaveEvent.getFieldValues();
+			
+			try {
+				// Extract values from the fields
+				String accountName = (String) fieldValues.get("accountName");
+				String bankName = (String) fieldValues.get("bankName");
+				AccountTableView.AccountModel.AccountType type = (AccountTableView.AccountModel.AccountType) fieldValues.get("accountType");
+				
+				
+				double accountBalance = 0.0;
+				try {
+					String balanceStr = (String) fieldValues.get("accountBalance");
+					if (balanceStr != null && !balanceStr.isEmpty()) {
+						accountBalance = Double.parseDouble(balanceStr);
+					}
+				} catch (NumberFormatException e) {
+					System.out.println("Invalid balance format: " + fieldValues.get("accountBalance"));
+					return;
+				}
+				System.out.printf("Account Name: %s\nBank Name: %s\nAccount Type: %s\nAccount Balance: %s\n", accountName, bankName, type.getDisplayName(), accountBalance);
+
+				AccountTableView.AccountModel newAccountModel = accountService.createAndAddAccount(accountName, bankName, type.getDisplayName(), accountBalance);
+				accountTableView.getSelectionModel().select(newAccountModel);
+				accountSlidingForm.setCurrentModel(newAccountModel);
+			} catch (Exception e) {
+				System.out.println("Error creating new account " + e.getMessage());
+			}
+		}
+	}
+	
 	public VBox getAccountContainer() { return this.accountContainer;}
 	
 	public void refreshAccountTable(ObservableList<AccountTableView.AccountModel> accountModelObservableList) {
@@ -93,49 +126,9 @@ public class AccountViewController extends AbstractViewController {
 			}
 			
 			try {
-/*				// Extract changedValues
-				String accountName = (String) changedValues.get("accountName");
-				System.out.println("Before Account Name: " + accountName);
-				String bankName = (String) changedValues.get("bankName");
-				String accountType = changedValues.get("accountType").toString();
-				double accountBalance = 0.0;
-				try {
-					String balanceStr = (String) changedValues.get("accountBalance");
-					if (balanceStr != null && !balanceStr.isEmpty()) {
-						accountBalance = Double.parseDouble(balanceStr);
-					}
-				} catch (NumberFormatException e) {
-					System.out.println("Invalid balance format: " + changedValues.get("accountBalance"));
-					return;
-				}*/
-				
-				
-				// Determine if this is a new account or an existing one
 				if (model == null) {
-					// Create new account
-/*
-					accountService.createAddAndGetNewAccountModel(accountName, bankName, accountType, accountBalance);
-*/
-					System.out.println("Account created successfully");
-				} /*else {
-					// Update existing account
-					if (!model.getAccountName().equals(accountName)) {
-						model.setAccountName(accountName);
-						System.out.println("Account name updated successfully");
-					}
-					if (!model.getBankName().equals(bankName)) {
-						model.setBankName(bankName);
-						System.out.println("Bank name updated successfully");
-					}
-					if (!model.getAccountType().name().equals(accountType.toUpperCase())) {
-						model.setAccountType(AccountTableView.AccountModel.AccountType.valueOf(accountType));
-						System.out.println("Account type updated successfully");
-					}
-					if (!model.getAccountBalance().equals(accountBalance)) {
-						model.setAccountBalance(accountBalance);
-						System.out.println("Account balance updated successfully");
-					}
-					*/
+					System.out.println("model is null in AccountViewController.handleSaveEvent");
+				}
 					for (String fieldName : changedValues.keySet()) {
 						Control field = accountSlidingForm.getField(fieldName);
 						if (field != null) {
@@ -160,12 +153,6 @@ public class AccountViewController extends AbstractViewController {
 				
 				// Refresh the table with updated data
 				refreshAccountTable(accountService.getAccountModelObservableList());
-				
-				// Hide the form
-				//hideForm();
-				
-				// Clear table selection
-				//unselectRow();
 				
 			} catch (Exception e) {
 				System.out.println("Error saving account: " + e.getMessage());
@@ -197,7 +184,7 @@ public class AccountViewController extends AbstractViewController {
 	
 	@Override
 	protected void handleCloseEvent(FormEvent formCloseEvent) {
-	
+		tableView.getSelectionModel().clearSelection();
 	}
 	
 	
