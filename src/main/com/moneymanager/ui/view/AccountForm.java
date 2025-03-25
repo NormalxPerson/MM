@@ -127,6 +127,9 @@ public class AccountForm extends AbstractForm<AccountTableView.AccountModel> {
 	public void openCreationDialog() {
 		this.setVisible(true);
 		this.setManaged(true);
+		
+		this.getChildren().remove(buttonBox);
+		
 		loadModelDataIntoForm(null);
 		
 		Dialog<AccountTableView.AccountModel> dialog = new Dialog<>();
@@ -142,7 +145,7 @@ public class AccountForm extends AbstractForm<AccountTableView.AccountModel> {
 		
 		// Get the Save button and validate before allowing close
 		Button saveButton = (Button) dialog.getDialogPane().lookupButton(saveButtonType);
-		saveButton.disableProperty().bind(isValid.not());
+		saveButton.disableProperty().bind(isSaveable.not());
 		
 		dialog.setResultConverter(dialogButton -> {
 			if (dialogButton == saveButtonType) {
@@ -165,7 +168,6 @@ public class AccountForm extends AbstractForm<AccountTableView.AccountModel> {
 		});
 		
 		fieldChangeTracker.resetModifications();
-		
 		dialog.showAndWait().ifPresent(newAccount -> {
 			// Fire a custom save event with the new account data
 			FormEvent<AccountTableView.AccountModel> createEvent =

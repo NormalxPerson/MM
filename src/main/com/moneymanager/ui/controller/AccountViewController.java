@@ -70,10 +70,7 @@ public class AccountViewController extends AbstractViewController {
 			AccountTableView.AccountModel selectedModel = (AccountTableView.AccountModel) row.getItem();
 			System.out.println("Clicked: " + selectedModel);
 			
-			// Show and load data without worrying about re-adding the form
 			accountSlidingForm.setCurrentModel(selectedModel);
-			//accountSlidingForm.setVisible(true);
-			//accountSlidingForm.setManaged(true);
 		}
 	}
 	

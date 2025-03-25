@@ -22,7 +22,7 @@ public class FormValidationSupport extends ValidationSupport {
 	private static final String ERROR_STYLE_CLASS = "validation-error";
 	private static final String SUCCESS_STYLE_CLASS = "validation-success";
 	
-	private final EnchancedValidationDecoration decorator = new EnchancedValidationDecoration();
+	private final EnhancedValidationDecoration decorator = new EnhancedValidationDecoration();
 	
 	public FormValidationSupport() {
 		super();
@@ -44,7 +44,7 @@ public class FormValidationSupport extends ValidationSupport {
 		return isValid;
 	}
 	
-	private class EnchancedValidationDecoration implements ValidationDecoration {
+	private class EnhancedValidationDecoration implements ValidationDecoration {
 		
 		private final GraphicValidationDecoration graphicDecoration = new GraphicValidationDecoration();
 		

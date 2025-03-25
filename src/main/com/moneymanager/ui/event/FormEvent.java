@@ -10,6 +10,7 @@ public class FormEvent<T> extends Event {
 	public static final EventType<FormEvent> SAVE = new EventType<>(ANY, "SAVE");
 	public static final EventType<FormEvent> DELETE = new EventType<>(ANY, "DELETE");
 	public static final EventType<FormEvent> CLOSE = new EventType<>(ANY, "CLOSE");
+	public static final EventType<FormEvent> NEWSAVE = new EventType<>(SAVE, "NEWSAVE");
 	
 	private final T model;
 	private final Map<String, Object> fieldValues;
