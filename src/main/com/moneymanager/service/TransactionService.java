@@ -7,6 +7,7 @@ import com.moneymanager.ui.view.AccountTableView;
 import com.moneymanager.ui.view.TransactionTableView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
 import java.util.Collections;
 import java.util.List;
@@ -92,6 +93,10 @@ public class TransactionService implements TransactionServiceInterface {
 		return accountService.getAccountModelObservableList();
 	}
 	
+	public ObservableMap<String, AccountTableView.AccountModel> getAccountModelObservableMap() {
+		return accountService.getAccountModelMap();
+	}
+	
 	public TransactionTableView.TransactionModel createTransactionModelFromTransaction(Transaction transaction) {
 		String accountName = accountService.getAccountNameByAccountId(transaction.getAccountId());
 		return new TransactionTableView.TransactionModel(
@@ -105,20 +110,6 @@ public class TransactionService implements TransactionServiceInterface {
 		);
 	}
 	
-	public void updateTransaction(TransactionTableView.TransactionModel updatedTransactionModel) {
-		Transaction updatedTransaction = new Transaction(
-				updatedTransactionModel.getTransactionId(),
-				updatedTransactionModel.getTransactionAmount(),
-				updatedTransactionModel.getTransactionDescription(),
-				updatedTransactionModel.getTransactionDate(), // Convert String to LocalDate
-				updatedTransactionModel.getTransactionType().toString(),
-				updatedTransactionModel.getTransactionAccountId()
-		);
-		
-		transRepo.updateTransaction(updatedTransaction);
-		
-	}
-	
 	public TransactionTableView.TransactionModel createAndAddTransaction(Map<String, Object> fieldValues) {
 		Transaction transaction = TransactionFactory.createTransaction(fieldValues, transRepo);
 		transRepo.addTransaction(transaction);
@@ -126,6 +117,17 @@ public class TransactionService implements TransactionServiceInterface {
 		transactionModels.add(newTransactionModel);
 		return newTransactionModel;
 		
+	}
+	
+	public void updateTransaction(TransactionTableView.TransactionModel transactionModel) {
+		transRepo.updateTransaction(transactionModel);
+	}
+	
+	public int deleteTransaction(TransactionTableView.TransactionModel transactionModel) {
+		if (transactionModels.remove(transactionModel)) {
+			 return transRepo.deleteTransaction(transactionModel.getTransactionId());
+		}
+		return 0;
 	}
 	
 

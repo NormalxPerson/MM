@@ -149,6 +149,25 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 		public void setTransactionAccountName(String transactionAccountName) {this.transactionAccountName.set(transactionAccountName);}
 		public StringProperty TransactionAccountNameProperty() {return transactionAccountName;}
 		
+		public void makeChanges(String change, Object value) {
+			if (change.equalsIgnoreCase("transactionAmount")) {
+				double amount = 0.0;
+				String balanceStr = (String) value;
+				amount = Double.parseDouble(balanceStr);
+				setTransactionAmount(amount);
+			} else if (change.equalsIgnoreCase("transactionDescription")) {
+				setTransactionDescription(String.valueOf(value));
+			} else if (change.equalsIgnoreCase("transactionDate")) {
+				setTransactionDate((LocalDate) value);
+			} else if (change.equalsIgnoreCase("transactionType")) {
+				setTransactionType(((TransactionType) value).toString());
+			} else if (change.equalsIgnoreCase("transactionAccount")) {
+				AccountTableView.AccountModel accountModel = (AccountTableView.AccountModel) value;
+				setTransactionAccountId(accountModel.getAccountId());
+				setTransactionAccountName(accountModel.getAccountName());
+			}
+		}
+		
 		
 	}
 }

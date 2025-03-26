@@ -3,6 +3,7 @@ package com.moneymanager.repos;
 import com.moneymanager.core.Transaction;
 import com.moneymanager.core.TransactionFactory;
 import com.moneymanager.database.DatabaseConnection;
+import com.moneymanager.ui.view.TransactionTableView;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -142,5 +143,38 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 		} catch (SQLException e) {
 			throw new RuntimeException("Failed to update transaction with ID: " + transaction.getId(), e);
 		}
+	}
+	
+	@Override
+	public void updateTransaction(TransactionTableView.TransactionModel transactionModel) {
+		String sql = "UPDATE transactions set transactionDate = ?, transactionAmount = ?, transactionDescription = ?, transactionType = ?, accountId = ? WHERE transactionId = ?";
+		int amountInCents = (int) Math.round(transactionModel.getTransactionAmount() * 100);
+		
+		try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(sql)) {
+			stmt.setString(1, transactionModel.getTransactionDate().toString());
+			stmt.setInt(2, amountInCents);
+			stmt.setString(3, transactionModel.getTransactionDescription());
+			stmt.setString(4, transactionModel.getTransactionType().name());
+			stmt.setInt(5, Integer.parseInt(transactionModel.getTransactionAccountId()));
+			stmt.setString(6, transactionModel.getTransactionId());
+			
+			int rowsUpdated = stmt.executeUpdate();
+			
+			if (rowsUpdated == 0) {
+				System.err.println("No transaction found with ID: " + transactionModel.getTransactionId());
+			}
+		} catch (SQLException e) { throw new RuntimeException(e);}
+	}
+	@Override
+	public int deleteTransaction(String transactionId) {
+		String sql = "DELETE FROM transactions WHERE transactionId = ?";
+		try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(sql)) {
+			stmt.setString(1, transactionId);
+			
+			return stmt.executeUpdate();
+		}catch (SQLException e) {
+			System.err.println("Error deleting transaction with ID: " + transactionId);
+		}
+		return 0;
 	}
 }

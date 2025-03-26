@@ -80,7 +80,7 @@ public class MainViewController implements Initializable {
 	}
 	
 	private void populateAccountTable() {
-		ObservableList<AccountTableView.AccountModel> accountModels = accountService.getAccountModelObservableList();
+		ObservableList<AccountTableView.AccountModel> accountModels = accountService.getAccountModelObservableMap();
 
 		
 	}

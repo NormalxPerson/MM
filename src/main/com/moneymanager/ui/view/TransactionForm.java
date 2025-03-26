@@ -5,6 +5,7 @@ import com.moneymanager.ui.event.FormEvent;
 import com.moneymanager.ui.validation.FormValidationSupport;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
@@ -23,16 +24,19 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 	private DatePicker transactionDatePicker;
 	private ComboBox<TransactionTableView.TransactionModel.TransactionType> transactionTypeComboBox;
 	private ComboBox<AccountTableView.AccountModel> accountComboBox;
+	
+	private ObservableMap<String, AccountTableView.AccountModel> accountModelMap;
 
 	
-	public TransactionForm(ObservableList<AccountTableView.AccountModel> accountModels) {
+	public TransactionForm(ObservableMap<String, AccountTableView.AccountModel> accountModelsMap) {
 		super();
-		initializeFields(accountModels);
+		this.accountModelMap = accountModelsMap;
+		initializeFields();
 		setupValidators();
 	}
 	
 	
-	protected void initializeFields(ObservableList<AccountTableView.AccountModel> accountModels) {
+	protected void initializeFields() {
 		transactionAmountField = new TextField();
 		transactionDescriptionField = new TextField();
 		transactionDatePicker = new DatePicker(LocalDate.now());
@@ -58,7 +62,7 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 		});
 		transactionTypeComboBox.getSelectionModel().selectLast();
 		
-		accountComboBox.setItems(accountModels);
+		accountComboBox.setItems(FXCollections.observableArrayList(accountModelMap.values()));
 		accountComboBox.getSelectionModel().selectFirst();
 		
 		Label transactionAmountLabel = new Label("Transaction Amount");
@@ -124,7 +128,11 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 			transactionDescriptionField.setText(transactionModel.getTransactionDescription());
 			transactionDatePicker.setValue(transactionModel.getTransactionDate());
 			transactionTypeComboBox.getSelectionModel().select(transactionModel.getTransactionType());
-			accountComboBox.getSelectionModel().select(Integer.parseInt(transactionModel.getTransactionAccountId())-1);
+			
+			String selectedAccountId = transactionModel.getTransactionAccountId();
+			if (selectedAccountId != null && accountModelMap.containsKey(selectedAccountId)) {
+				accountComboBox.getSelectionModel().select(accountModelMap.get(selectedAccountId));
+			} else { accountComboBox.getSelectionModel().clearSelection(); }
 		}
 		
 		fieldChangeTracker.resetModifications();

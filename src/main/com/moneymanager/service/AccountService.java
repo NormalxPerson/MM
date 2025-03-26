@@ -4,7 +4,9 @@ import com.moneymanager.core.Account;
 import com.moneymanager.repos.AccountRepo;
 import com.moneymanager.ui.view.AccountTableView;
 import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
 import java.util.*;
 
@@ -12,12 +14,19 @@ import java.util.*;
 public class AccountService {
     private AccountRepo accountRepo;
     private HashMap<String, Account> theSourceHashMapOfAccounts;
+    private ObservableMap<String, AccountTableView.AccountModel> accountModelMap;
     private ObservableList<AccountTableView.AccountModel> accountModelObservableList;
 
     public AccountService(AccountRepo accountRepo) {
         
         this.accountRepo = accountRepo;
-        this.accountModelObservableList = FXCollections.observableArrayList();
+        this.accountModelMap = FXCollections.observableHashMap();
+        this.accountModelObservableList = FXCollections.observableArrayList(accountModelMap.values());
+        
+        accountModelMap.addListener((MapChangeListener.Change<? extends String, ? extends AccountTableView.AccountModel> change) -> {
+            accountModelObservableList.setAll(accountModelMap.values());
+        });
+        
         loadAccountModelsObservableList();
     }
     
@@ -28,11 +37,11 @@ public class AccountService {
     
     public void loadAccountModelsObservableList() {
         updateTheSourceAccountMap();
-        accountModelObservableList.clear();
+        accountModelMap.clear();
         
         for (Account account : theSourceHashMapOfAccounts.values()) {
             AccountTableView.AccountModel accountModel = new AccountTableView.AccountModel(account.getAccountName(), account.getBankName(), account.getAccountType().name(), account.getBalance(), account.getAccountId());
-            accountModelObservableList.add(accountModel);
+            accountModelMap.put(accountModel.getAccountId(),accountModel);
         }
     }
     public void updateBalance(String accountId, double amount) {
@@ -56,7 +65,7 @@ public class AccountService {
         theSourceHashMapOfAccounts.put(newId,newAccount);
         
         AccountTableView.AccountModel newAccountModel = createModelFromAccount(newAccount);
-        accountModelObservableList.add(newAccountModel);
+        accountModelMap.put(newAccountModel.getAccountId(), newAccountModel);
 	    return newAccountModel;
     }
     
@@ -66,7 +75,9 @@ public class AccountService {
     
     
     public String getAccountNameByAccountId(String accountId) {
-        return theSourceHashMapOfAccounts.get(accountId).getAccountName();
+        if (theSourceHashMapOfAccounts.containsKey(accountId)) {
+            return theSourceHashMapOfAccounts.get(accountId).getAccountName();
+        } else { return "ACCOUNT_DELETED"; }
     }
     
     public HashMap<String, Account> getAccountMap() {return theSourceHashMapOfAccounts;}
@@ -83,8 +94,8 @@ public class AccountService {
     }
     
     public int deleteAccountById(AccountTableView.AccountModel accountModel) {
-        if (accountModelObservableList.contains(accountModel)) {
-            accountModelObservableList.remove(accountModel);
+        if (accountModelMap.containsKey(accountModel.getAccountId())) {
+            accountModelMap.remove(accountModel.getAccountId());
             int rowDeleted = accountRepo.deleteAccountById(accountModel.getAccountId());
             
             if (rowDeleted == 1 && theSourceHashMapOfAccounts.containsKey(accountModel.getAccountId())) {
@@ -95,6 +106,12 @@ public class AccountService {
         }
         return 0;
     }
+    
+    public ObservableMap<String, AccountTableView.AccountModel> getAccountModelMap() {
+        return accountModelMap;
+    }
+    
+    
 
 
 
