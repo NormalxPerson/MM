@@ -1,11 +1,14 @@
 package com.moneymanager.core;
 import com.moneymanager.exceptions.ValidationException;
 import com.moneymanager.repos.TransactionRepo;
+import com.moneymanager.ui.view.AccountTableView;
+import com.moneymanager.ui.view.TransactionTableView;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Map;
 
 public class TransactionFactory {
 	private static final DateTimeFormatter transactionDateFormat = DateTimeFormatter.ofPattern("M-d-yy");
@@ -16,11 +19,11 @@ public class TransactionFactory {
 		System.out.printf("Transaction Factory: before Validation: amount=%s, description=%s, strdate: %s, date=%s, type=%s, accountId=%s\n", amount, description,date.getClass(), date, type, accountId);
 		
 		LocalDate convertedDate = validateDate(date);
-		String formattedType = validateType(type);
+		Transaction.TransactionType formattedType = validateType(type);
 		double adjustedAmount = validateAndAdjustAmount(amount, formattedType);
 		String generatedId = generateTransactionId(convertedDate, accountId, transRepo);
 	
-		return new Transaction(generatedId, adjustedAmount, description, convertedDate, formattedType, accountId);
+		return new Transaction(generatedId, adjustedAmount, description, convertedDate, formattedType.getDisplayName(), accountId);
 	}
 	
 	public static Transaction createTransaction(ResultSet rs) throws SQLException {
@@ -37,13 +40,35 @@ public class TransactionFactory {
 		
 	}
 	
-	
-	private static String validateType(String type) {
+	public static Transaction createTransaction(Map<String, Object> fieldValues, TransactionRepo transRepo) {
+			
+			String description = (String) fieldValues.get("transactionDescription");
+			LocalDate date = validateDate(String.valueOf(fieldValues.get("transactionDate")));
+			TransactionTableView.TransactionModel.TransactionType transactionModelType = (TransactionTableView.TransactionModel.TransactionType) fieldValues.get("transactionType");
+			Transaction.TransactionType transactionType = validateType(transactionModelType.getDisplayName());
+			
+			
+			double amount = validateAndAdjustAmount(Double.parseDouble((String) fieldValues.get("transactionAmount")), transactionType);
+			AccountTableView.AccountModel accountModel = (AccountTableView.AccountModel) fieldValues.get("transactionAccount");
+			
+			String accountId = accountModel.getAccountId();
+			String accountName = accountModel.getAccountName();
+			
+			String generatedId = generateTransactionId(date, accountId, transRepo);
+		System.out.printf("Values to create Transaction in TransactionFactory.createTransaction(Map<String, Object> fieldValues, TransactionRepo transRepo)\n\tgeneratedId=%s\n\tamount=%s\n\tdescription=%s", generatedId, amount, description);
+			return new Transaction(generatedId, amount, description, date, transactionType.getDisplayName(), accountId);
+			
 		
-		if (type == null || (!type.equalsIgnoreCase("INCOME") && !type.equalsIgnoreCase("EXPENSE"))) {
-			throw new ValidationException.InvalidTransactionTypeException(type, "TransactionFactory.validateType");
-		}
-		return type.toUpperCase();
+	}
+	
+	
+	private static Transaction.TransactionType validateType(String type) {
+		
+		return switch (type.toUpperCase()) {
+			case "INCOME" -> Transaction.TransactionType.INCOME;
+			case "EXPENSE" -> Transaction.TransactionType.EXPENSE;
+			default -> null;
+		};
 	}
 	
 	private static LocalDate validateDate(String date) {
@@ -59,19 +84,19 @@ public class TransactionFactory {
 		throw new ValidationException.InvalidTransactionDateException(date, "TransactionFactory.validateDate");
 	}
 	
-	private static double validateAndAdjustAmount(double amount, String type) {
-		if (type.equals("INCOME")) {
+	private static double validateAndAdjustAmount(double amount, Transaction.TransactionType type) {
+		if (type.equals(Transaction.TransactionType.INCOME)) {
 			if (amount < 0) {
 				throw new ValidationException.InvalidTransactionAmountException(amount, "TransactionFactory.validateAndAdjustAmount: Income cannot have a negative amount");
 			}
 			return amount; // Positive amount for INCOME
-		} else if (type.equals("EXPENSE")) {
+		} else if (type.equals(Transaction.TransactionType.EXPENSE)) {
 			if (amount > 0) {
 				return -Math.abs(amount); // Convert positive to negative for EXPENSE
 			}
 			return amount; // Already negative for EXPENSE
 		} else {
-			throw new ValidationException.InvalidTransactionTypeException(type, "TransactionFactory.validateAndAdjustAmount");
+			throw new ValidationException.InvalidTransactionTypeException(type.getDisplayName(), "TransactionFactory.validateAndAdjustAmount");
 		}
 	}
 	

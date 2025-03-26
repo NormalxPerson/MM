@@ -1,10 +1,17 @@
 package com.moneymanager.ui.view;
 
 import com.moneymanager.service.TransactionService;
+import com.moneymanager.ui.event.FormEvent;
+import com.moneymanager.ui.validation.FormValidationSupport;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
+import javafx.util.StringConverter;
+import org.controlsfx.validation.Severity;
+import org.controlsfx.validation.Validator;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -14,42 +21,51 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 	private TextField transactionAmountField;
 	private TextField transactionDescriptionField;
 	private DatePicker transactionDatePicker;
-	private ComboBox<String> transactionTypeComboBox;
+	private ComboBox<TransactionTableView.TransactionModel.TransactionType> transactionTypeComboBox;
 	private ComboBox<AccountTableView.AccountModel> accountComboBox;
 
-	private TransactionService transactionService;
 	
-	public TransactionForm(TransactionService transactionService, FloatingActionButton floatingActionButton) {
+	public TransactionForm(ObservableList<AccountTableView.AccountModel> accountModels) {
 		super();
-		this.transactionService = transactionService;
-		initializeLayout();
+		initializeFields(accountModels);
+		setupValidators();
 	}
 	
 	
-	protected void initializeLayout() {
-		transactionAmountField = new TextField("Amount");
-		transactionDescriptionField = new TextField("Description");
+	protected void initializeFields(ObservableList<AccountTableView.AccountModel> accountModels) {
+		transactionAmountField = new TextField();
+		transactionDescriptionField = new TextField();
 		transactionDatePicker = new DatePicker(LocalDate.now());
-		
 		transactionTypeComboBox = new ComboBox<>();
-		transactionTypeComboBox.setItems(FXCollections.observableArrayList("INCOME", "EXPENSE"));
+		accountComboBox = new ComboBox<>();
+		
+		transactionTypeComboBox.setItems(FXCollections.observableArrayList(TransactionTableView.TransactionModel.TransactionType.values()));
+		transactionTypeComboBox.setConverter(new StringConverter<>() {
+			@Override
+			public String toString(TransactionTableView.TransactionModel.TransactionType object) {
+				return object != null ? object.getDisplayName() : "";
+			}
+			
+			@Override
+			public TransactionTableView.TransactionModel.TransactionType fromString(String string) {
+				for (TransactionTableView.TransactionModel.TransactionType type : TransactionTableView.TransactionModel.TransactionType.values()) {
+					if (type.getDisplayName().equals(string)) {
+						return type;
+					}
+				}
+				return TransactionTableView.TransactionModel.TransactionType.EXPENSE;
+			}
+		});
 		transactionTypeComboBox.getSelectionModel().selectLast();
 		
-		accountComboBox = new ComboBox<>();
-		accountComboBox.setItems(transactionService.getAccountModelObservableList());
-		if (!transactionService.getAccountModelObservableList().isEmpty()) { accountComboBox.getSelectionModel().selectFirst(); }
-		else {accountComboBox.setPromptText("Account"); }
+		accountComboBox.setItems(accountModels);
+		accountComboBox.getSelectionModel().selectFirst();
 		
-		Label transactionAmountLabel = new Label("Amount");
-		Label transactionDescriptionLabel = new Label("Description");
-		Label transactionDateLabel = new Label("Date");
-		Label transactionTypeLabel = new Label("Type");
-		Label accountLabel = new Label("Account");
-		
-		transactionAmountField.getStyleClass().addAll("text-field", "md3-rounded-small");
-		transactionDescriptionField.getStyleClass().addAll("text-field", "md3-rounded-small");
-		transactionDatePicker.getStyleClass().add("md3-rounded-small");
-		transactionTypeComboBox.getStyleClass().add("md3-rounded-small");
+		Label transactionAmountLabel = new Label("Transaction Amount");
+		Label transactionDescriptionLabel = new Label("Transaction Description");
+		Label transactionDateLabel = new Label("Transaction Date");
+		Label transactionTypeLabel = new Label("Transaction Type");
+		Label accountLabel = new Label("Account for Transaction");
 		
 		VBox amountFieldBox = new VBox(2, transactionAmountLabel, transactionAmountField);
 		VBox descriptionFieldBox = new VBox(2, transactionDescriptionLabel, transactionDescriptionField);
@@ -58,6 +74,45 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 		VBox accountFieldBox = new VBox(2, accountLabel, accountComboBox);
 		
 		this.getChildren().addAll(amountFieldBox, descriptionFieldBox, dateFieldBox, typeFieldBox, accountFieldBox);
+	
+		registerField("transactionAmount", transactionAmountField, amountFieldBox);
+		registerField("transactionDescription", transactionDescriptionField, descriptionFieldBox);
+		registerField("transactionDate", transactionDatePicker, dateFieldBox);
+		registerField("transactionType", transactionTypeComboBox, typeFieldBox);
+		registerField("transactionAccount", accountComboBox, accountFieldBox);
+	
+	}
+	
+	@Override
+	protected void setupValidators() {
+	
+		validationSupport.registerValidator(
+				transactionAmountField,
+				Validator.combine(
+						Validator.createEmptyValidator("Transaction Amount is required"),
+						Validator.createRegexValidator("Balance must be a number", "-?\\d+(\\.\\d+)?", Severity.ERROR)
+				)
+		);
+		
+		validationSupport.registerValidator(
+				transactionDescriptionField,
+				Validator.createEmptyValidator("Transaction Description Required")
+		);
+		
+		validationSupport.registerValidator(
+				transactionDatePicker,
+				Validator.createEmptyValidator("Transaction Date Required")
+		);
+		
+		validationSupport.registerValidator(
+				transactionTypeComboBox,
+				Validator.createEmptyValidator("Transaction Type Required")
+		);
+		
+		validationSupport.registerValidator(
+				accountComboBox,
+				Validator.createEmptyValidator("Account Needed For Transaction")
+		);
 	}
 	
 	@Override
@@ -71,98 +126,40 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 			transactionTypeComboBox.getSelectionModel().select(transactionModel.getTransactionType());
 			accountComboBox.getSelectionModel().select(Integer.parseInt(transactionModel.getTransactionAccountId())-1);
 		}
+		
+		fieldChangeTracker.resetModifications();
+		validationSupport.revalidate();
 	}
 	
 	
 	@Override
 	protected void onSaveAction() {
-/*		double amount = Double.parseDouble(transactionAmountField.getText());
-		String description = transactionDescriptionField.getText();
-		String date = transactionDatePicker.getValue().toString();
-		String type = transactionTypeComboBox.getValue();
-		String accountId = accountComboBox.getValue().getAccountId();
-		
-		Map<String, String> fieldValues = Map.of(
-				"amount", String.valueOf(amount),
-				"description", description,
-				"date", date,
-				"type", type,
-				"accountId", accountId
-		);
-		
-		Map<String, List<String>> constraints = Map.of(
-				"amount", List.of("required", "double"),
-				"description", List.of("required"),
-				"date", List.of("required"),
-				"type", List.of("required", "options:INCOME,EXPENSE"),
-				"accountId", List.of("required")
-		);
-		
-		Map<String, String> errors = validateFields(fieldValues, constraints);
-		if (!errors.isEmpty()) {
-			showValidationErrors(errors, getTransactionFieldMap());
-			return;
-		}
-		
-		if (status == FormStatus.EDITING) {
-			Map<String, String> changes = hasTransactionModelChanged(amount, description, date, type, accountId);
-			
-			if (!changes.isEmpty()) {
-				showChanges(changes); // Highlight changed fields
-				currentModel.setTransactionAmount(amount);
-				currentModel.setTransactionDescription(description);
-				currentModel.setTransactionDate(LocalDate.parse(date));
-				currentModel.setTransactionType(type);
-				currentModel.setTransactionAccountId(accountId);
-				
-				transactionService.updateTransaction(currentModel);
-			}
-		} else if (status == FormStatus.ADDING) {
-			this.currentModel = transactionService.createAddAndGetNewTransactionModel(amount, description, date, type, accountId);
-			transactionService.addNewTransactionModelToTable(this.currentModel);
-		}
-		
-		hideForm();*/
-	}
-	
-	@Override
-	protected void setupValidators() {
-	
+
 	}
 	
 	@Override
 	protected void onDeleteAction() {
-	
-	}
-	
-	
-	public void setUpFields() {
-		transactionAmountField.setPromptText("Amount");
-		transactionDescriptionField.setPromptText("Description");
-		transactionDatePicker.setValue(LocalDate.now());
-		transactionTypeComboBox.setValue("EXPENSE");
-		if (!transactionService.getAccountModelObservableList().isEmpty()) { accountComboBox.getSelectionModel().selectFirst(); }
-		else {accountComboBox.setPromptText("Account"); }
+		Alert confirmDialog = new Alert(Alert.AlertType.CONFIRMATION);
+		confirmDialog.setTitle("Confirm Deletion");
+		confirmDialog.setHeaderText("Delete Account");
+		confirmDialog.setContentText("Are you sure you want to delete Transaction:\n\tAmount: " + currentModel.getTransactionAmount() + "\n\tDescription: " + currentModel.getTransactionDescription());
+		
+		confirmDialog.showAndWait().ifPresent(response -> {
+			if (response == ButtonType.OK) {
+				// Fire delete event
+				fireDeleteEvent();
+			}
+		});
 	}
 	
 	public void clearFormFields() {
 		transactionAmountField.clear();
 		transactionDescriptionField.clear();
-		transactionDatePicker.setValue(LocalDate.now());
-		transactionTypeComboBox.getSelectionModel().select("EXPENSE");
-		accountComboBox.getSelectionModel().selectFirst();
+		transactionDatePicker.setValue(LocalDate.of(2025, 1, 1));
+		transactionTypeComboBox.getSelectionModel().clearSelection();
+		accountComboBox.getSelectionModel().clearSelection();
 	}
-
 	
-	private Map<String, Control> getTransactionFieldMap() {
-		return Map.of(
-				"amount", transactionAmountField,
-				"description", transactionDescriptionField,
-				"date", transactionDatePicker,
-				"type", transactionTypeComboBox,
-				"accountId", accountComboBox
-		);
-	}
 	
 	
 	private void showChanges(Map<String, String> changes) {
@@ -191,15 +188,42 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 	
 	@Override
 	public void openCreationDialog() {
-		Dialog<TransactionTableView.TransactionModel> dialog = new Dialog<>();
-		dialog.setTitle("Create Account");
-		dialog.initModality(Modality.APPLICATION_MODAL);
+		this.setVisible(true);
+		this.setManaged(true);
+		this.getChildren().remove(buttonBox);
 		
-		dialog.getDialogPane().getButtonTypes().clear();
-		ButtonType createButtonType = new ButtonType("Create", ButtonBar.ButtonData.OK_DONE);
-		dialog.getDialogPane().getButtonTypes().addAll(createButtonType, ButtonType.CANCEL);
+		loadModelDataIntoForm(null);
+		transactionDatePicker.setValue(LocalDate.now());
+		transactionTypeComboBox.getSelectionModel().select(TransactionTableView.TransactionModel.TransactionType.EXPENSE);
+		accountComboBox.getSelectionModel().selectFirst();
+		
+		
+		Dialog<TransactionTableView.TransactionModel> dialog = new Dialog<>();
+		dialog.setTitle("Create a New Transaction");
+		
+		ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+		ButtonType cancelButtonType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+		dialog.getDialogPane().getButtonTypes().addAll(saveButtonType, cancelButtonType);
 		
 		dialog.getDialogPane().setContent(this);
+		
+		Button saveButton = (Button) dialog.getDialogPane().lookupButton(saveButtonType);
+		saveButton.disableProperty().bind(isSaveable.not());
+		
+		saveButton.addEventFilter(ActionEvent.ACTION, event -> {
+			if (isSaveable.get()) {
+				Map<String, Object> values = fieldChangeTracker.getModifiedValues();
+				FormEvent<TransactionTableView.TransactionModel> createEvent =
+						new FormEvent<>(FormEvent.NEWSAVE, null, values);
+				fireEvent(createEvent);
+				fieldChangeTracker.resetModifications();
+			} else {
+				// Prevent dialog from closing if validation fails
+				event.consume();
+			}
+		});
+		
+		dialog.showAndWait();
 	}
 
 	

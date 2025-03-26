@@ -72,11 +72,32 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 	}
 	
 	public static class TransactionModel {
+		public enum  TransactionType {
+			INCOME("Income"),
+			EXPENSE("Expense");
+			
+			private String displayName;
+			
+			TransactionType(String displayName) {
+				this.displayName = displayName;
+			}
+			
+			public String getDisplayName() {
+				return displayName;
+			}
+			
+			@Override
+			public String toString() {
+				return displayName;
+			}
+			
+		}
+		
 		private StringProperty transactionId;
 		private DoubleProperty transactionAmount;
 		private StringProperty transactionDescription;
 		private ObjectProperty<LocalDate> transactionDate;
-		private StringProperty TransactionType;
+		private ObjectProperty<TransactionType> transactionType;
 		private StringProperty transactionAccountId;
 		private StringProperty transactionAccountName;
 		
@@ -85,7 +106,7 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 			this.transactionAmount = new SimpleDoubleProperty(amount);
 			this.transactionDescription = new SimpleStringProperty(description);
 			this.transactionDate = new SimpleObjectProperty<>(date);
-			this.TransactionType = new SimpleStringProperty(type);
+			this.transactionType = new SimpleObjectProperty<>(TransactionType.valueOf(type.toUpperCase()));
 			this.transactionAccountId = new SimpleStringProperty(accountId);
 			this.transactionAccountName = new SimpleStringProperty(accountName);
 		}
@@ -95,7 +116,7 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 			this.transactionAmount = new SimpleDoubleProperty(amount);
 			this.transactionDescription = new SimpleStringProperty(description);
 			this.transactionDate = new SimpleObjectProperty<>(date);
-			this.TransactionType = new SimpleStringProperty(type);
+			this.transactionType = new SimpleObjectProperty<>(TransactionType.valueOf(type.toUpperCase()));
 		}
 		
 		
@@ -116,9 +137,9 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 		public void setTransactionDate(LocalDate transactionDate) {this.transactionDate.set(transactionDate);}
 		public ObjectProperty<LocalDate> transactionDateProperty() {return transactionDate;}
 		
-		public String getTransactionType() {return TransactionType.get();}
-		public void setTransactionType(String transactionType) {this.TransactionType.set(transactionType);}
-		public StringProperty TransactionTypeProperty() {return TransactionType;}
+		public TransactionType getTransactionType() {return transactionType.get();}
+		public void setTransactionType(String transactionType) {this.transactionType.set(TransactionType.valueOf(transactionType.toUpperCase()));}
+		public ObjectProperty<TransactionType> transactionTypeProperty() {return transactionType;}
 		
 		public String getTransactionAccountId() {return transactionAccountId.get();}
 		public void setTransactionAccountId(String transactionAccountId) {this.transactionAccountId.set(transactionAccountId);}

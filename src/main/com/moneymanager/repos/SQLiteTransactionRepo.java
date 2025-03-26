@@ -31,7 +31,7 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 				statement.setInt(2, (int) Math.round(transaction.getAmount() * 100));
 				statement.setString(3, transaction.getDescription());
 				statement.setString(4, transaction.getFormattedDate()); // Assuming date is stored as TEXT in your database
-				statement.setString(5, transaction.getType());
+				statement.setString(5, transaction.getType().name());
 				statement.setString(6, transaction.getAccountId());
 				
 				statement.executeUpdate();
@@ -131,7 +131,7 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 			stmt.setInt(1, (int) Math.round(transaction.getAmount() * 100)); // Convert to cents
 			stmt.setString(2, transaction.getDescription());
 			stmt.setString(3, transaction.getDate().toString()); // Store LocalDate as TEXT
-			stmt.setString(4, transaction.getType());
+			stmt.setString(4, transaction.getType().name());
 			stmt.setString(5, transaction.getAccountId());
 			stmt.setString(6, transaction.getId());
 			
