@@ -208,8 +208,9 @@
     -fx-control-inner-background: -fx-md3-surface-color; /* Inner background too */
     -fx-border-color: -fx-md3-outline-color;        /* Table outline */
     -fx-border-width: 1px;
-    -fx-background-radius: 8px;                   /* Rounded corners for table itself */
-    -fx-border-radius: 8px;
+    -fx-background-radius: 16px;                   /* Rounded corners for table itself */
+    -fx-border-radius: 16px;
+    -fx-padding: 8px;
 }
 
 .table-view:focused {
@@ -229,20 +230,26 @@
     -fx-text-fill: -fx-md3-on-surface-variant-color;    /* Header text - On Surface Variant */
     -fx-font-weight: bold;                             /* Bolder header text */
     -fx-alignment: CENTER_LEFT;
-    -fx-padding: 12px;                                 /* Header padding - adjust as needed */
+    -fx-padding: 16px 12px;
+    -fx-font-size: 15px;
+}
+
+.money-cell {
+    -fx-alignment: CENTER-RIGHT;
 }
 
 .table-view .table-row-cell {
-    -fx-background-color: -fx-md3-surface-variant-color; /* Default row background - Surface */
+    -fx-background-color: -fx-md3-surface-color; /* Default row background - Surface */
     -fx-cell-padding: 12px;                       /* Cell padding for rows */
 }
 
 .table-view .table-row-cell:odd {
-    -fx-background-color: -fx-md3-surface-color; /* Odd rows - Surface (no alternation in MD3 data tables typically) */
+    -fx-background-color: derive(-fx-md3-surface-variant-color, 50%); /* Odd rows - Surface (no alternation in MD3 data tables typically) */
 }
 
-.table-view .table-row-cell:even {
-    -fx-background-color: -fx-md3-surface-variant-color; /* Even rows - Surface */
+.negative-balance {
+    -fx-text-fill: -fx-md3-error-color;
+    -fx-font-weight: bold;
 }
 
 .table-row-cell:selected.no-highlight {
@@ -272,7 +279,8 @@
 .md3-navigation-rail {
     -fx-background-color: -fx-md3-surface-color; /* Rail background - Surface */
     -fx-border-color: transparent;             /* No border for rail itself in MD3 usually */
-    -fx-padding: 8px 0;                      /* Adjust rail padding */
+    -fx-padding: 24px 8px;
+    -fx-spacing: 16px;
 }
 
 .md3-navigation-rail-item {
@@ -280,13 +288,14 @@
     -fx-text-fill: -fx-md3-on-surface-variant-color; /* Item text - On Surface Variant (inactive) */
     -fx-background-radius: 28px;              /* Rounded shape for rail items */
     -fx-border-radius: 28px;
-    -fx-padding: 12px 24px;                     /* Item padding - adjust */
-    -fx-alignment: CENTER_LEFT;                /* Text alignment in rail items */
+    -fx-padding: 12px 16px;                     /* Item padding - adjust */
+    -fx-alignment: CENTER;                /* Text alignment in rail items */
     -fx-font-weight: 500;                     /* Medium font weight for rail items */
     -fx-font-size: 14px;                        /* Font size for rail items */
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.12), 2, 0, 0, 1);
-    -fx-min-width: 80px;                       /* Minimum width for rail item */
-    -fx-max-width: 80px;                       /* Maximum width for rail item */
+    -fx-min-width: 150px;
+    -fx-pref-width: 150px;
+    -fx-max-width: 150px;                       /* Maximum width for rail item */
 }
 
 .md3-navigation-rail-item:hover {
@@ -307,6 +316,13 @@
     -fx-text-fill: -fx-md3-on-primary-container-color;    !* Focus text - On Primary Container *!
     -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.14), 3, 0, 0, 2),  dropshadow(gaussian, -fx-focus-color, 12, 0, 0, 0); !* Focus ring - **CORRECTED** *!}
 */
+
+.section-header {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-padding: 0 0 16px 0;
+    -fx-text-fill: -fx-md3-on-surface-color;
+}
 
 
 
@@ -341,10 +357,14 @@
 /* VBox for Navigation Rail Container (example - style the rail container if needed) */
 .md3-navigation-rail-container {
     -fx-padding: 16px; /* Example padding around the rail */
+    -fx-min-width: 160px;
+    -fx-pref-width: 160px;
+    -fx-max-width: 160px;
 }
 
 /* HBox for Content Area (example - style the main content area container if needed) */
 .content-area {
-    -fx-padding: 16px; /* Example padding around the content area */
-    -fx-background-color: -fx-md3-surface-color; /* Ensure content area has surface background */
+    -fx-padding: 24px;
+    -fx-spacing: 24px; /* Example padding around the content area */
+    -fx-background-color: -fx-md3-background-color; /* Ensure content area has surface background */
 }

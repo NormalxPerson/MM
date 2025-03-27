@@ -75,6 +75,12 @@ public class ViewManager {
 		return currentViewController;
 	}
 	
+	public BaseViewController getControllerByName(String viewName) {
+		if (controllerCache.containsKey(viewName)) {
+			return controllerCache.get(viewName);
+		}
+		return null;
+	}
 	
 }
 

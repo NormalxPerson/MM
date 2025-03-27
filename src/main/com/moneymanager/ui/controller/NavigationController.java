@@ -2,6 +2,7 @@ package com.moneymanager.ui.controller;
 
 import com.moneymanager.service.AccountService;
 import com.moneymanager.service.TransactionService;
+import com.moneymanager.ui.event.FormEvent;
 import com.moneymanager.ui.view.FloatingActionButton;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -60,6 +61,7 @@ public class NavigationController implements Initializable{
 		
 		//Adding Event Handler to Content Area.
 		
+		contentArea.addEventHandler(FormEvent.DELETEACCOUNT, this::handleDeleteAccountEvent);
 		
 		fab.setOnAction(new EventHandler<ActionEvent>() {
 			@Override
@@ -100,6 +102,14 @@ public class NavigationController implements Initializable{
 		if (navigationGroup.getSelectedToggle() != null && viewManager.getController() != null) {
 			viewManager.getController().hideForm();
 			viewManager.getController().showCreationDialog();
+		}
+	}
+	
+	private void handleDeleteAccountEvent(FormEvent event) {
+		if (event.getEventType() == FormEvent.DELETEACCOUNT) {
+			System.out.println("NavigationController.handleDeleteAccountEvent got event");
+			transactionViewController = (TransactionViewController) viewManager.getControllerByName("transactionView");
+			transactionViewController.refreshTransactionTable(transactionService.getObservableTransactionModelsList());
 		}
 	}
 	

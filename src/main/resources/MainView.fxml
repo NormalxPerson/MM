@@ -25,7 +25,7 @@
     </fx:define>
 
     <left>
-        <VBox fx:id="navigationRail" spacing="12" prefWidth="80" styleClass="md3-navigation-rail, md3-navigation-rail-container" BorderPane.alignment="CENTER_LEFT" >
+        <VBox fx:id="navigationRail" spacing="12"  styleClass="md3-navigation-rail, md3-navigation-rail-container" BorderPane.alignment="CENTER_LEFT" >
             <ToggleButton fx:id="accountsButton" text="Accounts" toggleGroup="$navigationGroup" styleClass="md3-navigation-rail-item, md3-rounded-large" userData="accountView"/>
             <ToggleButton fx:id="transactionsButton" text="Transactions" toggleGroup="$navigationGroup" styleClass="md3-navigation-rail-item, md3-rounded-large" userData="transactionView"/>
         </VBox>

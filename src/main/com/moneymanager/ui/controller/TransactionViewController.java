@@ -46,10 +46,10 @@ public class TransactionViewController extends AbstractViewController implements
 	public void postInitialize() {
 		refreshTransactionTable(transactionService.getObservableTransactionModelsList());
 		
-		transactionSlidingForm = new TransactionForm(transactionService.getAccountModelObservableMap());
+		transactionSlidingForm = new TransactionForm(transactionService.getAccountModelObservableMap(), transactionService.getAccountModelObservableList());
 		this.editingForm = this.transactionSlidingForm;
 		
-		this.transactionCreationForm = new TransactionForm(transactionService.getAccountModelObservableMap());
+		this.transactionCreationForm = new TransactionForm(transactionService.getAccountModelObservableMap(), transactionService.getAccountModelObservableList());
 		this.creationDialogForm = this.transactionCreationForm;
 		
 		transactionContainer.getChildren().addAll(transactionTableView, transactionSlidingForm);
@@ -86,7 +86,13 @@ public class TransactionViewController extends AbstractViewController implements
 			Map<String, Object> changedValues = event.getFieldValues();
 			
 			for (String key : changedValues.keySet()) {
-				transactionModel.makeChanges(key, changedValues.get(key));
+				if (!key.equalsIgnoreCase("updateBalance")) {
+					transactionModel.makeChanges(key, changedValues.get(key));
+				}
+			}
+			
+			if (changedValues.containsKey("updateBalance")) {
+				transactionService.updateAccountBalance(transactionModel.getTransactionAccountId(), transactionModel.getTransactionAmount());
 			}
 			
 			try {

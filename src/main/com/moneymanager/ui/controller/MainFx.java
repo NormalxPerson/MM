@@ -32,7 +32,7 @@ public class MainFx extends Application {
 		navigationController.setUpControllers();
 		
 		// 2. Create the Scene
-		Scene scene = new Scene(root, 800, 600);
+		Scene scene = new Scene(root, 900, 750);
 		scene.getStylesheets().add(getClass().getResource("/stylesheetfx.css").toExternalForm());
 		// 3. Set up the Stage
 		primaryStage.setTitle("Money Manager");

@@ -57,7 +57,7 @@ public class TransactionService implements TransactionServiceInterface {
 		transactionModels.add(createNewTransactionModel(transaction));
 	}
 	
-	private void updateAccountBalance(String accountId, double amount) {
+	public void updateAccountBalance(String accountId, double amount) {
 		accountService.updateBalance(accountId, amount);
 		
 	}
@@ -115,6 +115,8 @@ public class TransactionService implements TransactionServiceInterface {
 		transRepo.addTransaction(transaction);
 		TransactionTableView.TransactionModel newTransactionModel = createNewTransactionModel(transaction);
 		transactionModels.add(newTransactionModel);
+		
+		updateAccountBalance(transaction.getAccountId(), transaction.getAmount());
 		return newTransactionModel;
 		
 	}

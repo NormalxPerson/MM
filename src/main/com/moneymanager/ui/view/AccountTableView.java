@@ -32,7 +32,6 @@ public class AccountTableView extends TableView<AccountTableView.AccountModel> {
 		TableColumn<AccountModel, Double> accountBalanceColumn = new TableColumn<>("Balance");
 		accountBalanceColumn.setCellValueFactory(cellData -> cellData.getValue().accountBalanceProperty().asObject());
 		accountBalanceColumn.setCellFactory(this::createBalanceCellFactory); // Use method reference
-		
 		//width of columns
 		this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);

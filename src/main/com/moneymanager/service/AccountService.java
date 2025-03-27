@@ -51,7 +51,7 @@ public class AccountService {
         System.out.println("Updated account balance: AccountService.updateBalance: New Balance: " + account.getBalance());
         
         
-        accountModelObservableList.get(Integer.parseInt(accountId)-1).setAccountBalance(account.getBalance());
+        accountModelMap.get(account.getAccountId()).setAccountBalance(account.getBalance());
         accountRepo.updateAccountBalance(account);
         
     }
@@ -101,6 +101,7 @@ public class AccountService {
             if (rowDeleted == 1 && theSourceHashMapOfAccounts.containsKey(accountModel.getAccountId())) {
                 System.out.println("Deleted account with ID: " + accountModel.getAccountId());
                 theSourceHashMapOfAccounts.remove(accountModel.getAccountId());
+                accountModelMap.remove(accountModel.getAccountId());
                 return rowDeleted;
             }
         }

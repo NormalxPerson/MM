@@ -7,6 +7,8 @@ import com.moneymanager.ui.view.AccountTableView;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Control;
@@ -178,6 +180,8 @@ public class AccountViewController extends AbstractViewController {
 			deleteSuccessDialog.setContentText("Sheee Gonee!");
 			deleteSuccessDialog.showAndWait();
 			
+			FormEvent<FormEvent> deleteAccountFormEvent = new FormEvent<>(FormEvent.DELETEACCOUNT);
+			accountContainer.fireEvent(deleteAccountFormEvent);
 			accountSlidingForm.fireCloseEvent();
 		}
 	}

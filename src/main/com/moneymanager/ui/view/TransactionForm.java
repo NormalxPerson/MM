@@ -7,7 +7,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.event.ActionEvent;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.util.StringConverter;
@@ -24,24 +26,27 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 	private DatePicker transactionDatePicker;
 	private ComboBox<TransactionTableView.TransactionModel.TransactionType> transactionTypeComboBox;
 	private ComboBox<AccountTableView.AccountModel> accountComboBox;
+	private CheckBox updateBalanceCheckBox;
+	private VBox updateBalanceFieldBox;
 	
 	private ObservableMap<String, AccountTableView.AccountModel> accountModelMap;
 
 	
-	public TransactionForm(ObservableMap<String, AccountTableView.AccountModel> accountModelsMap) {
+	public TransactionForm(ObservableMap<String, AccountTableView.AccountModel> accountModelsMap, ObservableList<AccountTableView.AccountModel> accountModelList) {
 		super();
 		this.accountModelMap = accountModelsMap;
-		initializeFields();
+		initializeFields(accountModelList);
 		setupValidators();
 	}
 	
 	
-	protected void initializeFields() {
+	protected void initializeFields(ObservableList<AccountTableView.AccountModel> accountModelList) {
 		transactionAmountField = new TextField();
 		transactionDescriptionField = new TextField();
 		transactionDatePicker = new DatePicker(LocalDate.now());
 		transactionTypeComboBox = new ComboBox<>();
 		accountComboBox = new ComboBox<>();
+		updateBalanceCheckBox = new CheckBox();
 		
 		transactionTypeComboBox.setItems(FXCollections.observableArrayList(TransactionTableView.TransactionModel.TransactionType.values()));
 		transactionTypeComboBox.setConverter(new StringConverter<>() {
@@ -62,7 +67,7 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 		});
 		transactionTypeComboBox.getSelectionModel().selectLast();
 		
-		accountComboBox.setItems(FXCollections.observableArrayList(accountModelMap.values()));
+		accountComboBox.setItems(accountModelList);
 		accountComboBox.getSelectionModel().selectFirst();
 		
 		Label transactionAmountLabel = new Label("Transaction Amount");
@@ -70,20 +75,27 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 		Label transactionDateLabel = new Label("Transaction Date");
 		Label transactionTypeLabel = new Label("Transaction Type");
 		Label accountLabel = new Label("Account for Transaction");
+		Label accountBalanceLabel = new Label("Update Account Balance?");
 		
 		VBox amountFieldBox = new VBox(2, transactionAmountLabel, transactionAmountField);
 		VBox descriptionFieldBox = new VBox(2, transactionDescriptionLabel, transactionDescriptionField);
 		VBox dateFieldBox = new VBox(2, transactionDateLabel, transactionDatePicker);
 		VBox typeFieldBox = new VBox(2, transactionTypeLabel, transactionTypeComboBox);
 		VBox accountFieldBox = new VBox(2, accountLabel, accountComboBox);
+		updateBalanceFieldBox = new VBox(2, accountBalanceLabel, updateBalanceCheckBox);
 		
-		this.getChildren().addAll(amountFieldBox, descriptionFieldBox, dateFieldBox, typeFieldBox, accountFieldBox);
+		updateBalanceFieldBox.setAlignment(Pos.CENTER);
+		
+		HBox dateAndCheckbox = new HBox(16, dateFieldBox, updateBalanceFieldBox);
+		
+		this.getChildren().addAll(amountFieldBox, descriptionFieldBox, dateAndCheckbox, typeFieldBox, accountFieldBox);
 	
 		registerField("transactionAmount", transactionAmountField, amountFieldBox);
 		registerField("transactionDescription", transactionDescriptionField, descriptionFieldBox);
 		registerField("transactionDate", transactionDatePicker, dateFieldBox);
 		registerField("transactionType", transactionTypeComboBox, typeFieldBox);
 		registerField("transactionAccount", accountComboBox, accountFieldBox);
+		registerField("updateBalance", updateBalanceCheckBox, updateBalanceFieldBox);
 	
 	}
 	
@@ -134,6 +146,7 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 				accountComboBox.getSelectionModel().select(accountModelMap.get(selectedAccountId));
 			} else { accountComboBox.getSelectionModel().clearSelection(); }
 		}
+		updateBalanceCheckBox.setSelected(false);
 		
 		fieldChangeTracker.resetModifications();
 		validationSupport.revalidate();
@@ -166,6 +179,7 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 		transactionDatePicker.setValue(LocalDate.of(2025, 1, 1));
 		transactionTypeComboBox.getSelectionModel().clearSelection();
 		accountComboBox.getSelectionModel().clearSelection();
+		updateBalanceCheckBox.setSelected(false);
 	}
 	
 	
@@ -199,6 +213,8 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 		this.setVisible(true);
 		this.setManaged(true);
 		this.getChildren().remove(buttonBox);
+		updateBalanceFieldBox.setVisible(false);
+		updateBalanceFieldBox.setManaged(false);
 		
 		loadModelDataIntoForm(null);
 		transactionDatePicker.setValue(LocalDate.now());

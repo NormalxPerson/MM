@@ -32,7 +32,7 @@ public class TransactionFactory {
 		String id = rs.getString("transactionId");
 		double amount = rs.getInt("transactionAmount") / 100.0;
 		String description = rs.getString("transactionDescription");
-		LocalDate date = LocalDate.parse(rs.getString("transactionDate"), transactionDateFormat);
+		LocalDate date = validateDate(rs.getString("transactionDate"));
 		String type = rs.getString("transactionType");
 		String accountId = rs.getString("accountId");
 		
