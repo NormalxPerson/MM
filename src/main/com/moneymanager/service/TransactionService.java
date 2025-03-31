@@ -132,6 +132,10 @@ public class TransactionService implements TransactionServiceInterface {
 		return 0;
 	}
 	
+	public TransactionRepo getTransactionRepo() {
+		return transRepo;
+	}
+	
 
 	
 	

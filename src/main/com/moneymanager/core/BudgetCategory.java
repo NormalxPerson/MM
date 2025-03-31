@@ -19,6 +19,14 @@ public class BudgetCategory {
 		this.budgetAmount = budgetAmount;
 	}
 	
+	public BudgetCategory(String categoryId, String budgetId, String categoryName, String description, double budgetAmount) {
+		this.categoryId = categoryId;
+		this.budgetId = budgetId;
+		this.categoryName = categoryName;
+		this.description = description;
+		this.budgetAmount = budgetAmount;
+	}
+	
 	public String getCategoryId() {
 		return categoryId;
 	}

@@ -15,22 +15,24 @@ public class Budget {
 		this.yearMonth = yearMonth;
 	}
 	
+	public Budget(String budgetId, String budgetName, YearMonth yearMonth) {
+		this.budgetId = budgetId;
+		this.budgetName = budgetName;
+		this.yearMonth = yearMonth;
+	}
+	
 	public String getBudgetId() {
 		return budgetId;
 	}
-	
 	public String getBudgetName() {
 		return budgetName;
 	}
-	
 	public void setBudgetName(String budgetName) {
 		this.budgetName = budgetName;
 	}
-	
 	public YearMonth getYearMonth() {
 		return yearMonth;
 	}
-	
 	public void setYearMonth(YearMonth yearMonth) {
 		this.yearMonth = yearMonth;
 	}

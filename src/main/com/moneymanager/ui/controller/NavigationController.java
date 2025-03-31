@@ -1,6 +1,11 @@
 package com.moneymanager.ui.controller;
 
+import com.moneymanager.core.BudgetCategory;
+import com.moneymanager.repos.BudgetRepo;
+import com.moneymanager.repos.SQLBudgetCategoryRepo;
+import com.moneymanager.repos.SQLBudgetRepo;
 import com.moneymanager.service.AccountService;
+import com.moneymanager.service.BudgetService;
 import com.moneymanager.service.TransactionService;
 import com.moneymanager.ui.event.FormEvent;
 import com.moneymanager.ui.view.FloatingActionButton;
@@ -20,6 +25,7 @@ import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.YearMonth;
 import java.util.ResourceBundle;
 
 public class NavigationController implements Initializable{
@@ -143,7 +149,12 @@ public class NavigationController implements Initializable{
 
 		
 		accountsButton.setSelected(true);
+		BudgetRepo br = new SQLBudgetRepo();
+		SQLBudgetCategoryRepo bcr = new SQLBudgetCategoryRepo();
+		YearMonth ym = YearMonth.now();
 		
+		BudgetService bs = new BudgetService(br, bcr, transactionService.getTransactionRepo());
+		bs.createBudget("Jan", ym);
 	}
 	
 	
