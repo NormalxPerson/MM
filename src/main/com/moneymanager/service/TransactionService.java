@@ -25,9 +25,9 @@ public class TransactionService implements TransactionServiceInterface {
 		this.transactionModels = FXCollections.observableArrayList();
 	}
 	
-	public TransactionTableView.TransactionModel createAddAndGetNewTransactionModel(double amount, String description, String date, String type, String accountId) {
+	public TransactionTableView.TransactionModel createAddAndGetNewTransactionModel(double amount, String description, String date, String type, String accountId, String categoryId) {
 		// Create transaction using TransactionFactory
-		Transaction newTransaction = TransactionFactory.createTransaction(amount, description, date, type, accountId, transRepo);
+		Transaction newTransaction = TransactionFactory.createTransaction(amount, description, date, type, accountId, categoryId, transRepo);
 		
 		// Insert the transaction into the database
 		transRepo.addTransaction(newTransaction);
@@ -42,8 +42,8 @@ public class TransactionService implements TransactionServiceInterface {
 	}
 	
 	@Override
-	public void createTransactionFromUser(double amount, String description, String date, String type, String accountId) {
-		Transaction transaction = TransactionFactory.createTransaction(amount, description, date, type, accountId, transRepo);
+	public void createTransactionFromUser(double amount, String description, String date, String type, String accountId, String categoryId) {
+		Transaction transaction = TransactionFactory.createTransaction(amount, description, date, type, accountId, categoryId, transRepo);
 		System.out.println("TransactionService.createTransactionFromUser: " + transaction.toString());
 
 		saveTransaction(transaction);

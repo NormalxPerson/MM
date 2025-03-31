@@ -7,7 +7,7 @@ import javafx.collections.ObservableList;
 import java.util.List;
 
 public interface TransactionServiceInterface {
-	void createTransactionFromUser(double amount, String description, String date, String type, String accountId);
+	void createTransactionFromUser(double amount, String description, String date, String type, String accountId, String categoryId);
 	List<Transaction> getListAllTransactions();
 	ObservableList<TransactionTableView.TransactionModel> getObservableTransactionModelsList();
 }

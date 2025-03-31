@@ -15,15 +15,15 @@ public class TransactionFactory {
 	private static final DateTimeFormatter transactionIdFormat = DateTimeFormatter.ofPattern("M-d-yyyy");
 	private static final DateTimeFormatter inputDateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 	
-	public static Transaction createTransaction(double amount, String description, String date, String type, String accountId, TransactionRepo transRepo) {
-		System.out.printf("Transaction Factory: before Validation: amount=%s, description=%s, strdate: %s, date=%s, type=%s, accountId=%s\n", amount, description,date.getClass(), date, type, accountId);
+	public static Transaction createTransaction(double amount, String description, String date, String type, String accountId, String categoryId, TransactionRepo transRepo) {
+		System.out.printf("Transaction Factory: before Validation: amount=%s, description=%s, strdate: %s, date=%s, type=%s, accountId=%s\n, categoryId=%s", amount, description,date.getClass(), date, type, accountId, categoryId);
 		
 		LocalDate convertedDate = validateDate(date);
 		Transaction.TransactionType formattedType = validateType(type);
 		double adjustedAmount = validateAndAdjustAmount(amount, formattedType);
 		String generatedId = generateTransactionId(convertedDate, accountId, transRepo);
 	
-		return new Transaction(generatedId, adjustedAmount, description, convertedDate, formattedType.getDisplayName(), accountId);
+		return new Transaction(generatedId, adjustedAmount, description, convertedDate, formattedType.getDisplayName(), accountId, categoryId);
 	}
 	
 	public static Transaction createTransaction(ResultSet rs) throws SQLException {
@@ -35,8 +35,8 @@ public class TransactionFactory {
 		LocalDate date = validateDate(rs.getString("transactionDate"));
 		String type = rs.getString("transactionType");
 		String accountId = rs.getString("accountId");
-		
-		return new Transaction(id, amount, description, date, type, accountId);
+		String categoryId = rs.getString("categoryId");
+		return new Transaction(id, amount, description, date, type, accountId, categoryId);
 		
 	}
 	
@@ -53,10 +53,10 @@ public class TransactionFactory {
 			
 			String accountId = accountModel.getAccountId();
 			String accountName = accountModel.getAccountName();
-			
+			String categoryId = (String) fieldValues.get("trasactionCategoryId");
 			String generatedId = generateTransactionId(date, accountId, transRepo);
 		System.out.printf("Values to create Transaction in TransactionFactory.createTransaction(Map<String, Object> fieldValues, TransactionRepo transRepo)\n\tgeneratedId=%s\n\tamount=%s\n\tdescription=%s", generatedId, amount, description);
-			return new Transaction(generatedId, amount, description, date, transactionType.getDisplayName(), accountId);
+			return new Transaction(generatedId, amount, description, date, transactionType.getDisplayName(), accountId, categoryId);
 			
 		
 	}

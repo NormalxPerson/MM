@@ -13,7 +13,9 @@ public class DatabaseInitializer {
 				transactionDescription TEXT NOT NULL,
 				transactionType TEXT NOT NULL,
 				accountId INTEGER NOT NULL,
+				budget_categoryId Text NULL,
 				FOREIGN KEY (accountId) REFERENCES accounts(accountId)
+				FOREIGN KEY (budget_categoryId) REFERENCES budget_categories(budget_categoryId) ON DELETE SET NULL
 			);""";
 	
 	private static final String CREATE_ACCOUNTS_TABLE = """
@@ -36,6 +38,22 @@ public class DatabaseInitializer {
 				FOREIGN KEY (accountId) REFERENCES accounts(accountId) ON DELETE set NULL
 			);""";
 	
+	private static final String CREATE_BUDGET_TABLE = """
+			CREATE TABLE IF NOT EXISTS budgets (
+				budgetId Text Primary Key not NULL,
+				budgetName Text not NULL,
+				budgetYearMonth Text not NULL UNIQUE
+				);"""; // YearMonth as YYYY-MM
+	
+	private static final String CREATE_BUDGET_CATEGORIES = """
+			CREATE TABLE IF NOT EXISTS budget_categories (
+			categoryId Text PRIMARY KEY not NULL,
+			budgetId Text NOT NULL,
+			categoryName Text NOT NULL,
+			allocatedAmount Integer NOT NULL,
+			FOREIGN KEY (budgetId) REFERENCES budgets(budgetId) on DELETE CASCADE
+			);""";
+	
 	public static void initializeDatabase(Connection dbConnection) throws SQLException {
 		try (Statement stmt = dbConnection.createStatement()) {
 			
@@ -43,6 +61,8 @@ public class DatabaseInitializer {
 			stmt.execute(CREATE_TRANSACTION_TABLE);
 			stmt.execute(CREATE_ACCOUNTS_TABLE);
 			stmt.execute(CREATE_CSV_STRATEGIES_TABLE);
+			stmt.execute(CREATE_BUDGET_TABLE);
+			stmt.execute(CREATE_BUDGET_CATEGORIES);
 			
 			// Enable foreign keys and set busy timeout
 			stmt.execute("PRAGMA foreign_keys = ON");

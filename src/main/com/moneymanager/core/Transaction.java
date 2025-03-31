@@ -33,23 +33,25 @@ public class Transaction {
 	private String formattedDate;
 	private TransactionType type;
 	private String accountId;
+	private String categoryId;
 
-	public Transaction(String id, double amount, String description, LocalDate date, String type, String accountId) {
+	public Transaction(String id, double amount, String description, LocalDate date, String type, String accountId, String categoryId) {
 		this.id = id;
 		this.amount = amount;
 		this.description = description;
 		this.date = date;
 		this.type = TransactionType.valueOf(type.toUpperCase());
 		this.accountId = accountId;
+		this.categoryId = categoryId;
 	}
 	
-	public Transaction(String id, double amount, String description, LocalDate date, String type) {
+	public Transaction(String id, double amount, String description, LocalDate date, String type, String categoryId) {
 		this.id = id;
 		this.amount = amount;
 		this.description = description;
 		this.date = date;
 		this.type = TransactionType.valueOf(type.toUpperCase());
-		this.accountId = null;
+		this.categoryId = categoryId;
 	}
 	
 	public String getId() { return id; }
@@ -58,6 +60,8 @@ public class Transaction {
 	public LocalDate getDate() { return date; }
 	public TransactionType getType() { return type; }
 	public String getAccountId() { return accountId; }
+	public String getCategoryId() { return categoryId; }
+	public void setCategoryId(String categoryId) { this.categoryId = categoryId; }
 	
 	public String getFormattedDate() {
 		if (formattedDate == null) {
@@ -69,7 +73,7 @@ public class Transaction {
 	
 	@Override
 	public String toString() {
-		return String.format("Transaction{amount=%.2f, description=%s, date=%s, type=%s, accountId=%s}", amount, description, date, type, accountId);
+		return String.format("Transaction{amount=%.2f, description=%s, date=%s, type=%s, accountId=%s, category=%s}", amount, description, date, type, accountId, categoryId);
 	}
 
 }
