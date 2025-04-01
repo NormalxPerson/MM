@@ -149,12 +149,6 @@ public class NavigationController implements Initializable{
 
 		
 		accountsButton.setSelected(true);
-		BudgetRepo br = new SQLBudgetRepo();
-		SQLBudgetCategoryRepo bcr = new SQLBudgetCategoryRepo();
-		YearMonth ym = YearMonth.now();
-		
-		BudgetService bs = new BudgetService(br, bcr, transactionService.getTransactionRepo());
-		bs.createBudget("Jan", ym);
 	}
 	
 	
