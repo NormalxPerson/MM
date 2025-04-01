@@ -13,9 +13,9 @@ public class DatabaseInitializer {
 				transactionDescription TEXT NOT NULL,
 				transactionType TEXT NOT NULL,
 				accountId INTEGER NOT NULL,
-				budget_categoryId Text NULL,
+				categoryId Text NULL,
 				FOREIGN KEY (accountId) REFERENCES accounts(accountId)
-				FOREIGN KEY (budget_categoryId) REFERENCES budget_categories(budget_categoryId) ON DELETE SET NULL
+				FOREIGN KEY (categoryId) REFERENCES budget_categories(categoryId) ON DELETE SET NULL
 			);""";
 	
 	private static final String CREATE_ACCOUNTS_TABLE = """

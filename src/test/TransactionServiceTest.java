@@ -1,14 +1,25 @@
+
 import com.moneymanager.core.Account;
+import com.moneymanager.core.Transaction;
 import com.moneymanager.database.DatabaseConnection;
 import com.moneymanager.repos.SQLiteAccountRepo;
 import com.moneymanager.repos.SQLiteTransactionRepo;
 import com.moneymanager.service.AccountService;
 import com.moneymanager.service.TransactionService;
+import com.moneymanager.ui.view.AccountTableView;
+import com.moneymanager.ui.view.TransactionTableView;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 public class TransactionServiceTest {
 	
@@ -16,23 +27,23 @@ public class TransactionServiceTest {
 	private AccountService accountService;
 	private SQLiteTransactionRepo transactionRepo;
 	private TransactionService transactionService;
-	private Account testAccount;
+	private String testAccountId;
 	
 	@BeforeEach
 	void setUp() {
 		resetDatabase();
-		// Initialize the repositories (connection obtained internally from the singleton)
+		// Initialize the repositories
 		accountRepo = new SQLiteAccountRepo();
 		accountService = new AccountService(accountRepo);
 		transactionRepo = new SQLiteTransactionRepo();
 		// Initialize the service
 		transactionService = new TransactionService(transactionRepo, accountService);
-		// Reset and initialize the database state
 		
-		accountService.createAccount("Test Name", "Test Bank", "DEBT");
-		testAccount = accountService.getAccountList().get(0);
+		// Create a test account and store its ID
+		AccountTableView.AccountModel accountModel = accountService.createAndAddAccount("Test Account", "Test Bank", "DEBIT", 0.0);
+		System.out.println("Test AccountId: " + accountModel.getAccountId());
+		testAccountId = accountModel.getAccountId();
 	}
-	
 	
 	@AfterEach
 	void tearDown() {
@@ -41,51 +52,152 @@ public class TransactionServiceTest {
 	}
 	
 	@Test
-	public void getTestAccount() {
-		// Create the account and retrieve its database-generated ID
-		Account retrievedAccount = testAccount;
-		System.out.println(testAccount.toString());
-		// Fetch the account from the database using its generated ID
+	public void testGetTestAccount() {
+		// Get account from the map
+		Account testAccount = accountService.getAccountMap().get(testAccountId);
 		
-		// Assert the balance is initialized to 0
-		//assertNotNull(retrievedAccount); // Ensure the account is retrieved
-		assertEquals(0, retrievedAccount.getBalance()); // Verify initial balance is 0
-		
-		// Assert other fields
-		assertEquals("Test Name", retrievedAccount.getAccountName());
-		assertEquals("Test Bank", retrievedAccount.getBankName());
-		assertEquals("DEBT", retrievedAccount.getAccountType());
+		// Verify the test account was created properly
+		assertNotNull(testAccount);
+		assertEquals("Test Account", testAccount.getAccountName());
+		assertEquals("Test Bank", testAccount.getBankName());
+		assertEquals(Account.AccountType.DEBIT, testAccount.getAccountType());
+		assertEquals(0.0, testAccount.getBalance(), 0.001);
 	}
 	
 	@Test
-	public void addTransactionShouldUpdateAccountBalance() {
-		double initialBalance = testAccount.getBalance();  // Get initial balance
-		// Add a transaction (using your transaction service)
-		transactionService.createTransactionFromUser(500, "Test Transaction", "12-25-2024", "income", testAccount.getAccountId());  // Assuming account ID is 1
+	public void testCreateTransactionFromUser() {
+		// Get the account
+		Account testAccount = accountService.getAccountMap().get(testAccountId);
+		double initialBalance = testAccount.getBalance();
 		
-		// Retrieve the updated account from the database (using your account service)
-		Account updatedAccount = accountService.getAccountByAccountId(testAccount.getAccountId());  // Replace with actual account ID if needed
+		// Create a transaction
+		double amount = 500.0;
+		String description = "Test Transaction";
+		String date = LocalDate.now().format(DateTimeFormatter.ofPattern("M-d-yy"));
+		String type = "INCOME";
 		
-		// Assert that the account balance has been updated correctly
-		assertEquals(initialBalance + 500, updatedAccount.getBalance(), 0.001);  // Use delta for double comparison
+		transactionService.createTransactionFromUser(amount, description, date, type, testAccountId, null);
+		
+		// Verify transaction was created
+		List<Transaction> transactions = transactionRepo.getAllTransactions();
+		assertEquals(1, transactions.size());
+		
+		Transaction transaction = transactions.get(0);
+		assertEquals(amount, transaction.getAmount());
+		assertEquals(description, transaction.getDescription());
+		assertEquals(type.toUpperCase(), transaction.getType().name());
+		assertEquals(testAccountId, transaction.getAccountId());
+		
+		// Verify account balance was updated
+		Account updatedAccount = accountService.getAccountMap().get(testAccountId);
+		assertEquals(initialBalance + amount, updatedAccount.getBalance(), 0.001);
 	}
 	
 	@Test
-	public void addMultipleTransactionsShouldUpdateAccountBalance() {
-		double initialBalance = testAccount.getBalance();  // Get initial balance
+	public void testCreateAndAddTransaction() {
+		// Get the account
+		Account testAccount = accountService.getAccountMap().get(testAccountId);
+		double initialBalance = testAccount.getBalance();
+		
+		// Create transaction data
+		Map<String, Object> fieldValues = new HashMap<>();
+		fieldValues.put("transactionAmount", "300.0");
+		fieldValues.put("transactionDescription", "Test Add Transaction");
+		fieldValues.put("transactionDate", LocalDate.now());
+		fieldValues.put("transactionType", TransactionTableView.TransactionModel.TransactionType.INCOME);
+		
+		// Get the account model from the account service
+		AccountTableView.AccountModel accountModel = accountService.getAccountModelMap().get(testAccountId);
+		fieldValues.put("transactionAccount", accountModel);
+		
+		// Create the transaction
+		TransactionTableView.TransactionModel result = transactionService.createAndAddTransaction(fieldValues);
+		
+		// Verify transaction was created
+		assertNotNull(result);
+		assertEquals("Test Add Transaction", result.getTransactionDescription());
+		assertEquals(300.0, result.getTransactionAmount());
+		assertEquals(testAccountId, result.getTransactionAccountId());
+		
+		// Verify account balance was updated
+		Account updatedAccount = accountService.getAccountMap().get(testAccountId);
+		assertEquals(initialBalance + 300.0, updatedAccount.getBalance(), 0.001);
+	}
+	
+	@Test
+	public void testAddMultipleTransactions() {
+		// Get the account
+		Account testAccount = accountService.getAccountMap().get(testAccountId);
+		double initialBalance = testAccount.getBalance();
 		
 		// Add multiple transactions
-		transactionService.createTransactionFromUser(500, "Test Transaction 1", "12-25-2024", "income", testAccount.getAccountId());
-		transactionService.createTransactionFromUser(300, "Test Transaction 2", "12-26-2024", "income", testAccount.getAccountId());
-		transactionService.createTransactionFromUser(100, "Test Transaction 3", "12-27-2024", "expense", testAccount.getAccountId());  // Expense should subtract from balance
+		transactionService.createTransactionFromUser(500, "Test Income 1",
+				LocalDate.now().format(DateTimeFormatter.ofPattern("M-d-yy")),
+				"INCOME", testAccountId, null);
 		
-		// Retrieve the updated account
-		Account updatedAccount = accountService.getAccountByAccountId(testAccount.getAccountId());
+		transactionService.createTransactionFromUser(300, "Test Income 2",
+				LocalDate.now().plusDays(1).format(DateTimeFormatter.ofPattern("M-d-yy")),
+				"INCOME", testAccountId, null);
 		
-		// Assert the final balance
-		assertEquals(initialBalance + 500 + 300 - 100, updatedAccount.getBalance(), 0.001);  // Expected balance after all transactions
+		transactionService.createTransactionFromUser(200, "Test Expense",
+				LocalDate.now().plusDays(2).format(DateTimeFormatter.ofPattern("M-d-yy")),
+				"EXPENSE", testAccountId, null);
+		
+		// Verify transactions were created
+		List<Transaction> transactions = transactionRepo.getAllTransactions();
+		assertEquals(3, transactions.size());
+		
+		// Verify account balance reflects all transactions
+		Account updatedAccount = accountService.getAccountMap().get(testAccountId);
+		// Income adds, expense subtracts
+		assertEquals(initialBalance + 500 + 300 - 200, updatedAccount.getBalance(), 0.001);
 	}
 	
+	@Test
+	public void testDeleteTransaction() {
+		// Create a transaction
+		TransactionTableView.TransactionModel model = transactionService.createTransactionFromUser(500, "Transaction to Delete",
+				LocalDate.now().format(DateTimeFormatter.ofPattern("M-d-yy")),
+				"INCOME", testAccountId, null);
+		
+		// Get the transaction
+		List<Transaction> transactions = transactionRepo.getAllTransactions();
+		assertEquals(1, transactions.size());
+		Transaction transaction = transactions.get(0);
+		
+		// Delete the transaction
+		int result = transactionService.deleteTransaction(model);
+		
+		// Verify deletion
+		assertEquals(1, result);
+		List<Transaction> afterDelete = transactionRepo.getAllTransactions();
+		assertEquals(0, afterDelete.size());
+	}
+	
+	@Test
+	public void testUpdateTransaction() {
+		// Create a transaction
+		TransactionTableView.TransactionModel model = transactionService.createTransactionFromUser(500, "Original Description", LocalDate.now().format(DateTimeFormatter.ofPattern("M-d-yy")), "INCOME", "1", null);
+		
+		// Get the transaction
+		List<Transaction> transactions = transactionRepo.getAllTransactions();
+		assertEquals(1, transactions.size());
+		Transaction transaction = transactions.get(0);
+		
+		// Create a transaction model for update
+		model.setTransactionDescription("Updated Description");
+		// Update the transaction
+		transactionService.updateTransaction(model);
+		
+		// Verify update
+		List<Transaction> afterUpdate = transactionRepo.getAllTransactions();
+		assertEquals(1, afterUpdate.size());
+		
+		// Verify description was updated by querying the database
+		List<Transaction> updatedTransactions = transactionRepo.getAllTransactions();
+		Transaction updated = updatedTransactions.get(0);
+		assertEquals("Updated Description", updated.getDescription());
+	}
 	
 	private void resetDatabase() {
 		try {
@@ -93,13 +205,15 @@ public class TransactionServiceTest {
 			DatabaseConnection connection = DatabaseConnection.getInstance();
 			connection.getConnection().createStatement().execute("PRAGMA foreign_keys = OFF");
 			// Clear the database tables
+			connection.getConnection().createStatement().execute("DELETE FROM budget_categories");
+			connection.getConnection().createStatement().execute("DELETE FROM budgets");
 			connection.getConnection().createStatement().execute("DELETE FROM csv_strategies");
 			connection.getConnection().createStatement().execute("DELETE FROM transactions");
 			connection.getConnection().createStatement().execute("DELETE FROM accounts");
 			
 			connection.getConnection().createStatement().execute("PRAGMA foreign_keys = ON");
-			connection.getConnection().createStatement().execute("DELETE FROM sqlite_sequence WHERE name IN ('accounts', 'transactions', 'csv_strategies')");
-		} catch (Exception e) {
+			connection.getConnection().createStatement().execute("DELETE FROM sqlite_sequence WHERE name IN ('accounts', 'transactions', 'csv_strategies', 'budgets', 'budget_categories')");
+		} catch (SQLException e) {
 			throw new RuntimeException("Failed to reset database", e);
 		}
 	}

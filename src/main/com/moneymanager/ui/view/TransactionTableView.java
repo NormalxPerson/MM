@@ -100,6 +100,7 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 		private ObjectProperty<TransactionType> transactionType;
 		private StringProperty transactionAccountId;
 		private StringProperty transactionAccountName;
+		private StringProperty transactionCategoryId;
 		
 		public TransactionModel(String transactionId, LocalDate date, double amount, String description, String type, String accountId, String accountName) {
 			this.transactionId = new SimpleStringProperty(transactionId);
@@ -109,6 +110,7 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 			this.transactionType = new SimpleObjectProperty<>(TransactionType.valueOf(type.toUpperCase()));
 			this.transactionAccountId = new SimpleStringProperty(accountId);
 			this.transactionAccountName = new SimpleStringProperty(accountName);
+			this.transactionCategoryId = new SimpleStringProperty(null);
 		}
 		
 		public TransactionModel(String transactionId, LocalDate date, double amount, String description, String type) {
@@ -117,6 +119,7 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 			this.transactionDescription = new SimpleStringProperty(description);
 			this.transactionDate = new SimpleObjectProperty<>(date);
 			this.transactionType = new SimpleObjectProperty<>(TransactionType.valueOf(type.toUpperCase()));
+			this.transactionCategoryId = new SimpleStringProperty(null);
 		}
 		
 		
@@ -148,6 +151,10 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 		public String getTransactionAccountName() {return transactionAccountName.get();}
 		public void setTransactionAccountName(String transactionAccountName) {this.transactionAccountName.set(transactionAccountName);}
 		public StringProperty TransactionAccountNameProperty() {return transactionAccountName;}
+		
+		public String getTransactionCategoryId() {return transactionCategoryId.get();}
+		public void setTransactionCategoryId(String transactionCategoryId) {this.transactionCategoryId.set(transactionCategoryId);}
+		public StringProperty TransactionCategoryIdProperty() {return transactionCategoryId;}
 		
 		public void makeChanges(String change, Object value) {
 			if (change.equalsIgnoreCase("transactionAmount")) {

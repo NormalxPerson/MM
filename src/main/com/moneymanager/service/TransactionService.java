@@ -42,12 +42,16 @@ public class TransactionService implements TransactionServiceInterface {
 	}
 	
 	@Override
-	public void createTransactionFromUser(double amount, String description, String date, String type, String accountId, String categoryId) {
+	public TransactionTableView.TransactionModel createTransactionFromUser(double amount, String description, String date, String type, String accountId, String categoryId) {
 		Transaction transaction = TransactionFactory.createTransaction(amount, description, date, type, accountId, categoryId, transRepo);
 		System.out.println("TransactionService.createTransactionFromUser: " + transaction.toString());
-
-		saveTransaction(transaction);
-		updateAccountBalance(accountId, transaction.getAmount());
+		
+		transRepo.addTransaction(transaction);
+		TransactionTableView.TransactionModel newTransactionModel = createNewTransactionModel(transaction);
+		transactionModels.add(newTransactionModel);
+		
+		updateAccountBalance(transaction.getAccountId(), transaction.getAmount());
+		return newTransactionModel;
 		
 		
 	}
@@ -80,13 +84,18 @@ public class TransactionService implements TransactionServiceInterface {
 	}
 	
 	private TransactionTableView.TransactionModel createNewTransactionModel(Transaction transaction) {
+		TransactionTableView.TransactionModel newModel;
 		if (transaction.getAccountId() != null && !transaction.getAccountId().isEmpty()) {
 			String accountName = accountService.getAccountNameByAccountId(transaction.getAccountId());
 			
-			return new TransactionTableView.TransactionModel(transaction.getId(), transaction.getDate(),transaction.getAmount(), transaction.getDescription(), transaction.getType().getDisplayName(), transaction.getAccountId(), accountName);
+			newModel = new TransactionTableView.TransactionModel(transaction.getId(), transaction.getDate(),transaction.getAmount(), transaction.getDescription(), transaction.getType().getDisplayName(), transaction.getAccountId(), accountName);
 		} else {
-			return new TransactionTableView.TransactionModel(transaction.getId(), transaction.getDate(), transaction.getAmount(), transaction.getDescription(), transaction.getType().toString());
+			newModel = new TransactionTableView.TransactionModel(transaction.getId(), transaction.getDate(), transaction.getAmount(), transaction.getDescription(), transaction.getType().toString());
 		}
+		if (transaction.getCategoryId() != null && !transaction.getCategoryId().isEmpty()) {
+			newModel.setTransactionCategoryId(transaction.getCategoryId());
+		}
+		return newModel;
 	}
 	
 	public ObservableList<AccountTableView.AccountModel> getAccountModelObservableList() {
@@ -99,7 +108,7 @@ public class TransactionService implements TransactionServiceInterface {
 	
 	public TransactionTableView.TransactionModel createTransactionModelFromTransaction(Transaction transaction) {
 		String accountName = accountService.getAccountNameByAccountId(transaction.getAccountId());
-		return new TransactionTableView.TransactionModel(
+		TransactionTableView.TransactionModel newModel = new TransactionTableView.TransactionModel(
 				transaction.getId(),
 				transaction.getDate(),
 				transaction.getAmount(),
@@ -108,6 +117,10 @@ public class TransactionService implements TransactionServiceInterface {
 				transaction.getAccountId(),
 				accountName
 		);
+		if (transaction.getCategoryId() != null && !transaction.getCategoryId().isEmpty()) {
+			newModel.setTransactionCategoryId(transaction.getCategoryId());
+		}
+		return newModel;
 	}
 	
 	public TransactionTableView.TransactionModel createAndAddTransaction(Map<String, Object> fieldValues) {

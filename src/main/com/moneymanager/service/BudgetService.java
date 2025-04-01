@@ -26,4 +26,6 @@ public class BudgetService {
 		System.out.print(newBudget.getBudgetId() + newBudget.getBudgetName() + newBudget.getYearMonth());
 		return newBudget;
 	}
+	
+	
 }

@@ -27,7 +27,6 @@ public class TransactionFactory {
 	}
 	
 	public static Transaction createTransaction(ResultSet rs) throws SQLException {
-		System.out.printf("Transaction Factory: ResultSet: %s\n",rs.toString());
 		
 		String id = rs.getString("transactionId");
 		double amount = rs.getInt("transactionAmount") / 100.0;
@@ -35,7 +34,16 @@ public class TransactionFactory {
 		LocalDate date = validateDate(rs.getString("transactionDate"));
 		String type = rs.getString("transactionType");
 		String accountId = rs.getString("accountId");
-		String categoryId = rs.getString("categoryId");
+		
+		String categoryId = null;
+		try {
+			categoryId = rs.getString("categoryId");
+		} catch (SQLException e) {
+			// Column doesn't exist, use null for categoryId
+			System.out.println("Note: categoryId column not found in result set. Using null.");
+		}
+		
+		System.out.print("Transaction Factory: ResultSet:id-"+id+"\namount-"+amount+"\ndescription-"+description+"\ndate-"+date+"\ntype-"+type+"\n"+"accountId-"+accountId+"\ncategoryId-"+categoryId);
 		return new Transaction(id, amount, description, date, type, accountId, categoryId);
 		
 	}

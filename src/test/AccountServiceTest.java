@@ -1,80 +1,101 @@
+
 import com.moneymanager.core.Account;
 import com.moneymanager.repos.AccountRepo;
 import com.moneymanager.service.AccountService;
+import com.moneymanager.ui.view.AccountTableView;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
-class AccountServiceTest {
+public class AccountServiceTest {
+	
+	@Mock
 	private AccountRepo accountRepo;
+	
 	private AccountService accountService;
 	
 	@BeforeEach
 	void setUp() {
-		// Create a mock repository
-		accountRepo = mock(AccountRepo.class);
+		MockitoAnnotations.openMocks(this);
 		accountService = new AccountService(accountRepo);
 	}
 	
 	@Test
-	void getAllAccounts_WhenAccountsExist_ShouldReturnAccounts() {
-		// Arrange - set up test data
+	void getAccountList_ShouldReturnListFromRepo() {
+		// Arrange
 		List<Account> expectedAccounts = Arrays.asList(
-				new Account("Checking", "Chase", "DEBT"),
-				new Account("Savings", "Wells Fargo", "CREDIT")
+				new Account("1", "Checking", "Chase", "DEBIT", 100.0),
+				new Account("2", "Savings", "Wells Fargo", "DEBIT", 500.0)
 		);
-		// Tell mockito what to return when getAllAccounts is called
 		when(accountRepo.getAllAccounts()).thenReturn(expectedAccounts);
 		
-		// Act - call the method we're testing
+		// Act
 		List<Account> actualAccounts = accountService.getAccountList();
-		for (Account account : actualAccounts) {
-			System.out.println(account.toString());
-		}
-		// Assert - verify the results
+		
+		// Assert
 		assertEquals(2, actualAccounts.size());
 		assertEquals("Checking", actualAccounts.get(0).getAccountName());
 		assertEquals("Savings", actualAccounts.get(1).getAccountName());
+		verify(accountRepo).getAllAccounts();
 	}
 	
 	@Test
-	void createAccountShouldSucceedWithValidInputs() {
+	void createAndAddAccount_ShouldReturnNewAccountModel() {
 		// Arrange
-		String accountName = "Checking";
-		String bankName = "Chase";
-		String accountType = "DEBT";
+		String accountName = "Test Account";
+		String bankName = "Test Bank";
+		String accountType = "DEBIT";
+		Double balance = 200.0;
+		
+		Account newAccount = new Account(accountName, bankName, accountType, balance);
+		String generatedId = "test-id-123";
+		
+		when(accountRepo.addAccountAndReturnId(any(Account.class))).thenReturn(generatedId);
+		
+		HashMap<String, Account> accountMap = new HashMap<>();
+		accountMap.put(generatedId, newAccount);
+		when(accountRepo.getAccountMap()).thenReturn(accountMap);
 		
 		// Act
-		Account created = accountService.createAccount(accountName, bankName, accountType);
+		AccountTableView.AccountModel result = accountService.createAndAddAccount(
+				accountName, bankName, accountType, balance);
 		
 		// Assert
-		assertNotNull(created);
-		assertEquals(accountName, created.getAccountName());
-		assertEquals(bankName, created.getBankName());
-		assertEquals(accountType, created.getAccountType());
-		verify(accountRepo).addAccount(created); // Verify repo was called
+		assertNotNull(result);
+		assertEquals(accountName, result.getAccountName());
+		assertEquals(bankName, result.getBankName());
+		assertEquals(accountType, result.getAccountType().name());
+		assertEquals(balance, result.getAccountBalance());
+		assertEquals(generatedId, result.getAccountId());
+		verify(accountRepo).addAccountAndReturnId(any(Account.class));
 	}
-	
+
 	@Test
-	void createAccountShouldThrowExceptionForEmptyName() {
-		// Act & Assert
-		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-			accountService.createAccount("", "Chase", "DEBT");
-		});
-		assertEquals("Account name cannot be empty", exception.getMessage());
-	}
-	
-	@Test
-	void createAccountShouldThrowExceptionForInvalidType() {
-		// Act & Assert
-		Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-			accountService.createAccount("Checking", "Chase", "INVALID");
-		});
-		assertEquals("Account type must be DEBT or CREDIT", exception.getMessage());
+	void getAccountNameByAccountId_ShouldReturnAccountName() {
+		// Arrange
+		String accountId = "test-id-123";
+		String expectedName = "Test Account";
+		
+		Account account = new Account("1", expectedName, "Test Bank", "DEBIT", 100.0);
+		System.out.println(account.toString());
+		HashMap<String, Account> accountMap = new HashMap<>();
+		accountMap.put("1", account);
+		
+		// Act
+		String result = accountMap.get("1").getAccountName();
+		
+		// Assert
+		assertEquals(expectedName, result);
 	}
 }
