@@ -72,7 +72,7 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 	}
 	
 	public static class TransactionModel {
-		public enum  TransactionType {
+		public enum TransactionType {
 			INCOME("Income"),
 			EXPENSE("Expense");
 			
@@ -101,18 +101,22 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 		private StringProperty transactionAccountId;
 		private StringProperty transactionAccountName;
 		private StringProperty transactionCategoryId;
+		private StringProperty transactionCategoryName;
 		
-		public TransactionModel(String transactionId, LocalDate date, double amount, String description, String type, String accountId, String accountName) {
-			this.transactionId = new SimpleStringProperty(transactionId);
-			this.transactionAmount = new SimpleDoubleProperty(amount);
-			this.transactionDescription = new SimpleStringProperty(description);
-			this.transactionDate = new SimpleObjectProperty<>(date);
-			this.transactionType = new SimpleObjectProperty<>(TransactionType.valueOf(type.toUpperCase()));
-			this.transactionAccountId = new SimpleStringProperty(accountId);
-			this.transactionAccountName = new SimpleStringProperty(accountName);
-			this.transactionCategoryId = new SimpleStringProperty(null);
+		//public TransactionModel(String transactionId, LocalDate date, double amount, String description, String type, String accountId, String accountName) {
+		private TransactionModel(Builder builder) {
+			this.transactionId = new SimpleStringProperty(builder.transactionId);
+			this.transactionAmount = new SimpleDoubleProperty(builder.transactionAmount);
+			this.transactionDescription = new SimpleStringProperty(builder.transactionDescription);
+			this.transactionDate = new SimpleObjectProperty<>(builder.transactionDate);
+			this.transactionType = new SimpleObjectProperty<>(builder.transactionType);
+			this.transactionAccountId = new SimpleStringProperty(builder.transactionAccountId);
+			this.transactionAccountName = new SimpleStringProperty(builder.transactionAccountName);
+			this.transactionCategoryId = new SimpleStringProperty(builder.transactionCategoryId);
+			this.transactionCategoryName = new SimpleStringProperty(builder.transactionCategoryName);
 		}
 		
+		/*
 		public TransactionModel(String transactionId, LocalDate date, double amount, String description, String type) {
 			this.transactionId = new SimpleStringProperty(transactionId);
 			this.transactionAmount = new SimpleDoubleProperty(amount);
@@ -120,41 +124,104 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 			this.transactionDate = new SimpleObjectProperty<>(date);
 			this.transactionType = new SimpleObjectProperty<>(TransactionType.valueOf(type.toUpperCase()));
 			this.transactionCategoryId = new SimpleStringProperty(null);
+		}*/
+		
+		
+		public String getTransactionId() {
+			return transactionId.get();
 		}
 		
+		public void setTransactionId(String transactionId) {
+			this.transactionId.set(transactionId);
+		}
 		
+		public StringProperty transactionIdProperty() {
+			return transactionId;
+		}
 		
-		public String getTransactionId() {return transactionId.get();}
-		public void setTransactionId(String transactionId) {this.transactionId.set(transactionId);}
-		public StringProperty transactionIdProperty() {return transactionId;}
+		public Double getTransactionAmount() {
+			return transactionAmount.get();
+		}
 		
-		public Double getTransactionAmount() {return transactionAmount.get();}
-		public void setTransactionAmount(Double transactionAmount) {this.transactionAmount.set(transactionAmount);}
-		public DoubleProperty transactionAmountProperty() {return transactionAmount;}
+		public void setTransactionAmount(Double transactionAmount) {
+			this.transactionAmount.set(transactionAmount);
+		}
 		
-		public String getTransactionDescription() {return transactionDescription.get();}
-		public void setTransactionDescription(String transactionDescription) {this.transactionDescription.set(transactionDescription);}
-		public StringProperty transactionDescriptionProperty() {return transactionDescription;}
+		public DoubleProperty transactionAmountProperty() {
+			return transactionAmount;
+		}
 		
-		public LocalDate getTransactionDate() {return transactionDate.get();}
-		public void setTransactionDate(LocalDate transactionDate) {this.transactionDate.set(transactionDate);}
-		public ObjectProperty<LocalDate> transactionDateProperty() {return transactionDate;}
+		public String getTransactionDescription() {
+			return transactionDescription.get();
+		}
 		
-		public TransactionType getTransactionType() {return transactionType.get();}
-		public void setTransactionType(String transactionType) {this.transactionType.set(TransactionType.valueOf(transactionType.toUpperCase()));}
-		public ObjectProperty<TransactionType> transactionTypeProperty() {return transactionType;}
+		public void setTransactionDescription(String transactionDescription) {
+			this.transactionDescription.set(transactionDescription);
+		}
 		
-		public String getTransactionAccountId() {return transactionAccountId.get();}
-		public void setTransactionAccountId(String transactionAccountId) {this.transactionAccountId.set(transactionAccountId);}
-		public StringProperty TransactionAccountIdProperty() {return transactionAccountId;}
+		public StringProperty transactionDescriptionProperty() {
+			return transactionDescription;
+		}
 		
-		public String getTransactionAccountName() {return transactionAccountName.get();}
-		public void setTransactionAccountName(String transactionAccountName) {this.transactionAccountName.set(transactionAccountName);}
-		public StringProperty TransactionAccountNameProperty() {return transactionAccountName;}
+		public LocalDate getTransactionDate() {
+			return transactionDate.get();
+		}
 		
-		public String getTransactionCategoryId() {return transactionCategoryId.get();}
-		public void setTransactionCategoryId(String transactionCategoryId) {this.transactionCategoryId.set(transactionCategoryId);}
-		public StringProperty TransactionCategoryIdProperty() {return transactionCategoryId;}
+		public void setTransactionDate(LocalDate transactionDate) {
+			this.transactionDate.set(transactionDate);
+		}
+		
+		public ObjectProperty<LocalDate> transactionDateProperty() {
+			return transactionDate;
+		}
+		
+		public TransactionType getTransactionType() {
+			return transactionType.get();
+		}
+		
+		public void setTransactionType(String transactionType) {
+			this.transactionType.set(TransactionType.valueOf(transactionType.toUpperCase()));
+		}
+		
+		public ObjectProperty<TransactionType> transactionTypeProperty() {
+			return transactionType;
+		}
+		
+		public String getTransactionAccountId() {
+			return transactionAccountId.get();
+		}
+		
+		public void setTransactionAccountId(String transactionAccountId) {
+			this.transactionAccountId.set(transactionAccountId);
+		}
+		
+		public StringProperty TransactionAccountIdProperty() {
+			return transactionAccountId;
+		}
+		
+		public String getTransactionAccountName() {
+			return transactionAccountName.get();
+		}
+		
+		public void setTransactionAccountName(String transactionAccountName) {
+			this.transactionAccountName.set(transactionAccountName);
+		}
+		
+		public StringProperty TransactionAccountNameProperty() {
+			return transactionAccountName;
+		}
+		
+		public String getTransactionCategoryId() {
+			return transactionCategoryId.get();
+		}
+		
+		public void setTransactionCategoryId(String transactionCategoryId) {
+			this.transactionCategoryId.set(transactionCategoryId);
+		}
+		
+		public StringProperty TransactionCategoryIdProperty() {
+			return transactionCategoryId;
+		}
 		
 		public void makeChanges(String change, Object value) {
 			if (change.equalsIgnoreCase("transactionAmount")) {
@@ -175,6 +242,73 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 			}
 		}
 		
+		public boolean hasAccount() {
+			String accountId = getTransactionAccountId();
+			return accountId != null && !accountId.isEmpty() &&
+					!"DELETED_ACCOUNT".equals(getTransactionAccountName());
+		}
 		
+		public boolean hasCategory() {
+			String categoryId = getTransactionCategoryId();
+			return categoryId != null && !categoryId.isEmpty();
+		}
+		
+		@Override
+		public String toString() {
+			return "Transaction: " + getTransactionDescription() + " ($" +
+					String.format("%.2f", getTransactionAmount()) + ")";
+		}
+		
+		public static class Builder {
+			// Required parameters
+			private final String transactionId;
+			private final LocalDate transactionDate;
+			private final double transactionAmount;
+			private final String transactionDescription;
+			private final TransactionType transactionType;
+			
+			// Optional parameters - initialized with default values
+			private String transactionAccountId = "";
+			private String transactionAccountName = "";
+			private String transactionCategoryId = "";
+			private String transactionCategoryName = "";
+			
+			// Constructor with required parameters
+			public Builder(String id, LocalDate date, double amount, String description, String type) {
+				this.transactionId = id;
+				this.transactionDate = date;
+				this.transactionAmount = amount;
+				this.transactionDescription = description;
+				this.transactionType = TransactionType.valueOf(type.toUpperCase());
+			}
+			
+			// Methods to set optional parameters
+			public Builder accountId(String accountId) {
+				this.transactionAccountId = accountId;
+				return this;
+			}
+			
+			public Builder accountName(String accountName) {
+				this.transactionAccountName = accountName;
+				return this;
+			}
+			
+			public Builder categoryId(String categoryId) {
+				this.transactionCategoryId = categoryId;
+				return this;
+			}
+			
+			public Builder categoryName(String categoryName) {
+				this.transactionCategoryName = categoryName;
+				return this;
+			}
+			
+			// Build method to create the TransactionModel object
+			public TransactionModel build() {
+				return new TransactionModel(this);
+			}
+			
+			
+		}
 	}
 }

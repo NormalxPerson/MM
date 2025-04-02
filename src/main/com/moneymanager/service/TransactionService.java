@@ -56,18 +56,9 @@ public class TransactionService implements TransactionServiceInterface {
 		
 	}
 	
-	private void saveTransaction(Transaction transaction) {
-		transRepo.addTransactions(Collections.singletonList(transaction));
-		transactionModels.add(createNewTransactionModel(transaction));
-	}
-	
 	public void updateAccountBalance(String accountId, double amount) {
 		accountService.updateBalance(accountId, amount);
 		
-	}
-	
-	public void addNewTransactionModelToTable(TransactionTableView.TransactionModel transaction) {
-		transactionModels.add(transaction);
 	}
 	
 	@Override
@@ -84,18 +75,18 @@ public class TransactionService implements TransactionServiceInterface {
 	}
 	
 	private TransactionTableView.TransactionModel createNewTransactionModel(Transaction transaction) {
-		TransactionTableView.TransactionModel newModel;
-		if (transaction.getAccountId() != null && !transaction.getAccountId().isEmpty()) {
-			String accountName = accountService.getAccountNameByAccountId(transaction.getAccountId());
-			
-			newModel = new TransactionTableView.TransactionModel(transaction.getId(), transaction.getDate(),transaction.getAmount(), transaction.getDescription(), transaction.getType().getDisplayName(), transaction.getAccountId(), accountName);
-		} else {
-			newModel = new TransactionTableView.TransactionModel(transaction.getId(), transaction.getDate(), transaction.getAmount(), transaction.getDescription(), transaction.getType().toString());
-		}
-		if (transaction.getCategoryId() != null && !transaction.getCategoryId().isEmpty()) {
-			newModel.setTransactionCategoryId(transaction.getCategoryId());
-		}
-		return newModel;
+		String accountName = accountService.getAccountNameByAccountId(transaction.getAccountId());
+		return new TransactionTableView.TransactionModel.Builder(
+				transaction.getId(),
+				transaction.getDate(),
+				transaction.getAmount(),
+				transaction.getDescription(),
+				transaction.getType().getDisplayName())
+				.accountId(transaction.getAccountId()) // This can safely be null
+				.accountName(accountName)
+				.categoryId(transaction.getCategoryId()) // This can safely be null
+				// Add category name if needed
+				.build();
 	}
 	
 	public ObservableList<AccountTableView.AccountModel> getAccountModelObservableList() {
@@ -108,19 +99,17 @@ public class TransactionService implements TransactionServiceInterface {
 	
 	public TransactionTableView.TransactionModel createTransactionModelFromTransaction(Transaction transaction) {
 		String accountName = accountService.getAccountNameByAccountId(transaction.getAccountId());
-		TransactionTableView.TransactionModel newModel = new TransactionTableView.TransactionModel(
+		return new TransactionTableView.TransactionModel.Builder(
 				transaction.getId(),
 				transaction.getDate(),
 				transaction.getAmount(),
 				transaction.getDescription(),
-				transaction.getType().toString(),
-				transaction.getAccountId(),
-				accountName
-		);
-		if (transaction.getCategoryId() != null && !transaction.getCategoryId().isEmpty()) {
-			newModel.setTransactionCategoryId(transaction.getCategoryId());
-		}
-		return newModel;
+				transaction.getType().getDisplayName())
+				.accountId(transaction.getAccountId()) // This can safely be null
+				.accountName(accountName)
+				.categoryId(transaction.getCategoryId()) // This can safely be null
+				// Add category name if needed
+				.build();
 	}
 	
 	public TransactionTableView.TransactionModel createAndAddTransaction(Map<String, Object> fieldValues) {

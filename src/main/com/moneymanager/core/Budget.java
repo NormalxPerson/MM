@@ -40,11 +40,11 @@ public class Budget {
 	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof Budget budget)) return false;
-		return Objects.equals(budgetId, budget.budgetId);
+		return Objects.equals(budgetId, budget.budgetId) && Objects.equals(yearMonth, budget.yearMonth);
 	}
 	
 	@Override
 	public int hashCode() {
-		return Objects.hash(budgetId);
+		return Objects.hash(budgetId, yearMonth);
 	}
 }
