@@ -9,12 +9,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 // TODO: Create a TransactionServiceInterface
-public class TransactionService implements TransactionServiceInterface {
+public class TransactionService {
 	private final TransactionRepo transRepo;
 	private final AccountService accountService;
 	private final ObservableList<TransactionTableView.TransactionModel> transactionModels;
@@ -25,29 +24,17 @@ public class TransactionService implements TransactionServiceInterface {
 		this.transactionModels = FXCollections.observableArrayList();
 	}
 	
-	public TransactionTableView.TransactionModel createAddAndGetNewTransactionModel(double amount, String description, String date, String type, String accountId, String categoryId) {
-		// Create transaction using TransactionFactory
-		Transaction newTransaction = TransactionFactory.createTransaction(amount, description, date, type, accountId, categoryId, transRepo);
-		
-		// Insert the transaction into the database
-		transRepo.addTransaction(newTransaction);
-		return createTransactionModelFromTransaction(newTransaction);
-		
-	}
-	
-	@Override
 	public ObservableList<TransactionTableView.TransactionModel> getObservableTransactionModelsList() {
 		loadObservableList();
 		return transactionModels;
 	}
 	
-	@Override
 	public TransactionTableView.TransactionModel createTransactionFromUser(double amount, String description, String date, String type, String accountId, String categoryId) {
 		Transaction transaction = TransactionFactory.createTransaction(amount, description, date, type, accountId, categoryId, transRepo);
 		System.out.println("TransactionService.createTransactionFromUser: " + transaction.toString());
 		
 		transRepo.addTransaction(transaction);
-		TransactionTableView.TransactionModel newTransactionModel = createNewTransactionModel(transaction);
+		TransactionTableView.TransactionModel newTransactionModel = createNewModelFromTransaction(transaction);
 		transactionModels.add(newTransactionModel);
 		
 		updateAccountBalance(transaction.getAccountId(), transaction.getAmount());
@@ -61,20 +48,15 @@ public class TransactionService implements TransactionServiceInterface {
 		
 	}
 	
-	@Override
-	public List<Transaction> getListAllTransactions() {
-		return transRepo.getAllTransactions();
-	}
-	
 	private void loadObservableList() {
 		transactionModels.clear();
 		List<Transaction> transactions = transRepo.getAllTransactions();
 		for (Transaction transaction : transactions) {
-			transactionModels.add(createNewTransactionModel(transaction));
+			transactionModels.add(createNewModelFromTransaction(transaction));
 		}
 	}
 	
-	private TransactionTableView.TransactionModel createNewTransactionModel(Transaction transaction) {
+	private TransactionTableView.TransactionModel createNewModelFromTransaction(Transaction transaction) {
 		String accountName = accountService.getAccountNameByAccountId(transaction.getAccountId());
 		return new TransactionTableView.TransactionModel.Builder(
 				transaction.getId(),
@@ -112,10 +94,10 @@ public class TransactionService implements TransactionServiceInterface {
 				.build();
 	}
 	
-	public TransactionTableView.TransactionModel createAndAddTransaction(Map<String, Object> fieldValues) {
+	public TransactionTableView.TransactionModel createFromFormValues(Map<String, Object> fieldValues) {
 		Transaction transaction = TransactionFactory.createTransaction(fieldValues, transRepo);
 		transRepo.addTransaction(transaction);
-		TransactionTableView.TransactionModel newTransactionModel = createNewTransactionModel(transaction);
+		TransactionTableView.TransactionModel newTransactionModel = createNewModelFromTransaction(transaction);
 		transactionModels.add(newTransactionModel);
 		
 		updateAccountBalance(transaction.getAccountId(), transaction.getAmount());

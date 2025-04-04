@@ -13,7 +13,7 @@ import java.util.List;
 public class TransactionTableView extends TableView<TransactionTableView.TransactionModel> {
 	
 	public TransactionTableView() {
-		initializeColumns(); this.getStyleClass().addAll("table-view", "md3-rounded-medium");}
+		initializeColumns(); this.getStyleClass().addAll("table-view", "md3-rounded-medium"); this.setStyle("-fx-: transparent;");}
 	
 	private void initializeColumns() {
 		TableColumn<TransactionModel, LocalDate> dateColumn = new TableColumn<>("Date");

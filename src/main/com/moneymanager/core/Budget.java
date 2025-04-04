@@ -33,9 +33,9 @@ public class Budget {
 	public YearMonth getYearMonth() {
 		return yearMonth;
 	}
-	public void setYearMonth(YearMonth yearMonth) {
+/*	public void setYearMonth(YearMonth yearMonth) {
 		this.yearMonth = yearMonth;
-	}
+	}*/
 	
 	@Override
 	public boolean equals(Object o) {

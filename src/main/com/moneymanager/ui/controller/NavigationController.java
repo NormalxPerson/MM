@@ -1,11 +1,6 @@
 package com.moneymanager.ui.controller;
 
-import com.moneymanager.core.BudgetCategory;
-import com.moneymanager.repos.BudgetRepo;
-import com.moneymanager.repos.SQLBudgetCategoryRepo;
-import com.moneymanager.repos.SQLBudgetRepo;
 import com.moneymanager.service.AccountService;
-import com.moneymanager.service.BudgetService;
 import com.moneymanager.service.TransactionService;
 import com.moneymanager.ui.event.FormEvent;
 import com.moneymanager.ui.view.FloatingActionButton;
@@ -25,7 +20,6 @@ import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
 import java.net.URL;
-import java.time.YearMonth;
 import java.util.ResourceBundle;
 
 public class NavigationController implements Initializable{
@@ -41,6 +35,9 @@ public class NavigationController implements Initializable{
 	
 	@FXML
 	private ToggleButton transactionsButton;
+	
+	@FXML
+	private ToggleButton budgetButton;
 	
 	@FXML
 	private ToggleGroup navigationGroup;
@@ -150,6 +147,13 @@ public class NavigationController implements Initializable{
 		
 		accountsButton.setSelected(true);
 	}
+	
+	public void setUpBudgetController() {
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("/budgetView.fxml"));
+		BudgetViewController budgetViewController = loader.getController();
+		this.viewManager.registerView(budgetButton.getUserData().toString(), budgetViewController.getBudgetContainer(), budgetViewController);
+	}
+	
 	
 	
 	public void setAccountService(AccountService accountService) { this.accountService = accountService;}

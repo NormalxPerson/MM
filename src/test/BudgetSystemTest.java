@@ -40,7 +40,8 @@ public class BudgetSystemTest {
 	@BeforeEach
 	void setUp() {
 		// Set up test data
-		testBudget = new Budget("Monthly Budget", YearMonth.now());
+		String monthName = YearMonth.now().getMonth().toString();
+		testBudget = new Budget(monthName + " Budget", YearMonth.now());
 		testCategory = new BudgetCategory(testBudget.getBudgetId(), "Groceries", "Food and household items", 500.0);
 		
 		testCategories = new ArrayList<>();
@@ -54,8 +55,8 @@ public class BudgetSystemTest {
 	@Test
 	void testBudgetCreation() {
 		// Test that a Budget object is created correctly
-		String budgetName = "Test Budget";
-		YearMonth yearMonth = YearMonth.of(2025, 4);
+		String budgetName = "APRIL Budget";
+		YearMonth yearMonth = YearMonth.now();
 		
 		Budget budget = new Budget(budgetName, yearMonth);
 		
@@ -63,12 +64,13 @@ public class BudgetSystemTest {
 		assertNotNull(budget.getBudgetId());
 		assertEquals(budgetName, budget.getBudgetName());
 		assertEquals(yearMonth, budget.getYearMonth());
+		assertEquals(testBudget.getBudgetName(), budget.getBudgetName());
 	}
 	
 	@Test
 	void testBudgetCategoryCreation() {
 		// Test that a BudgetCategory object is created correctly
-		String budgetId = "test-budget-id";
+		String budgetId = testBudget.getBudgetId();
 		String categoryName = "Test Category";
 		String description = "Test description";
 		double amount = 100.0;
@@ -91,13 +93,6 @@ public class BudgetSystemTest {
 		assertEquals(newName, testBudget.getBudgetName());
 	}
 	
-	@Test
-	void testBudgetYearMonthUpdate() {
-		// Test that a Budget's YearMonth can be updated
-		YearMonth newYearMonth = YearMonth.of(2025, 5);
-		testBudget.setYearMonth(newYearMonth);
-		assertEquals(newYearMonth, testBudget.getYearMonth());
-	}
 	
 	@Test
 	void testBudgetCategoryUpdate() {
@@ -135,6 +130,9 @@ public class BudgetSystemTest {
 			fail("Failed to set budget ID via reflection: " + e.getMessage());
 		}
 	}
+	
+	@Test
+	void testAddingBudgetCategory() {}
 }
 	/*
 	@Test

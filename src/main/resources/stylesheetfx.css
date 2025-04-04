@@ -215,6 +215,10 @@
 
 .table-view:focused {
     -fx-effect: none;
+}
+
+.table-view:selected {
+    -fx-effect: none;
     -fx-border-color: transparent;
 }
 
@@ -252,15 +256,14 @@
     -fx-font-weight: bold;
 }
 
-.table-row-cell:selected.no-highlight {
-    -fx-background-color: transparent; /* Or your default row background color */
-}
 
- .table-view .table-row-cell:filled:selected,
+.table-view .table-row-cell:filled:selected,
 .table-view .table-row-cell:selected,
 .table-view {
     -fx-background-color: -fx-md3-secondary-color;
     -fx-text-fill: -fx-md3-on-secondary-color;
+     -fx-border-color: transparent;
+     -fx-border-width: 0;
 }
 
 .table-view .table-row-cell:selected .table-cell,

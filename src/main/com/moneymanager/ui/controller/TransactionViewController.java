@@ -2,7 +2,6 @@ package com.moneymanager.ui.controller;
 
 import com.moneymanager.service.TransactionService;
 import com.moneymanager.ui.event.FormEvent;
-import com.moneymanager.ui.view.AccountTableView;
 import com.moneymanager.ui.view.TransactionForm;
 import com.moneymanager.ui.view.TransactionTableView;
 import javafx.animation.KeyFrame;
@@ -153,7 +152,7 @@ public class TransactionViewController extends AbstractViewController implements
 	protected <T> void handleNewSaveEvent(FormEvent<T> formNewSaveEvent) {
 		if (formNewSaveEvent.getEventType() == FormEvent.NEWSAVE) {
 			Map<String, Object> fieldValues = formNewSaveEvent.getFieldValues();
-			TransactionTableView.TransactionModel newModel = transactionService.createAndAddTransaction(fieldValues);
+			TransactionTableView.TransactionModel newModel = transactionService.createFromFormValues(fieldValues);
 			transactionTableView.getSelectionModel().select(newModel);
 			transactionSlidingForm.setCurrentModel(newModel);
 		}

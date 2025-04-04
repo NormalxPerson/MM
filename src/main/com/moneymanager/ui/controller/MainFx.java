@@ -30,6 +30,7 @@ public class MainFx extends Application {
 		navigationController.setAccountService(accountService);
 		navigationController.setTransactionService(transactionService);
 		navigationController.setUpControllers();
+		navigationController.setUpBudgetController();
 		
 		// 2. Create the Scene
 		Scene scene = new Scene(root, 900, 750);
