@@ -1,12 +1,16 @@
 package com.moneymanager.repos;
 
 import com.moneymanager.core.BudgetCategory;
+import com.moneymanager.core.Transaction;
+import com.moneymanager.core.TransactionFactory;
 import com.moneymanager.database.DatabaseConnection;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SQLBudgetCategoryRepo implements BudgetCategoryRepo {
 	private DatabaseConnection databaseConnection;
@@ -51,6 +55,29 @@ public class SQLBudgetCategoryRepo implements BudgetCategoryRepo {
 			throw new RuntimeException("Failed to delete budget category", e);
 		}
 	}
+	
+	@Override
+	public void addBudgetCategory(BudgetCategory budgetCategory) {
+		addCategoryAndReturnId(budgetCategory);
+	
+	}
+	
+	@Override
+	public List<BudgetCategory> getCategoriesByBudgetId(String budgetId) {
+		List<BudgetCategory> categoryList = new ArrayList<>();
+		String sql = "SELECT * FROM budget_categories WHERE budgetId = ?";
+		try (Connection connection = databaseConnection.getConnection();
+		     PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, budgetId);
+			try (ResultSet rs = stmt.executeQuery()) {
+				while (rs.next()) {
+					categoryList.add(createCategoryFromResultSet(rs));
+				}
+			}
+		} catch (SQLException e) { System.out.println(e.getMessage()); }
+		return categoryList;
+	}
+	
 	
 	private BudgetCategory createCategoryFromResultSet(ResultSet rs) throws SQLException {
 		String categoryId = rs.getString("categoryId");

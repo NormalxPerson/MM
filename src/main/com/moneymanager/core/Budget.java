@@ -7,6 +7,7 @@ import java.util.UUID;
 public class Budget {
 	private String budgetId;
 	private String budgetName;
+	// YearMonth = YYYY-MM
 	private YearMonth yearMonth;
 	
 	public Budget(String budgetName, YearMonth yearMonth) {

@@ -1,5 +1,6 @@
 package com.moneymanager.ui.controller;
 
+import com.moneymanager.core.BudgetCategory;
 import com.moneymanager.service.BudgetService;
 import com.moneymanager.ui.model.BudgetCategoryModel;
 import com.moneymanager.ui.view.BudgetCategoryContainer;
@@ -9,6 +10,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.layout.VBox;
 
 import java.net.URL;
+import java.time.YearMonth;
 import java.util.ResourceBundle;
 
 public class BudgetViewController implements Initializable, BaseViewController {
@@ -25,7 +27,10 @@ public class BudgetViewController implements Initializable, BaseViewController {
 	budgetCardsContainerView.getChildren().add(container);
 		
 		container.getAddCategoryButton().setOnAction(event -> {
-			System.out.println("Add Category");
+			budgetService.createBudget("April", YearMonth.now());
+			String budgetId = budgetService.getBudgetFromYearMonth(YearMonth.now()).getBudgetId();
+			budgetService.createBudgetCategoryFromInput(budgetId, "food", "", 500.0);
+			refreshCategories();
 		});
 	}
 	
@@ -42,7 +47,7 @@ public class BudgetViewController implements Initializable, BaseViewController {
 	
 	private void refreshCategories() {
 		ObservableList<BudgetCategoryModel> categories =
-				budgetService.getCategoriesForBudget(currentBudgetId);
+				budgetService.getCategoriesForBudget(YearMonth.now());
 		
 		container.setCategoryModels(categories);
 	}

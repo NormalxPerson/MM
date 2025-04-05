@@ -1,6 +1,7 @@
 package com.moneymanager.ui.controller;
 
 import com.moneymanager.service.AccountService;
+import com.moneymanager.service.BudgetService;
 import com.moneymanager.service.TransactionService;
 import com.moneymanager.ui.event.FormEvent;
 import com.moneymanager.ui.view.FloatingActionButton;
@@ -47,6 +48,7 @@ public class NavigationController implements Initializable{
 	
 	private AccountService accountService;
 	private TransactionService transactionService;
+	private BudgetService budgetService;
 	
 	private AccountViewController accountViewController;
 	private TransactionViewController transactionViewController;
@@ -144,6 +146,14 @@ public class NavigationController implements Initializable{
 		transactionsController.setFloatingActionButton(this.fab);
 		this.viewManager.registerView(transactionsButton.getUserData().toString(), transactionsController.getTransactionContainer(), transactionsController);
 
+		FXMLLoader loader3 = new FXMLLoader(getClass().getResource("/budgetView.fxml"));
+		Parent budgetView = null;
+		try {
+			budgetView = loader3.load();
+		} catch (IOException e) { e.printStackTrace(); }
+		BudgetViewController budgetViewController = loader3.getController();
+		budgetViewController.setBudgetCategoryService(budgetService);
+		this.viewManager.registerView(budgetButton.getUserData().toString(), budgetViewController.getBudgetContainer(), budgetViewController);
 		
 		accountsButton.setSelected(true);
 	}
@@ -155,6 +165,6 @@ public class NavigationController implements Initializable{
 	
 	public void setTransactionService(TransactionService transactionService) { this.transactionService = transactionService;}
 	
-	
+	public void setBudgetService(BudgetService budgetService) { this.budgetService = budgetService; }
 	
 }

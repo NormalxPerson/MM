@@ -53,6 +53,19 @@ public class SQLBudgetRepo implements BudgetRepo {
 		return 0;
 	}
 	
+	public Budget getBudgetByYearMonth(YearMonth yearMonth) {
+		String sql = "SELECT * FROM budgets WHERE budgetYearMonth = ?";
+		try ( Connection connection = databaseConnection.getConnection();
+		PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, yearMonth.toString());
+			
+			try (ResultSet rs = stmt.executeQuery()) {
+				return createBudgetFromResultSet(rs);
+			}
+		} catch (SQLException e) { e.printStackTrace(); }
+		return null;
+	}
+	
 	private Budget createBudgetFromResultSet(ResultSet rs) throws SQLException {
 		String budgetId = rs.getString("budgetId");
 		String budgetName = rs.getString("budgetName");

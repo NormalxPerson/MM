@@ -8,7 +8,7 @@ public class DatabaseInitializer {
 	private static final String CREATE_TRANSACTION_TABLE = """
 			CREATE TABLE IF NOT EXISTS transactions(
 				transactionId TEXT PRIMARY KEY,
-				transactionDate TEXT NOT NULL,
+				transactionDate TEXT NOT NULL,""" /*Stored as YYYY-MM-DD */ + """
 				transactionAmount INTEGER NOT NULL,
 				transactionDescription TEXT NOT NULL,
 				transactionType TEXT NOT NULL,

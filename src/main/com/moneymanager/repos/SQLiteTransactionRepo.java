@@ -10,14 +10,49 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 public class SQLiteTransactionRepo implements TransactionRepo {
 	private final DatabaseConnection dbConnection;
+	// Date format converters
+	private static final DateTimeFormatter APP_FORMAT = DateTimeFormatter.ofPattern("M-d-yy");
+	private static final DateTimeFormatter DB_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	
+	// Convert from application format to database format
+	private String appDateToDbDate(String appDate) {
+		return LocalDate.parse(appDate, APP_FORMAT).format(DB_FORMAT);
+	}
+	
+	// Convert from database format to application format
+	private String dbDateToAppDate(String dbDate) {
+		return LocalDate.parse(dbDate, DB_FORMAT).format(APP_FORMAT);
+	}
 	
 	public SQLiteTransactionRepo() {
 		this.dbConnection = DatabaseConnection.getInstance();
+	}
+	
+	@Override
+	public List<Transaction> getTransactionsByDateRange(LocalDate startDate, LocalDate endDate) {
+		List<Transaction> transactions = new ArrayList<>();
+		String sql = "SELECT * FROM transactions WHERE transactionDate BETWEEN ? AND ?";
+		
+		try (Connection connection = dbConnection.getConnection();
+		     PreparedStatement stmt = connection.prepareStatement(sql)) {
+			
+			// Convert dates to database format
+			stmt.setString(1, startDate.toString());
+			stmt.setString(2, endDate.toString());
+			
+			try (ResultSet rs = stmt.executeQuery()) {
+				while (rs.next()) {
+					transactions.add(TransactionFactory.createTransaction(rs));
+				}
+			}
+		}catch (SQLException e) { System.out.println(e.getMessage()); }
+		return transactions;
 	}
 	
 	@Override
@@ -31,7 +66,7 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 				statement.setString(1, transaction.getId());
 				statement.setInt(2, (int) Math.round(transaction.getAmount() * 100));
 				statement.setString(3, transaction.getDescription());
-				statement.setString(4, transaction.getFormattedDate()); // Assuming date is stored as TEXT in your database
+				statement.setString(4, appDateToDbDate(transaction.getFormattedDate())); // Assuming date is stored as TEXT in your database
 				statement.setString(5, transaction.getType().name());
 				statement.setString(6, transaction.getAccountId());
 				
@@ -45,23 +80,6 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 	@Override
 	public void addTransaction(Transaction transaction) {
 		addTransactions(List.of(transaction));
-	}
-	
-	
-	@Override
-	public int getTransactionCountByDate(String date) {
-		String sql = "SELECT COUNT(*) as count FROM transactions WHERE transactionDate = ?";
-		try (Connection connection = dbConnection.getConnection();
-		     PreparedStatement stmt = connection.prepareStatement(sql)) {
-			 stmt.setString(1, date);
-			
-			try (ResultSet rs = stmt.executeQuery()) {
-				if (rs.next()) {
-					return rs.getInt(1);
-				}
-				return 0;
-			}
-		} catch (SQLException e) { throw new RuntimeException(e);}
 	}
 	
 	@Override
@@ -111,7 +129,7 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 		String sql = "SELECT transactionId FROM transactions WHERE transactionDate = ? ORDER BY transactionId DESC LIMIT 1";
 		try (Connection connection = dbConnection.getConnection();
 			PreparedStatement stmt = connection.prepareStatement(sql)) {
-			stmt.setString(1, date);
+			stmt.setString(1, appDateToDbDate(date));
 			try (ResultSet rs = stmt.executeQuery()) {
 				if (rs.next()) {
 					return rs.getString("transactionId");
@@ -122,28 +140,7 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 		return null;
 	}
 	
-	@Override
-	public void updateTransaction(Transaction transaction) {
-		String sql = "UPDATE transactions SET transactionAmount = ?, transactionDescription = ?, transactionDate = ?, transactionType = ?, accountId = ? WHERE transactionId = ?";
-		
-		try (Connection connection = dbConnection.getConnection();
-		     PreparedStatement stmt = connection.prepareStatement(sql)) {
-			
-			stmt.setInt(1, (int) Math.round(transaction.getAmount() * 100)); // Convert to cents
-			stmt.setString(2, transaction.getDescription());
-			stmt.setString(3, transaction.getDate().toString()); // Store LocalDate as TEXT
-			stmt.setString(4, transaction.getType().name());
-			stmt.setString(5, transaction.getAccountId());
-			stmt.setString(6, transaction.getId());
-			
-			int rowsUpdated = stmt.executeUpdate();
-			if (rowsUpdated == 0) {
-				System.err.println("No transaction found with ID: " + transaction.getId());
-			}
-		} catch (SQLException e) {
-			throw new RuntimeException("Failed to update transaction with ID: " + transaction.getId(), e);
-		}
-	}
+
 	
 	@Override
 	public void updateTransaction(TransactionTableView.TransactionModel transactionModel) {
@@ -151,7 +148,7 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 		int amountInCents = (int) Math.round(transactionModel.getTransactionAmount() * 100);
 		
 		try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(sql)) {
-			stmt.setString(1, transactionModel.getTransactionDate().toString());
+			stmt.setString(1, appDateToDbDate(transactionModel.getTransactionDate().toString()));
 			stmt.setInt(2, amountInCents);
 			stmt.setString(3, transactionModel.getTransactionDescription());
 			stmt.setString(4, transactionModel.getTransactionType().name());
