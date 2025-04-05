@@ -1,6 +1,5 @@
 package com.moneymanager.core;
 
-import java.time.YearMonth;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -9,22 +8,22 @@ public class BudgetCategory {
 	private String budgetId;
 	private String categoryName;
 	private String description;
-	private double budgetAmount;
+	private double allocatedAmount;
 	
-	public BudgetCategory(String budgetId, String categoryName, String description, double budgetAmount) {
+	public BudgetCategory(String budgetId, String categoryName, String description, double allocatedAmount) {
 		this.categoryId = UUID.randomUUID().toString();
 		this.budgetId = budgetId;
 		this.categoryName = categoryName;
 		this.description = description;
-		this.budgetAmount = budgetAmount;
+		this.allocatedAmount = allocatedAmount;
 	}
 	
-	public BudgetCategory(String categoryId, String budgetId, String categoryName, String description, double budgetAmount) {
+	public BudgetCategory(String categoryId, String budgetId, String categoryName, String description, double allocatedAmount) {
 		this.categoryId = categoryId;
 		this.budgetId = budgetId;
 		this.categoryName = categoryName;
 		this.description = description;
-		this.budgetAmount = budgetAmount;
+		this.allocatedAmount = allocatedAmount;
 	}
 	
 	public String getCategoryId() {
@@ -55,12 +54,12 @@ public class BudgetCategory {
 		this.description = description;
 	}
 	
-	public double getBudgetAmount() {
-		return budgetAmount;
+	public double getAllocatedAmount() {
+		return allocatedAmount;
 	}
 	
-	public void setBudgetAmount(double budgetAmount) {
-		this.budgetAmount = budgetAmount;
+	public void setAllocatedAmount(double allocatedAmount) {
+		this.allocatedAmount = allocatedAmount;
 	}
 	
 	@Override

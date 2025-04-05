@@ -18,7 +18,7 @@ public class SQLBudgetCategoryRepo implements BudgetCategoryRepo {
 	@Override
 	public String addCategoryAndReturnId(BudgetCategory category) {
 		String sql = "INSERT INTO budget_categories (categoryId, budgetId, categoryName, allocatedAmount) VALUES (?, ?, ?, ?)";
-		int allocatedAmountInCents = (int) Math.round(category.getBudgetAmount() * 100);
+		int allocatedAmountInCents = (int) Math.round(category.getAllocatedAmount() * 100);
 		
 		try (Connection connection = databaseConnection.getConnection();
 		     PreparedStatement stmt = connection.prepareStatement(sql)) {

@@ -147,12 +147,7 @@ public class NavigationController implements Initializable{
 		
 		accountsButton.setSelected(true);
 	}
-	
-	public void setUpBudgetController() {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource("/budgetView.fxml"));
-		BudgetViewController budgetViewController = loader.getController();
-		this.viewManager.registerView(budgetButton.getUserData().toString(), budgetViewController.getBudgetContainer(), budgetViewController);
-	}
+
 	
 	
 	

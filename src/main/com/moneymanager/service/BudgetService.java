@@ -6,6 +6,8 @@ import com.moneymanager.repos.BudgetCategoryRepo;
 import com.moneymanager.repos.BudgetRepo;
 import com.moneymanager.repos.SQLBudgetRepo;
 import com.moneymanager.repos.TransactionRepo;
+import com.moneymanager.ui.model.BudgetCategoryModel;
+import javafx.collections.ObservableList;
 
 import java.time.YearMonth;
 
@@ -28,4 +30,6 @@ public class BudgetService {
 	}
 	
 	
+	public ObservableList<BudgetCategoryModel> getCategoriesForBudget(String currentBudgetId) {
+	}
 }

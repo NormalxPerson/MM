@@ -12,13 +12,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.YearMonth;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 /**
  * Comprehensive test suite for the Budget system in Money Manager
@@ -82,7 +79,7 @@ public class BudgetSystemTest {
 		assertEquals(budgetId, category.getBudgetId());
 		assertEquals(categoryName, category.getCategoryName());
 		assertEquals(description, category.getDescription());
-		assertEquals(amount, category.getBudgetAmount());
+		assertEquals(amount, category.getAllocatedAmount());
 	}
 	
 	@Test
@@ -103,11 +100,11 @@ public class BudgetSystemTest {
 		
 		testCategory.setCategoryName(newName);
 		testCategory.setDescription(newDescription);
-		testCategory.setBudgetAmount(newAmount);
+		testCategory.setAllocatedAmount(newAmount);
 		
 		assertEquals(newName, testCategory.getCategoryName());
 		assertEquals(newDescription, testCategory.getDescription());
-		assertEquals(newAmount, testCategory.getBudgetAmount());
+		assertEquals(newAmount, testCategory.getAllocatedAmount());
 	}
 	
 	@Test
@@ -272,7 +269,7 @@ public class BudgetSystemTest {
 		
 		// Test updating a budget category
 		testCategory.setCategoryName("Updated Category Name");
-		testCategory.setBudgetAmount(300.0);
+		testCategory.setAllocatedAmount(300.0);
 		budgetRepo.updateCategory(testCategory);
 		
 		verify(budgetRepo).updateCategory(testCategory);
@@ -315,7 +312,7 @@ public class BudgetSystemTest {
 				testBudget.getBudgetId(),
 				testCategory.getCategoryName(),
 				testCategory.getDescription(),
-				testCategory.getBudgetAmount()
+				testCategory.getAllocatedAmount()
 		)).thenReturn(testCategory);
 		
 		// Test adding a category to a budget
@@ -323,17 +320,17 @@ public class BudgetSystemTest {
 				testBudget.getBudgetId(),
 				testCategory.getCategoryName(),
 				testCategory.getDescription(),
-				testCategory.getBudgetAmount()
+				testCategory.getAllocatedAmount()
 		);
 		
 		assertNotNull(addedCategory);
 		assertEquals(testCategory.getCategoryName(), addedCategory.getCategoryName());
-		assertEquals(testCategory.getBudgetAmount(), addedCategory.getBudgetAmount());
+		assertEquals(testCategory.getAllocatedAmount(), addedCategory.getAllocatedAmount());
 		verify(budgetService).addCategoryToBudget(
 				testBudget.getBudgetId(),
 				testCategory.getCategoryName(),
 				testCategory.getDescription(),
-				testCategory.getBudgetAmount()
+				testCategory.getAllocatedAmount()
 		);
 	}
 	
