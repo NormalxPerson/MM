@@ -27,6 +27,9 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 		TableColumn<TransactionModel, String> descriptionColumn = new TableColumn<>("Description");
 		descriptionColumn.setCellValueFactory(cellData -> cellData.getValue().transactionDescriptionProperty());
 		
+		TableColumn<TransactionModel, String> categoryColumn = new TableColumn<>("Budget Category");
+		descriptionColumn.setCellValueFactory(cellData -> cellData.getValue().TransactionCategoryNameProperty());
+		
 		TableColumn<TransactionModel, String> accountNameColumn = new TableColumn<>("Account Name");
 		accountNameColumn.setCellValueFactory(cellData -> cellData.getValue().TransactionAccountNameProperty());
 		
@@ -221,6 +224,18 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 		
 		public StringProperty TransactionCategoryIdProperty() {
 			return transactionCategoryId;
+		}
+		
+		public StringProperty TransactionCategoryNameProperty() {
+			return transactionCategoryName;
+		}
+		
+		public String getTransactionCategoryName() {
+			return transactionCategoryName.get();
+		}
+		
+		public void setTransactionCategoryName(String transactionCategoryName) {
+			this.transactionCategoryName.set(transactionCategoryName);
 		}
 		
 		public void makeChanges(String change, Object value) {
