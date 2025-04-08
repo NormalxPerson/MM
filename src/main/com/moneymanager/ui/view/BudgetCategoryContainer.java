@@ -7,12 +7,15 @@ import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.util.StringConverter;
 
+import java.time.YearMonth;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,13 +27,38 @@ public class BudgetCategoryContainer extends VBox {
 	private ScrollPane scrollPane;
 	private Button addCategoryButton;
 	
-	public BudgetCategoryContainer() {
+	public BudgetCategoryContainer(ObservableList<YearMonth> budgetMonths) {
 		this.categoryModels = FXCollections.observableArrayList();
 		initializeUI();
 		setupListeners();
+		ComboBox<YearMonth> yearMonthComboBox = new ComboBox<>(budgetMonths);
+		yearMonthComboBox.setConverter(new StringConverter<>() {
+			@Override
+			public String toString(YearMonth object) {
+				return object != null ? object.getMonth().toString() : "";
+			}
+			@Override
+			public YearMonth fromString(String string) {
+				for (YearMonth yearMonth : budgetMonths) {
+					if (yearMonth.toString().equals(string)) {
+						return yearMonth;
+					}
+				}
+				return YearMonth.now();
+			}
+		});
+		
+		ComboBox<YearMonth> yearComboBox = new ComboBox<>();
+		cardsContainer.getChildren().add(yearMonthComboBox);
 	}
 	
 	private void initializeUI() {
+		
+		
+
+
+
+
 		// Create header with title and add button
 		Label titleLabel = new Label("Budget Categories");
 		titleLabel.getStyleClass().add("section-header");
@@ -140,4 +168,5 @@ public class BudgetCategoryContainer extends VBox {
 	public Button getAddCategoryButton() {
 		return addCategoryButton;
 	}
+	
 }

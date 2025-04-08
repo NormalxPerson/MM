@@ -4,6 +4,7 @@ import com.moneymanager.core.BudgetCategory;
 import com.moneymanager.service.BudgetService;
 import com.moneymanager.ui.model.BudgetCategoryModel;
 import com.moneymanager.ui.view.BudgetCategoryContainer;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,16 +22,19 @@ public class BudgetViewController implements Initializable, BaseViewController {
 	private BudgetCategoryContainer container;
 	private BudgetService budgetService;
 	
+	ObservableList<YearMonth> listOfYearMonths;
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-	this.container = new BudgetCategoryContainer();
+	generateMonths();
+	this.container = new BudgetCategoryContainer(listOfYearMonths);
 	budgetCardsContainerView.getChildren().add(container);
 		
 		container.getAddCategoryButton().setOnAction(event -> {
-			budgetService.createBudget("April", YearMonth.now());
+			/*budgetService.createBudget("April", YearMonth.now());
 			String budgetId = budgetService.getBudgetFromYearMonth(YearMonth.now()).getBudgetId();
 			budgetService.createBudgetCategoryFromInput(budgetId, "food", "", 500.0);
-			refreshCategories();
+			refreshCategories();*/
 		});
 	}
 	
@@ -54,17 +58,29 @@ public class BudgetViewController implements Initializable, BaseViewController {
 	
 	public VBox getBudgetContainer() { return budgetCardsContainerView; }
 	
+	private void generateMonths() {
+		listOfYearMonths = FXCollections.observableArrayList();
+		for (int i = 1; i <= 12; i++) {
+			YearMonth yearMonth = YearMonth.of(2025, i);
+			listOfYearMonths.add(yearMonth);
+		}
+		for (YearMonth yearMonth : listOfYearMonths) {
+			System.out.println(yearMonth.toString());
+		}
+	}
+	
+	
+	
+	
 	
 	@Override
 	public void hideForm() {
 	
 	}
-	
 	@Override
 	public void unselectRow() {
 	
 	}
-	
 	@Override
 	public void showCreationDialog() {
 	
