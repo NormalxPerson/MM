@@ -1,5 +1,6 @@
 package com.moneymanager.ui.model;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -144,7 +145,6 @@ public class BudgetCategoryCard extends VBox {
 	
 	public void setAllocatedAmount(double amount) {
 		this.allocatedAmount.set(amount);
-		updateRemainingAmount();
 	}
 	public DoubleProperty allocatedAmountProperty() { return allocatedAmount; }
 	
@@ -152,7 +152,6 @@ public class BudgetCategoryCard extends VBox {
 	
 	public void setSpentAmount(double amount) {
 		this.spentAmount.set(amount);
-		updateRemainingAmount();
 	}
 	
 	public DoubleProperty spentAmountProperty() { return spentAmount; }
@@ -164,23 +163,29 @@ public class BudgetCategoryCard extends VBox {
 	public DoubleProperty progressProperty() { return progress; }
 	
 	// Helper to update calculated fields
-	private void updateRemainingAmount() {
+	/*private void updateRemainingAmount() {
 		double allocated = getAllocatedAmount();
 		double spent = getSpentAmount();
 		
 		remainingAmount.set(allocated - spent);
 		progress.set(allocated > 0 ? spent / allocated : 0);
-	}
+	}*/
 	
 	// Factory method to create a card from data
 	public static BudgetCategoryCard fromModel(BudgetCategoryModel model) {
 		BudgetCategoryCard card = new BudgetCategoryCard();
-		card.setCategoryId(model.getCategoryId());
-		card.setBudgetId(model.getBudgetId());
-		card.setCategoryName(model.getCategoryName());
-		card.setDescription(model.getDescription());
-		card.setAllocatedAmount(model.getAllocatedAmount());
-		card.setSpentAmount(model.getSpentAmount());
+		card.categoryId.bind(model.categoryIdProperty());
+		card.budgetId.bind(model.budgetIdProperty());
+		card.categoryName.bind(model.categoryNameProperty());
+		card.description.bind(model.descriptionProperty());
+		card.allocatedAmount.bind(model.allocatedAmountProperty());
+		card.spentAmount.bind(model.spentAmountProperty());
+		
+		card.remainingAmount.bind(
+				Bindings.subtract(card.allocatedAmount, card.spentAmount));
+		if (card.allocatedAmount.get() > 0.0) { card.progress.bind (
+				Bindings.divide(card.spentAmount,card.allocatedAmount));
+		}
 		return card;
 	}
 }
