@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SQLBudgetRepo implements BudgetRepo {
 	private DatabaseConnection databaseConnection;
@@ -64,6 +66,21 @@ public class SQLBudgetRepo implements BudgetRepo {
 			}
 		} catch (SQLException e) { e.printStackTrace(); }
 		return null;
+	}
+	
+	@Override
+	public List<Budget> getAllBudgets() {
+		String sql = "SELECT * FROM budgets";
+		List<Budget> budgets = new ArrayList<>();
+		try (Connection connection = databaseConnection.getConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
+			
+			try (ResultSet rs = stmt.executeQuery()) {
+				while (rs.next()) {
+					budgets.add(createBudgetFromResultSet(rs));
+				}
+			}
+		} catch (SQLException e) { System.out.println("Error Getting All Budgets: " + e.getMessage()); }
+		return budgets;
 	}
 	
 	private Budget createBudgetFromResultSet(ResultSet rs) throws SQLException {

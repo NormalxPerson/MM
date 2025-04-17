@@ -142,18 +142,11 @@ public class BudgetCategoryCard extends VBox {
 	public StringProperty descriptionProperty() { return description; }
 	
 	public double getAllocatedAmount() { return allocatedAmount.get(); }
-	
-	public void setAllocatedAmount(double amount) {
-		this.allocatedAmount.set(amount);
-	}
+	public void setAllocatedAmount(double amount) { this.allocatedAmount.set(amount); }
 	public DoubleProperty allocatedAmountProperty() { return allocatedAmount; }
 	
 	public double getSpentAmount() { return spentAmount.get(); }
-	
-	public void setSpentAmount(double amount) {
-		this.spentAmount.set(amount);
-	}
-	
+	public void setSpentAmount(double amount) { this.spentAmount.set(amount); }
 	public DoubleProperty spentAmountProperty() { return spentAmount; }
 	
 	public double getRemainingAmount() { return remainingAmount.get(); }

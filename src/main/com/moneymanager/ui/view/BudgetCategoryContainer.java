@@ -17,6 +17,7 @@ import javafx.util.StringConverter;
 
 import java.time.YearMonth;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class BudgetCategoryContainer extends VBox {
@@ -156,7 +157,7 @@ public class BudgetCategoryContainer extends VBox {
 		return categoryModels;
 	}
 	
-	public void setCategoryModels(ObservableList<BudgetCategoryModel> models) {
+	public void setCategoryModels(List<BudgetCategoryModel> models) {
 		// Clear current cards
 		cardsContainer.getChildren().clear();
 		cardMap.clear();

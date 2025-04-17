@@ -12,6 +12,7 @@ import javafx.scene.layout.VBox;
 
 import java.net.URL;
 import java.time.YearMonth;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class BudgetViewController implements Initializable, BaseViewController {
@@ -31,10 +32,11 @@ public class BudgetViewController implements Initializable, BaseViewController {
 	budgetCardsContainerView.getChildren().add(container);
 		
 		container.getAddCategoryButton().setOnAction(event -> {
-			/*budgetService.createBudget("April", YearMonth.now());
+/*			budgetService.createBudget("April", YearMonth.now());
 			String budgetId = budgetService.getBudgetFromYearMonth(YearMonth.now()).getBudgetId();
 			budgetService.createBudgetCategoryFromInput(budgetId, "food", "", 500.0);
-			refreshCategories();*/
+			budgetService.createBudgetCategoryFromInput(budgetId, "car", "", 50.0);*/
+			refreshCategories();
 		});
 	}
 	
@@ -50,7 +52,7 @@ public class BudgetViewController implements Initializable, BaseViewController {
 	}
 	
 	private void refreshCategories() {
-		ObservableList<BudgetCategoryModel> categories =
+		List<BudgetCategoryModel> categories =
 				budgetService.getCategoriesForBudget(YearMonth.now());
 		
 		container.setCategoryModels(categories);

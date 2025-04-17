@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,28 +46,49 @@ public class BudgetService {
 		return budgetRepo.getBudgetByYearMonth(yearMonth);
 	}
 	
+	public List<BudgetWithCategories> getBudgetsWithCategories() {
+		List<Budget> allBudgets = getAllBudgets();
+		List<BudgetWithCategories> budgetsWithCategories = new ArrayList<>();
+		
+		for (Budget budget : allBudgets) {
+			if (budget != null) {
+				budgetsWithCategories.add(new BudgetWithCategories(budget));
+			}
+		}
+		return budgetsWithCategories;
+	}
 	
-	public ObservableList<BudgetCategoryModel> getCategoriesForBudget(YearMonth yearMonth) {
+	public List<BudgetCategoryModel> getCategoriesForBudget(YearMonth yearMonth) {
 		BudgetWithCategories budsAndCats = new BudgetWithCategories(getBudgetFromYearMonth(yearMonth));
 		return budsAndCats.getCategories();
 	}
 	
+	public List<Budget> getAllBudgets() {
+		return budgetRepo.getAllBudgets();
+	}
+	
+	
+	
+	
+	
+	
 	public class BudgetWithCategories {
 		private Boolean categoriesLoaded = false;
 		private Budget budget;
-		private ObservableList<BudgetCategoryModel> categories = FXCollections.observableArrayList();
+		private List<BudgetCategoryModel> categories = FXCollections.observableArrayList();
 		private DoubleProperty totalAllocatedAmount = new SimpleDoubleProperty(0);
 		private DoubleProperty totalSpentAmount = new SimpleDoubleProperty(0);
 		
 		public BudgetWithCategories(Budget budget) {
 			this.budget = budget;
+			loadCategoriesWithSpentAmount();
 		}
 		
 		public Budget getBudget() {
 			return budget;
 		}
 		
-		public ObservableList<BudgetCategoryModel> getCategories() {
+		public List<BudgetCategoryModel> getCategories() {
 			if (!categoriesLoaded) {
 				loadCategoriesWithSpentAmount();
 			}
@@ -136,5 +158,9 @@ public class BudgetService {
 				e.printStackTrace();
 			}
 		}
+		
+		public Double getTotalAllocatedAmount() { return totalAllocatedAmount.get(); }
+	
+		public Double getTotalSpentAmount() { return totalSpentAmount.get(); }
 	}
 }
