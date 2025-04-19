@@ -75,10 +75,16 @@ public class BudgetInteractor {
 		}
 	}
 	
-	public Budget createBudget(YearMonth yearMonth) {
-		Budget newBudget = budgetService.createBudget(yearMonth);
+	public Budget createBudget() {
 		updateBudgetMap();
-		loadBudgetForMonth(newBudget.getYearMonth());
-		return newBudget;
+		YearMonth selectedYearMonth = budgetOverviewModel.getSelectedYearMonth();
+		if (!yearMonthBudgetWithCategoriesMap.containsKey(selectedYearMonth)) {
+			Budget newBudget = budgetService.createBudget(selectedYearMonth);
+			updateBudgetMap();
+			loadBudgetForMonth(newBudget.getYearMonth());
+			return newBudget;
+			
+		}
+		return null;
 	}
 }

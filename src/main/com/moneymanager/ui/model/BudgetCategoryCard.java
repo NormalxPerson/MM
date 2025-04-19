@@ -29,6 +29,8 @@ public class BudgetCategoryCard extends VBox {
 	private ProgressBar progressBar;
 	private Label progressLabel;
 	
+	
+	
 	public BudgetCategoryCard() {
 		initializeView();
 		setupBindings();

@@ -40,24 +40,20 @@ public class BudgetCardContainerBuilder implements Builder<Region> {
 	
 	@Override
 	public Region build() {
-		VBox mainContainer = new VBox();
+/*		VBox mainContainer = new VBox();
 		mainContainer.setSpacing(10);
-		mainContainer.setPadding(new Insets(15));
+		mainContainer.setPadding(new Insets(15));*/
 		
-		Node headerBox = createHeaderBox();
 		
-		Node scrollPane = createScrollPane();
+		ScrollPane scrollPane = createScrollPane();
 		VBox.setVgrow(scrollPane, Priority.ALWAYS);
 		HBox.setHgrow(scrollPane, Priority.ALWAYS);
 		
-		mainContainer.getChildren().addAll(headerBox, scrollPane);
 		
-		setupBindings();
-		
-		return mainContainer;
+		return scrollPane;
 	}
 	
-	private Node createHeaderBox() {
+	public Node buildHeaderBox() {
 		Label titleLabel = new Label("Budget For:");
 		titleLabel.getStyleClass().add("label");
 		
@@ -66,6 +62,8 @@ public class BudgetCardContainerBuilder implements Builder<Region> {
 		yearMonthComboBox.setConverter(createYearMonthConverter());
 		yearMonthComboBox.getStyleClass().add("text-field");
 		
+		setupBindings();
+		
 		HBox headerBox = new HBox(10, titleLabel, yearMonthComboBox);
 		headerBox.setAlignment(Pos.CENTER_LEFT);
 		headerBox.setPadding(new Insets(0,0,10,0));
@@ -73,7 +71,7 @@ public class BudgetCardContainerBuilder implements Builder<Region> {
 		return headerBox;
 	}
 	
-	private Node createScrollPane() {
+	private ScrollPane createScrollPane() {
 		cardsContainer = new HBox();
 		cardsContainer.setSpacing(16);
 		cardsContainer.setPadding(new Insets(5));

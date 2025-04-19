@@ -16,9 +16,12 @@ import javafx.util.Builder;
 public class BudgetOverviewBuilder implements Builder<Region> {
 	
 	private final BudgetOverviewMod viewModel;
+	private final Runnable createBudgetHandler;
 	
-	public BudgetOverviewBuilder(BudgetOverviewMod viewModel) {
+	
+	public BudgetOverviewBuilder(BudgetOverviewMod viewModel, Runnable createBudgetHandler) {
 		this.viewModel = viewModel;
+		this.createBudgetHandler = createBudgetHandler;
 	}
 	
 	@Override
@@ -29,15 +32,21 @@ public class BudgetOverviewBuilder implements Builder<Region> {
 		
 		Node topSection = createTopSection();
 		mainPane.setTop(topSection);
-		BudgetCardContainerBuilder cardContainerBuilder = new BudgetCardContainerBuilder(viewModel);
 		
-		Node cardContainer = createCardContainer();
-		mainPane.setCenter(cardContainer);
+		BudgetCardContainerBuilder cardContainerBuilder = new BudgetCardContainerBuilder(viewModel);
+		Node comboBoxHeader = cardContainerBuilder.buildHeaderBox();
+		
+		Node cardContainer = createCardContainer(cardContainerBuilder);
+		
+		VBox centerArea = new VBox(10);
+		centerArea.getChildren().addAll(comboBoxHeader, cardContainer);
+		VBox.setVgrow(comboBoxHeader, Priority.ALWAYS);
+		mainPane.setCenter(centerArea);
 		
 		return mainPane;
 	}
 	
-	private Node createCardContainer() {
+	private Node createCardContainer(BudgetCardContainerBuilder cardContainerBuilder) {
 		StackPane stackPane = new StackPane();
 		stackPane.setAlignment(Pos.CENTER);
 		
@@ -46,16 +55,14 @@ public class BudgetOverviewBuilder implements Builder<Region> {
 		textLabel.getStyleClass().add("label");
 		
 		Button createBudgetButton = new Button("Create Budget");
-		createBudgetButton.setOnAction(e -> {
-			System.out.println("Create budget");
-		});
+		createBudgetButton.setOnAction(e -> createBudgetHandler.run());
 		
 		VBox placeholderBox = new VBox(10, textLabel, createBudgetButton);
 		placeholderBox.setAlignment(Pos.CENTER);
 		placeholderBox.visibleProperty().bind(Bindings.not(viewModel.budgetExistsProperty()));
 		placeholderBox.managedProperty().bind(placeholderBox.visibleProperty());
 		
-		BudgetCardContainerBuilder cardContainerBuilder = new BudgetCardContainerBuilder(viewModel);
+		
 		Region cardRegion = cardContainerBuilder.build();
 		
 		cardRegion.visibleProperty().bind(viewModel.budgetExistsProperty());
