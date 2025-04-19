@@ -25,6 +25,9 @@ public class BudgetInteractor {
 		this.budgetService = budgetService;
 		this.transactionService = transactionService;
 		updateBudgetMap();
+		addListenerOnModSelectedYearMonth();
+		loadBudgetForMonth(budgetOverviewModel.getSelectedYearMonth());
+		
 	}
 	
 	private void updateBudgetMap() {
@@ -44,7 +47,16 @@ public class BudgetInteractor {
 	
 	private void loadBudgetForMonth(YearMonth yearMonth) {
 		if (!yearMonthBudgetWithCategoriesMap.containsKey(yearMonth)) {
-			System.out.println("No budget found for " + yearMonth);
+			updateBudgetMap();
+			if (!yearMonthBudgetWithCategoriesMap.containsKey(yearMonth)) {
+				System.out.println("No budget found for " + yearMonth);
+				budgetOverviewModel.getCategoryCards().removeAll();
+				budgetOverviewModel.setTotalAllocated(0.0);
+				budgetOverviewModel.setTotalSpent(0.0);
+				budgetOverviewModel.setBudgetName(yearMonth.getMonth().toString());
+				budgetOverviewModel.setBudgetId(null);
+			}
+			
 		}
 		else {
 			BudgetService.BudgetWithCategories budgetWithCategories = yearMonthBudgetWithCategoriesMap.get(yearMonth);

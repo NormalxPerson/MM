@@ -38,7 +38,7 @@ public class BudgetSystemTest {
 	void setUp() {
 		// Set up test data
 		String monthName = YearMonth.now().getMonth().toString();
-		testBudget = new Budget(monthName + " Budget", YearMonth.now());
+		testBudget = new Budget(YearMonth.now());
 		testCategory = new BudgetCategory(testBudget.getBudgetId(), "Groceries", "Food and household items", 500.0);
 		
 		testCategories = new ArrayList<>();
@@ -55,7 +55,7 @@ public class BudgetSystemTest {
 		String budgetName = "APRIL Budget";
 		YearMonth yearMonth = YearMonth.now();
 		
-		Budget budget = new Budget(budgetName, yearMonth);
+		Budget budget = new Budget(YearMonth.now());
 		
 		assertNotNull(budget);
 		assertNotNull(budget.getBudgetId());
@@ -110,8 +110,8 @@ public class BudgetSystemTest {
 	@Test
 	void testBudgetEquality() {
 		// Test that Budget equals() and hashCode() work correctly
-		Budget budget1 = new Budget("Same ID Budget", YearMonth.now());
-		Budget budget2 = new Budget("Different Name Budget", YearMonth.now().plusMonths(1));
+		Budget budget1 = new Budget(YearMonth.now());
+		Budget budget2 = new Budget(YearMonth.now().plusMonths(1));
 		
 		// Use reflection to set same ID for testing equals
 		try {

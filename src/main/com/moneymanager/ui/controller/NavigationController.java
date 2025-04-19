@@ -4,6 +4,7 @@ import com.moneymanager.service.AccountService;
 import com.moneymanager.service.BudgetService;
 import com.moneymanager.service.TransactionService;
 import com.moneymanager.ui.event.FormEvent;
+import com.moneymanager.ui.view.BudgetOverviewBuilder;
 import com.moneymanager.ui.view.FloatingActionButton;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -17,6 +18,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 
 import java.io.IOException;
@@ -145,17 +147,20 @@ public class NavigationController implements Initializable{
 		transactionsController.setTransactionService(transactionService);
 		transactionsController.setFloatingActionButton(this.fab);
 		this.viewManager.registerView(transactionsButton.getUserData().toString(), transactionsController.getTransactionContainer(), transactionsController);
-
-		FXMLLoader loader3 = new FXMLLoader(getClass().getResource("/budgetView.fxml"));
-		Parent budgetView = null;
-		try {
-			budgetView = loader3.load();
-		} catch (IOException e) { e.printStackTrace(); }
-		BudgetViewController budgetViewController = loader3.getController();
-		budgetViewController.setBudgetCategoryService(budgetService);
-		this.viewManager.registerView(budgetButton.getUserData().toString(), budgetViewController.getBudgetContainer(), budgetViewController);
+		
+		setUpBudgetController();
 		
 		accountsButton.setSelected(true);
+	}
+	
+	public void setUpBudgetController() {
+		try {
+			BudgetOverviewController budController = new BudgetOverviewController(budgetService, transactionService);
+			
+			Region budgetView = budController.getView();
+			String budgetViewName = budgetButton.getUserData().toString();
+			this.viewManager.registerView(budgetViewName, budgetView, budController);
+		} catch (Exception e) { System.err.println("failed to load BudgetOverviewController: " + e.getMessage() ); }
 	}
 
 	

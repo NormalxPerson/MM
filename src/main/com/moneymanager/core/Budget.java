@@ -10,16 +10,21 @@ public class Budget {
 	// YearMonth = YYYY-MM
 	private YearMonth yearMonth;
 	
-	public Budget(String budgetName, YearMonth yearMonth) {
+	public Budget(YearMonth yearMonth) {
 		this.budgetId = UUID.randomUUID().toString();
-		this.budgetName = budgetName;
 		this.yearMonth = yearMonth;
+		generateBudgetName(yearMonth);
 	}
 	
 	public Budget(String budgetId, String budgetName, YearMonth yearMonth) {
 		this.budgetId = budgetId;
 		this.budgetName = budgetName;
 		this.yearMonth = yearMonth;
+	}
+	
+	private void generateBudgetName(YearMonth yearMonth) {
+		this.budgetName = yearMonth.getMonth().toString();
+		
 	}
 	
 	public String getBudgetId() {

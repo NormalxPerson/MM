@@ -28,6 +28,7 @@ public class BudgetService {
 		this.budgetRepo = budgetRepo;
 		this.budgetCategoryRepo = budgetCategoryRepo;
 		this.transactionRepo = transactionRepo;
+		
 	}
 	
 	public void createBudgetCategoryFromInput(String budgetId, String categoryName, String categoryDescription, Double allocatedAmount ) {
@@ -35,8 +36,8 @@ public class BudgetService {
 		budgetCategoryRepo.addBudgetCategory(newCategory);
 	}
 	
-	public Budget createBudget(String budgetName, YearMonth yearMonth) {
-		Budget newBudget = new Budget(budgetName, yearMonth);
+	public Budget createBudget(YearMonth yearMonth) {
+		Budget newBudget = new Budget(yearMonth);
 		budgetRepo.addBudgetAndReturnId(newBudget);
 		System.out.print(newBudget.getBudgetId() + newBudget.getBudgetName() + newBudget.getYearMonth());
 		return newBudget;
