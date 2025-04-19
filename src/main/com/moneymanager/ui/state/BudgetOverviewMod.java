@@ -1,7 +1,8 @@
 package com.moneymanager.ui.state;
 
-import com.moneymanager.service.BudgetService;
 import com.moneymanager.ui.model.BudgetCategoryCard;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,9 +15,13 @@ public class BudgetOverviewMod {
 	private ObservableList<BudgetCategoryCard> categoryCards = FXCollections.observableArrayList();
 	private DoubleProperty totalAllocated = new SimpleDoubleProperty();
 	private DoubleProperty totalSpent = new SimpleDoubleProperty();
-	private StringProperty budgetName = new SimpleStringProperty("");
-	private StringProperty budgetId = new SimpleStringProperty("");
-	
+	private StringProperty budgetName = new SimpleStringProperty();
+	private StringProperty budgetId = new SimpleStringProperty();
+	private ReadOnlyBooleanWrapper budgetExistsWrapper = new ReadOnlyBooleanWrapper();
+	{
+		budgetExistsWrapper.bind(Bindings.isNotEmpty(budgetId));
+	}
+	private ReadOnlyBooleanProperty budgetExists = budgetExistsWrapper.getReadOnlyProperty();
 	
 	
 	
@@ -43,4 +48,8 @@ public class BudgetOverviewMod {
 	public StringProperty getBudgetId() { return budgetId; }
 	public void setBudgetId(String budgetId) { this.budgetId.set(budgetId); }
 	
+	public ReadOnlyBooleanProperty budgetExistsProperty() {
+		return budgetExists;
+	}
+	public Boolean budgetExists() { return budgetExists.get(); }
 }

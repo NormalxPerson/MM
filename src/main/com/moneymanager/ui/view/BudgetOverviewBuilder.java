@@ -3,9 +3,12 @@ package com.moneymanager.ui.view;
 import com.moneymanager.ui.state.BudgetOverviewMod;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
 import javafx.util.Builder;
@@ -26,12 +29,40 @@ public class BudgetOverviewBuilder implements Builder<Region> {
 		
 		Node topSection = createTopSection();
 		mainPane.setTop(topSection);
-		
 		BudgetCardContainerBuilder cardContainerBuilder = new BudgetCardContainerBuilder(viewModel);
-		Region cardContainer = cardContainerBuilder.build();
+		
+		Node cardContainer = createCardContainer();
 		mainPane.setCenter(cardContainer);
 		
 		return mainPane;
+	}
+	
+	private Node createCardContainer() {
+		StackPane stackPane = new StackPane();
+		stackPane.setAlignment(Pos.CENTER);
+		
+		Label textLabel = new Label();
+		textLabel.textProperty().bind(Bindings.concat("No Budget has been created for ", viewModel.getBudgetName()));
+		textLabel.getStyleClass().add("label");
+		
+		Button createBudgetButton = new Button("Create Budget");
+		createBudgetButton.setOnAction(e -> {
+			System.out.println("Create budget");
+		});
+		
+		VBox placeholderBox = new VBox(10, textLabel, createBudgetButton);
+		placeholderBox.setAlignment(Pos.CENTER);
+		placeholderBox.visibleProperty().bind(Bindings.not(viewModel.budgetExistsProperty()));
+		placeholderBox.managedProperty().bind(placeholderBox.visibleProperty());
+		
+		BudgetCardContainerBuilder cardContainerBuilder = new BudgetCardContainerBuilder(viewModel);
+		Region cardRegion = cardContainerBuilder.build();
+		
+		cardRegion.visibleProperty().bind(viewModel.budgetExistsProperty());
+		cardRegion.managedProperty().bind(cardRegion.visibleProperty());
+		
+		stackPane.getChildren().addAll(cardRegion, placeholderBox);
+		return stackPane;
 	}
 	
 	private Node createTopSection() {
@@ -51,6 +82,9 @@ public class BudgetOverviewBuilder implements Builder<Region> {
 		Label remainingLabel = createRemainingLabel();
 		
 		summaryBox.getChildren().setAll(allocatedLabel, spentLabel, remainingLabel);
+		summaryBox.visibleProperty().bind(viewModel.budgetExistsProperty());
+		summaryBox.managedProperty().bind(viewModel.budgetExistsProperty());
+		
 		topSection.getChildren().addAll(budgetNameLabel, summaryBox);
 		
 		return topSection;

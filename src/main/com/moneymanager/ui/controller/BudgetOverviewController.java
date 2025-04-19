@@ -14,6 +14,7 @@ public class BudgetOverviewController implements BaseViewController {
 	private final BudgetOverviewMod budgetOverviewModel;
 	private final BudgetInteractor budgetInteractor;
 	private final BudgetOverviewBuilder budgetOverviewBuilder;
+	private final Region budgetRegion;
 	
 	public BudgetOverviewController(BudgetService budgetService, TransactionService transactionService) {
 		this.budgetOverviewModel = new BudgetOverviewMod();

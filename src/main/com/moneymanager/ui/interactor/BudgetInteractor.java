@@ -66,7 +66,6 @@ public class BudgetInteractor {
 				categoryCards.add(BudgetCategoryCard.fromModel(categoryModel));
 			}
 			
-			
 			budgetOverviewModel.setCategoryCards(categoryCards);
 			budgetOverviewModel.setTotalAllocated(budgetWithCategories.getTotalAllocatedAmount());
 			budgetOverviewModel.setTotalSpent(budgetWithCategories.getTotalSpentAmount());
@@ -74,5 +73,12 @@ public class BudgetInteractor {
 			budgetOverviewModel.setBudgetId(budget.getBudgetId());
 			
 		}
+	}
+	
+	public Budget createBudget(YearMonth yearMonth) {
+		Budget newBudget = budgetService.createBudget(yearMonth);
+		updateBudgetMap();
+		loadBudgetForMonth(newBudget.getYearMonth());
+		return newBudget;
 	}
 }
