@@ -10,6 +10,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.*;
 import javafx.util.Builder;
 
@@ -30,23 +31,18 @@ public class BudgetOverviewBuilder implements Builder<Region> {
 		mainPane.setPadding(new Insets(10));
 		mainPane.setStyle("-fx-background-color: -fx-md3-background-color;");
 		
-		Node topSection = createTopSection();
+		BudgetCardContainerBuilder cardContainerBuilder = new BudgetCardContainerBuilder(viewModel);
+		
+		Node topSection = createTopSection(cardContainerBuilder);
 		mainPane.setTop(topSection);
 		
-		BudgetCardContainerBuilder cardContainerBuilder = new BudgetCardContainerBuilder(viewModel);
-		Node comboBoxHeader = cardContainerBuilder.buildHeaderBox();
-		
-		Node cardContainer = createCardContainer(cardContainerBuilder);
-		
-		VBox centerArea = new VBox(10);
-		centerArea.getChildren().addAll(comboBoxHeader, cardContainer);
-		VBox.setVgrow(comboBoxHeader, Priority.ALWAYS);
-		mainPane.setCenter(centerArea);
+		Node centerStackPane = createCenterStackPane(cardContainerBuilder);
+		mainPane.setCenter(centerStackPane);
 		
 		return mainPane;
 	}
 	
-	private Node createCardContainer(BudgetCardContainerBuilder cardContainerBuilder) {
+	private Node createCenterStackPane(BudgetCardContainerBuilder cardContainerBuilder) {
 		StackPane stackPane = new StackPane();
 		stackPane.setAlignment(Pos.CENTER);
 		
@@ -62,17 +58,17 @@ public class BudgetOverviewBuilder implements Builder<Region> {
 		placeholderBox.visibleProperty().bind(Bindings.not(viewModel.budgetExistsProperty()));
 		placeholderBox.managedProperty().bind(placeholderBox.visibleProperty());
 		
+		ScrollPane cardScrollPane = (ScrollPane) cardContainerBuilder.build();
 		
-		Region cardRegion = cardContainerBuilder.build();
 		
-		cardRegion.visibleProperty().bind(viewModel.budgetExistsProperty());
-		cardRegion.managedProperty().bind(cardRegion.visibleProperty());
+		cardScrollPane.visibleProperty().bind(viewModel.budgetExistsProperty());
+		cardScrollPane.managedProperty().bind(cardScrollPane.visibleProperty());
 		
-		stackPane.getChildren().addAll(cardRegion, placeholderBox);
+		stackPane.getChildren().addAll(cardScrollPane, placeholderBox);
 		return stackPane;
 	}
 	
-	private Node createTopSection() {
+	private Node createTopSection(BudgetCardContainerBuilder cardContainerBuilder) {
 		VBox topSection = new VBox(10);
 		topSection.setPadding(new Insets(5,0,15,0));
 		topSection.setAlignment(Pos.CENTER);
@@ -90,9 +86,12 @@ public class BudgetOverviewBuilder implements Builder<Region> {
 		
 		summaryBox.getChildren().setAll(allocatedLabel, spentLabel, remainingLabel);
 		summaryBox.visibleProperty().bind(viewModel.budgetExistsProperty());
-		summaryBox.managedProperty().bind(viewModel.budgetExistsProperty());
+		summaryBox.managedProperty().bind(summaryBox.visibleProperty());
 		
-		topSection.getChildren().addAll(budgetNameLabel, summaryBox);
+		Node comboBoxHeader = cardContainerBuilder.buildHeaderBox();
+		VBox.setMargin(comboBoxHeader, new Insets(5,0,0,0));
+		
+		topSection.getChildren().addAll(budgetNameLabel, summaryBox, comboBoxHeader);
 		
 		return topSection;
 	}
