@@ -7,6 +7,7 @@ import com.moneymanager.ui.model.BudgetCategoryCard;
 import com.moneymanager.ui.model.BudgetCategoryModel;
 import com.moneymanager.ui.state.BudgetOverviewMod;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 
 import java.time.YearMonth;
 import java.util.ArrayList;
@@ -61,11 +62,11 @@ public class BudgetInteractor {
 		else {
 			BudgetService.BudgetWithCategories budgetWithCategories = yearMonthBudgetWithCategoriesMap.get(yearMonth);
 			Budget budget = budgetWithCategories.getBudget();
-			List<BudgetCategoryCard> categoryCards = new ArrayList<>();
+			List<Node> categoryCards = new ArrayList<>();
 			for (BudgetCategoryModel categoryModel : budgetWithCategories.getCategories()) {
 				categoryCards.add(BudgetCategoryCard.fromModel(categoryModel));
 			}
-			
+			categoryCards.add(budgetOverviewModel.getCategoryCreationCard());
 			budgetOverviewModel.setCategoryCards(categoryCards);
 			budgetOverviewModel.setTotalAllocated(budgetWithCategories.getTotalAllocatedAmount());
 			budgetOverviewModel.setTotalSpent(budgetWithCategories.getTotalSpentAmount());
@@ -74,6 +75,10 @@ public class BudgetInteractor {
 			
 		}
 	}
+	
+/*	public BudgetCategoryCard createBudgetCategory(BudgetCategoryModel categoryModel) {
+	
+	}*/
 	
 	public Budget createBudget() {
 		updateBudgetMap();

@@ -7,10 +7,13 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
 public class BudgetCategoryCard extends VBox {
@@ -182,5 +185,28 @@ public class BudgetCategoryCard extends VBox {
 				Bindings.divide(card.spentAmount,card.allocatedAmount));
 		}
 		return card;
+	}
+	
+	public static Node createAddBudgetCategoryCard(Runnable createBudgetCategoryHandler) {
+		StackPane pane = new StackPane();
+		pane.setAlignment(Pos.CENTER);
+		pane.getStyleClass().add("budget-category-card");
+		pane.getStyleClass().add("md3-rounded-medium");
+		
+		BudgetCategoryCard fakeCard = new BudgetCategoryCard();
+		fakeCard.setVisible(false);
+		
+		Label createNewCategoryLabel = new Label("Create new category?");
+		createNewCategoryLabel.getStyleClass().add("label");
+		
+		Button createNewCategoryButton = new Button("+");
+		createNewCategoryButton.getStyleClass().add("create-category-button");
+		createNewCategoryButton.setOnAction(e -> createBudgetCategoryHandler.run());
+		
+		VBox vbox = new VBox(10, createNewCategoryLabel, createNewCategoryButton);
+		vbox.setAlignment(Pos.CENTER);
+		
+		pane.getChildren().addAll(fakeCard, vbox);
+		return pane;
 	}
 }

@@ -6,13 +6,14 @@ import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.Node;
 
 import java.time.YearMonth;
 import java.util.List;
 
 public class BudgetOverviewMod {
 	private ObjectProperty<YearMonth> selectedYearMonth = new SimpleObjectProperty<>(YearMonth.now());
-	private ObservableList<BudgetCategoryCard> categoryCards = FXCollections.observableArrayList();
+	private ObservableList<Node> categoryCards = FXCollections.observableArrayList();
 	private DoubleProperty totalAllocated = new SimpleDoubleProperty();
 	private DoubleProperty totalSpent = new SimpleDoubleProperty();
 	private StringProperty budgetName = new SimpleStringProperty();
@@ -22,17 +23,18 @@ public class BudgetOverviewMod {
 		budgetExistsWrapper.bind(Bindings.isNotEmpty(budgetId));
 	}
 	private ReadOnlyBooleanProperty budgetExists = budgetExistsWrapper.getReadOnlyProperty();
+	private Node categoryCreationCard;
 	
 	
 	
-	
-	
+	public void setCategoryCreationCard(Node card) { this.categoryCreationCard = card; }
+	public Node getCategoryCreationCard() { return categoryCreationCard; }
 	public YearMonth getSelectedYearMonth() { return selectedYearMonth.get(); }
 	public void setSelectedYearMonth(YearMonth selectedYearMonth) { this.selectedYearMonth.set(selectedYearMonth); }
 	public ObjectProperty<YearMonth> selectedYearMonthProperty() { return selectedYearMonth; }
 	
-	public ObservableList<BudgetCategoryCard> getCategoryCards() { return categoryCards; }
-	public void setCategoryCards(List<BudgetCategoryCard> categoryCards) {
+	public ObservableList<Node> getCategoryCards() { return categoryCards; }
+	public void setCategoryCards(List<Node> categoryCards) {
 		this.categoryCards.setAll(categoryCards);
 	}
 	
