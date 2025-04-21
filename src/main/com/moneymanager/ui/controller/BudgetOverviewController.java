@@ -18,9 +18,9 @@ public class BudgetOverviewController implements BaseViewController {
 	
 	public BudgetOverviewController(BudgetService budgetService, TransactionService transactionService) {
 		this.budgetOverviewModel = new BudgetOverviewMod();
+		createAddBudgetCatCard();
 		this.budgetInteractor = new BudgetInteractor(budgetOverviewModel, budgetService, transactionService);
 		this.budgetOverviewBuilder = new BudgetOverviewBuilder(budgetOverviewModel, budgetInteractor::createBudget);
-		createAddBudgetCatCard();
 	}
 	
 	public Region getView() {

@@ -38,7 +38,6 @@ public class BudgetOverviewBuilder implements Builder<Region> {
 		
 		Node centerStackPane = createCenterStackPane(cardContainerBuilder);
 		mainPane.setCenter(centerStackPane);
-		
 		return mainPane;
 	}
 	

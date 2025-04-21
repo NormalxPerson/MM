@@ -51,7 +51,8 @@ public class BudgetInteractor {
 			updateBudgetMap();
 			if (!yearMonthBudgetWithCategoriesMap.containsKey(yearMonth)) {
 				System.out.println("No budget found for " + yearMonth);
-				budgetOverviewModel.getCategoryCards().removeAll();
+				budgetOverviewModel.getCategoryCards().clear();
+				budgetOverviewModel.getCategoryCards().add(budgetOverviewModel.getCategoryCreationCard());
 				budgetOverviewModel.setTotalAllocated(0.0);
 				budgetOverviewModel.setTotalSpent(0.0);
 				budgetOverviewModel.setBudgetName(yearMonth.getMonth().toString());
