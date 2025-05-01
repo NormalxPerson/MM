@@ -28,8 +28,11 @@ public class BudgetOverviewBuilder implements Builder<Region> {
 	@Override
 	public Region build() {
 		BorderPane mainPane = new BorderPane();
+		
+		mainPane.setStyle("-fx-border-color: red; -fx-border-width: 2; -fx-background-color: -fx-md3-background-color;");
+		
 		mainPane.setPadding(new Insets(10));
-		mainPane.setStyle("-fx-background-color: -fx-md3-background-color;");
+		mainPane.setStyle("-fx-background-color: green -fx-md3-background-color;");
 		
 		BudgetCardContainerBuilder cardContainerBuilder = new BudgetCardContainerBuilder(viewModel);
 		
@@ -38,12 +41,17 @@ public class BudgetOverviewBuilder implements Builder<Region> {
 		
 		Node centerStackPane = createCenterStackPane(cardContainerBuilder);
 		mainPane.setCenter(centerStackPane);
+		BorderPane.setMargin(centerStackPane, new Insets(0));
 		return mainPane;
 	}
 	
 	private Node createCenterStackPane(BudgetCardContainerBuilder cardContainerBuilder) {
 		StackPane stackPane = new StackPane();
+		
+		stackPane.setStyle("-fx-border-color: blue; -fx-border-width: 2;"); // Add border
+		
 		stackPane.setAlignment(Pos.CENTER);
+		stackPane.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		
 		Label textLabel = new Label();
 		textLabel.textProperty().bind(Bindings.concat("No Budget has been created for ", viewModel.getBudgetName()));
@@ -56,14 +64,15 @@ public class BudgetOverviewBuilder implements Builder<Region> {
 		placeholderBox.setAlignment(Pos.CENTER);
 		placeholderBox.visibleProperty().bind(Bindings.not(viewModel.budgetExistsProperty()));
 		placeholderBox.managedProperty().bind(placeholderBox.visibleProperty());
-		
-		ScrollPane cardScrollPane = (ScrollPane) cardContainerBuilder.build();
-		
+		HBox.setHgrow(placeholderBox, Priority.ALWAYS);
+		ScrollPane cardScrollPane = cardContainerBuilder.build();
 		
 		cardScrollPane.visibleProperty().bind(viewModel.budgetExistsProperty());
 		cardScrollPane.managedProperty().bind(cardScrollPane.visibleProperty());
 		
+		HBox.setHgrow(cardScrollPane, Priority.ALWAYS);
 		stackPane.getChildren().addAll(cardScrollPane, placeholderBox);
+		
 		return stackPane;
 	}
 	
@@ -91,7 +100,6 @@ public class BudgetOverviewBuilder implements Builder<Region> {
 		VBox.setMargin(comboBoxHeader, new Insets(5,0,0,0));
 		
 		topSection.getChildren().addAll(budgetNameLabel, summaryBox, comboBoxHeader);
-		
 		return topSection;
 	}
 	

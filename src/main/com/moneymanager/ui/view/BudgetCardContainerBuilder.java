@@ -1,6 +1,5 @@
 package com.moneymanager.ui.view;
 
-import com.moneymanager.ui.model.BudgetCategoryCard;
 import com.moneymanager.ui.state.BudgetOverviewMod;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
@@ -11,10 +10,7 @@ import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.util.Builder;
 import javafx.util.StringConverter;
 
@@ -23,10 +19,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BudgetCardContainerBuilder implements Builder<Region> {
+public class BudgetCardContainerBuilder implements Builder<ScrollPane> {
 	
 	private final BudgetOverviewMod viewModel;
-	private HBox cardsContainer;
 	private ComboBox<YearMonth> yearMonthComboBox;
 	
 	private static final DateTimeFormatter MMMM_YY_FORMATTER = DateTimeFormatter.ofPattern("MMMM yy");
@@ -39,18 +34,13 @@ public class BudgetCardContainerBuilder implements Builder<Region> {
 	}
 	
 	@Override
-	public Region build() {
+	public ScrollPane build() {
 /*		VBox mainContainer = new VBox();
 		mainContainer.setSpacing(10);
 		mainContainer.setPadding(new Insets(15));*/
 		
 		
-		ScrollPane scrollPane = createScrollPane();
-		VBox.setVgrow(scrollPane, Priority.ALWAYS);
-		HBox.setHgrow(scrollPane, Priority.ALWAYS);
-		
-		
-		return scrollPane;
+		return createScrollPane();
 	}
 	
 	public Node buildHeaderBox() {
@@ -72,23 +62,31 @@ public class BudgetCardContainerBuilder implements Builder<Region> {
 	}
 	
 	private ScrollPane createScrollPane() {
-		cardsContainer = new HBox();
-		cardsContainer.setSpacing(16);
-		cardsContainer.setPadding(new Insets(5));
-		cardsContainer.setAlignment(Pos.CENTER_LEFT);
+		FlowPane cardsContainer = new FlowPane();
+		cardsContainer.setPadding(new Insets(5,0,5,0));
+		cardsContainer.setHgap(6);
+		cardsContainer.setVgap(6);
+		cardsContainer.setMaxWidth(Double.MAX_VALUE);
+		
 		
 		Bindings.bindContent(cardsContainer.getChildren(),viewModel.getCategoryCards());
 		
 		ScrollPane scrollPane = new ScrollPane(cardsContainer);
-		scrollPane.setFitToHeight(true);
-		scrollPane.setFitToWidth(true);
-		scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-		scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-		scrollPane.setPannable(true);
 		
-		scrollPane.setStyle("-background-color: -fx-md3-surface-color; -fx-background: -fx-md3-surface-color;");
-		cardsContainer.setStyle("-fx-background-color: transparent;");
+		//scrollPane.setFitToHeight(true);
+		//scrollPane.setFitToWidth(true);
+		//scrollPane.setPrefViewportHeight(Double.MAX_VALUE);
+		//scrollPane.setPrefViewportWidth(Double.MAX_VALUE);
+		//scrollPane.setMaxHeight(Double.MAX_VALUE);
+		//scrollPane.setMaxWidth(Double.MAX_VALUE);
+		//scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+		//scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+		scrollPane.setPannable(false);
 		
+		
+		//scrollPane.setStyle("-background-color: -fx-md3-surface-color; -fx-background: -fx-md3-surface-color;");
+		//cardsContainer.setStyle("-fx-background-color: transparent;");
+		scrollPane.setStyle("-fx-border-color: green; -fx-border-width: 2; -fx-background-color: -fx-md3-surface-color; -fx-background: -fx-md3-surface-color;"); // Add border
 		return scrollPane;
 	}
 	

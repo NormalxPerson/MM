@@ -46,24 +46,25 @@ public class BudgetInteractor {
 		});
 	}
 	
-	private void loadBudgetForMonth(YearMonth yearMonth) {
+	public void loadBudgetForMonth(YearMonth yearMonth) {
+		updateBudgetMap();
+		List<BudgetCategoryCard> categoryCards = new ArrayList<>();
+		
 		if (!yearMonthBudgetWithCategoriesMap.containsKey(yearMonth)) {
-			updateBudgetMap();
-			if (!yearMonthBudgetWithCategoriesMap.containsKey(yearMonth)) {
 				System.out.println("No budget found for " + yearMonth);
-				budgetOverviewModel.getCategoryCards().clear();
-				budgetOverviewModel.getCategoryCards().add(budgetOverviewModel.getCategoryCreationCard());
+				categoryCards.add(budgetOverviewModel.getCategoryCreationCard());
+				budgetOverviewModel.setCategoryCards(categoryCards);
+				//budgetOverviewModel.getCategoryCards().add(budgetOverviewModel.getCategoryCreationCard());
 				budgetOverviewModel.setTotalAllocated(0.0);
 				budgetOverviewModel.setTotalSpent(0.0);
 				budgetOverviewModel.setBudgetName(yearMonth.getMonth().toString());
 				budgetOverviewModel.setBudgetId(null);
-			}
-			
 		}
+			
+		
 		else {
 			BudgetService.BudgetWithCategories budgetWithCategories = yearMonthBudgetWithCategoriesMap.get(yearMonth);
 			Budget budget = budgetWithCategories.getBudget();
-			List<Node> categoryCards = new ArrayList<>();
 			for (BudgetCategoryModel categoryModel : budgetWithCategories.getCategories()) {
 				categoryCards.add(BudgetCategoryCard.fromModel(categoryModel));
 			}

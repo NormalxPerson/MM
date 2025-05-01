@@ -16,10 +16,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.ToggleGroup;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -65,7 +62,7 @@ public class NavigationController implements Initializable{
 		this.fab = FloatingActionButton.getInstance();
 		
 		BorderPane.setMargin(contentArea, new Insets(5));
-		
+		HBox.setHgrow(contentArea, Priority.ALWAYS);
 		//Adding Event Handler to Content Area.
 		
 		contentArea.addEventHandler(FormEvent.DELETEACCOUNT, this::handleDeleteAccountEvent);
@@ -93,6 +90,7 @@ public class NavigationController implements Initializable{
 				String viewName = newToggle.getUserData().toString();
 				// Switch the view using the ViewManager.
 				viewManager.switchTo(viewName);
+				HBox.setHgrow(contentArea, Priority.ALWAYS);
 			}
 			// Optionally, show the FAB when switching views.
 		});

@@ -62,7 +62,7 @@ public class BudgetCategoryCard extends VBox {
 		
 		// Progress section
 		progressBar = new ProgressBar();
-		progressBar.setPrefWidth(Double.MAX_VALUE);
+		progressBar.setPrefWidth(150);
 		
 		progressLabel = new Label();
 		progressLabel.getStyleClass().add("percentage-label");
@@ -70,7 +70,6 @@ public class BudgetCategoryCard extends VBox {
 		HBox progressBox = new HBox(progressBar, progressLabel);
 		progressBox.setAlignment(Pos.CENTER_LEFT);
 		HBox.setMargin(progressLabel, new Insets(0, 0, 0, 8));
-		HBox.setHgrow(progressBar, Priority.ALWAYS);
 		
 		// Put it all together
 		this.getChildren().addAll(nameBox, amountBox, remainingBox, progressBox);
@@ -104,6 +103,8 @@ public class BudgetCategoryCard extends VBox {
 		
 		updateRemainingColor();
 		updateProgressColor();
+		
+		this.setStyle("-fx-border-color: green; -fx-border-width: 2; -fx-background-color: -fx-md3-surface-color; -fx-background: -fx-md3-surface-color;");
 	}
 	
 	private void updateRemainingColor() {
@@ -129,6 +130,7 @@ public class BudgetCategoryCard extends VBox {
 			progressBar.setStyle("-fx-accent: #2ecc71;"); // Green if under budget
 		}
 	}
+	
 	
 	public String getCategoryId() { return categoryId.get(); }
 	public void setCategoryId(String id) { this.categoryId.set(id); }
@@ -184,17 +186,16 @@ public class BudgetCategoryCard extends VBox {
 		if (card.allocatedAmount.get() > 0.0) { card.progress.bind (
 				Bindings.divide(card.spentAmount,card.allocatedAmount));
 		}
+		card.setStyle("-fx-border-color: green; -fx-border-width: 2; -fx-background-color: -fx-md3-surface-color; -fx-background: -fx-md3-surface-color;");
+		
 		return card;
 	}
 	
-	public static Node createAddBudgetCategoryCard(Runnable createBudgetCategoryHandler) {
-		StackPane pane = new StackPane();
-		pane.setAlignment(Pos.CENTER);
-		pane.getStyleClass().add("budget-category-card");
-		pane.getStyleClass().add("md3-rounded-medium");
+	public static BudgetCategoryCard createAddBudgetCategoryCard(Runnable createBudgetCategoryHandler) {
+		BudgetCategoryCard creationCard = new BudgetCategoryCard();
+		creationCard.getChildren().clear();
 		
-		BudgetCategoryCard fakeCard = new BudgetCategoryCard();
-		fakeCard.setVisible(false);
+		
 		
 		Label createNewCategoryLabel = new Label("Create new category?");
 		createNewCategoryLabel.getStyleClass().add("label");
@@ -206,7 +207,7 @@ public class BudgetCategoryCard extends VBox {
 		VBox vbox = new VBox(10, createNewCategoryLabel, createNewCategoryButton);
 		vbox.setAlignment(Pos.CENTER);
 		
-		pane.getChildren().addAll(fakeCard, vbox);
-		return pane;
+		creationCard.getChildren().addAll(vbox);
+		return creationCard;
 	}
 }

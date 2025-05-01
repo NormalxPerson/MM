@@ -4,12 +4,12 @@ import com.moneymanager.service.AccountService;
 import com.moneymanager.service.TransactionService;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.scene.layout.*;
+
 
 public class ViewManager {
 	private static ViewManager instance;
@@ -66,6 +66,8 @@ public class ViewManager {
 		if (view != null) {
 			mainContainer.getChildren().setAll(view);
 			HBox.setHgrow(view, Priority.ALWAYS);
+			mainContainer.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+			
 		}
 	}
 	
