@@ -18,11 +18,12 @@ public class BudgetOverviewBuilder implements Builder<Region> {
 	
 	private final BudgetOverviewMod viewModel;
 	private final Runnable createBudgetHandler;
+	private final Runnable createCategoryHandler;
 	
-	
-	public BudgetOverviewBuilder(BudgetOverviewMod viewModel, Runnable createBudgetHandler) {
+	public BudgetOverviewBuilder(BudgetOverviewMod viewModel, Runnable createBudgetHandler, Runnable createCategory) {
 		this.viewModel = viewModel;
 		this.createBudgetHandler = createBudgetHandler;
+		this.createCategoryHandler = createCategory;
 	}
 	
 	@Override
@@ -97,9 +98,12 @@ public class BudgetOverviewBuilder implements Builder<Region> {
 		summaryBox.managedProperty().bind(summaryBox.visibleProperty());
 		
 		Node comboBoxHeader = cardContainerBuilder.buildHeaderBox();
+		
+		Button budgetButton = new Button("Create Category");
+		budgetButton.setOnAction(e -> createCategoryHandler.run());
 		VBox.setMargin(comboBoxHeader, new Insets(5,0,0,0));
 		
-		topSection.getChildren().addAll(budgetNameLabel, summaryBox, comboBoxHeader);
+		topSection.getChildren().addAll(budgetNameLabel, summaryBox, comboBoxHeader, budgetButton);
 		return topSection;
 	}
 	

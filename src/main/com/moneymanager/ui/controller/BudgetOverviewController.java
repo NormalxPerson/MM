@@ -9,13 +9,14 @@ import com.moneymanager.ui.model.BudgetCategoryModel;
 import com.moneymanager.ui.state.BudgetOverviewMod;
 import com.moneymanager.ui.validation.FormValidationSupport;
 import com.moneymanager.ui.view.BudgetOverviewBuilder;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.geometry.Insets;
+import javafx.scene.Node;
 import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 
@@ -36,7 +37,7 @@ public class BudgetOverviewController implements BaseViewController {
 		this.budgetOverviewModel = new BudgetOverviewMod();
 		createAddBudgetCatCard();
 		this.budgetInteractor = new BudgetInteractor(budgetOverviewModel, budgetService, transactionService);
-		this.budgetOverviewBuilder = new BudgetOverviewBuilder(budgetOverviewModel, budgetInteractor::createBudget);
+		this.budgetOverviewBuilder = new BudgetOverviewBuilder(budgetOverviewModel, budgetInteractor::createBudget, this::openCategoryCreationDialog);
 	
 		//temp
 		this.budgetService = budgetService;
@@ -56,22 +57,89 @@ public class BudgetOverviewController implements BaseViewController {
 	public void openCategoryCreationDialog() {
 		
 		Dialog<BudgetCategoryModel> categoryCreationDialog = new Dialog<>();
-		categoryCreationDialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
-		Button saveButton = (Button) categoryCreationDialog.getDialogPane().lookupButton(ButtonType.OK);
-
-		VBox labelsAndFields = buildCreationFields(saveButton);
 		categoryCreationDialog.setTitle("Create Budget Category");
-		categoryCreationDialog.setHeaderText("Header Text");
+		categoryCreationDialog.setHeaderText("Create a new budget category");
 		
+		ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+		ButtonType cancelButtonType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+		categoryCreationDialog.getDialogPane().getButtonTypes().addAll(saveButtonType, cancelButtonType);
 		
+		GridPane grid = new GridPane();
+		grid.setHgap(10);
+		grid.setVgap(10);
+		grid.setPadding(new Insets(20, 150, 10, 10));
 		
-		//categoryCreationDialog.getDialogPane().getButtonTypes().addAll( ButtonType.CANCEL);
-		categoryCreationDialog.getDialogPane().setContent(labelsAndFields);
+		TextField categoryNameField = new TextField();
+		TextField categoryDescriptionField = new TextField();
+		TextField allocatedAmountField = new TextField();
 		
-		categoryCreationDialog.show();
+		grid.add(new Label("Category Name"), 0, 0);
+		grid.add(categoryNameField, 1, 0);
+		grid.add(new Label("Category Description"), 0, 1);
+		grid.add(categoryDescriptionField, 1, 1);
+		grid.add(new Label("Allocated Amount:"), 0, 2);
+		grid.add(allocatedAmountField, 1, 2);
+		
+		categoryCreationDialog.getDialogPane().setContent(grid);
+		
+		Node saveButton = categoryCreationDialog.getDialogPane().lookupButton(saveButtonType);
+		saveButton.setDisable(true);
+		
+		BooleanBinding validInput = Bindings.createBooleanBinding(() ->
+						!categoryNameField.getText().trim().isEmpty() &&
+								!allocatedAmountField.getText().trim().isEmpty() &&
+								isValidAmount(allocatedAmountField.getText()),
+				categoryNameField.textProperty(),
+				allocatedAmountField.textProperty());
+		
+		saveButton.disableProperty().bind(validInput.not());
+		
+		categoryCreationDialog.setResultConverter(dialogButton -> {
+			if (dialogButton == saveButtonType) {
+				try {
+					String categoryName = categoryNameField.getText();
+					String categoryDescription = categoryDescriptionField.getText();
+					double allocatedAmount = Double.parseDouble(allocatedAmountField.getText());
+					
+					if (budgetOverviewModel.budgetExists()) {
+						budgetService.createBudgetCategoryFromInput(
+								budgetOverviewModel.getBudgetId().get(),
+								categoryName,
+								categoryDescription,
+								allocatedAmount
+						);
+						budgetInteractor.loadBudgetForMonth(budgetOverviewModel.getSelectedYearMonth());
+						return null;
+					} else {
+						Alert alert = new Alert(Alert.AlertType.WARNING);
+						alert.setTitle("No Budget");
+						alert.setHeaderText("No Budget Exists");
+						alert.setContentText("Please create a budget first before adding categories.");
+						alert.showAndWait();
+					}
+				} catch (NumberFormatException e) {
+					Alert alert = new Alert(Alert.AlertType.ERROR);
+					alert.setTitle("Invalid Amount");
+					alert.setHeaderText("Invalid Amount Format");
+					alert.setContentText("Please enter a valid number for the amount.");
+					alert.showAndWait();
+				}
+			}
+			return null;
+		});
+		categoryCreationDialog.showAndWait();
 		
 		//budgetService.createBudgetCategoryFromInput(budgetOverviewModel.getBudgetId().get(), "food", "description", 50.0);
 		//budgetInteractor.loadBudgetForMonth(YearMonth.now());
+	}
+	
+	private boolean isValidAmount(String text) {
+		try {
+			double amount = Double.parseDouble(text);
+			return amount > 0;
+		} catch (NumberFormatException e) {
+			return false;
+		}
 	}
 	
 	private VBox buildCreationFields(Button saveButton) {
@@ -103,7 +171,6 @@ public class BudgetOverviewController implements BaseViewController {
 		validationSupport.registerValidator(categoryDescriptionField, Validator.createEmptyValidator("Category description cannot be empty"));
 		validationSupport.registerValidator(planedAmountField, Validator.createPredicateValidator(isPositiveDouble, "Must be a positive number"));
 		
-		saveButton.disableProperty().bind(validationSupport.invalidProperty());
 		
 		
 		
