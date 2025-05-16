@@ -15,7 +15,7 @@ public class DatabaseInitializer {
 				accountId INTEGER NOT NULL,
 				categoryId Text NULL,
 				FOREIGN KEY (accountId) REFERENCES accounts(accountId)
-				FOREIGN KEY (categoryId) REFERENCES budget_categories(categoryId) ON DELETE SET NULL
+				FOREIGN KEY (categoryId) REFERENCES categories(categoryId) ON DELETE SET NULL
 			);""";
 	
 	private static final String CREATE_ACCOUNTS_TABLE = """
@@ -40,18 +40,28 @@ public class DatabaseInitializer {
 	
 	private static final String CREATE_BUDGET_TABLE = """
 			CREATE TABLE IF NOT EXISTS budgets (
-				budgetId Text Primary Key not NULL,
-				budgetName Text not NULL,
-				budgetYearMonth Text not NULL UNIQUE
+			budgetId Text Primary Key not NULL,
+			budgetName Text not NULL,
+			budgetYearMonth Text not NULL UNIQUE
 				);"""; // YearMonth as YYYY-MM
 	
-	private static final String CREATE_BUDGET_CATEGORIES = """
-			CREATE TABLE IF NOT EXISTS budget_categories (
-			categoryId Text PRIMARY KEY not NULL,
-			budgetId Text NOT NULL,
+	private static final String CREATE_CATEGORIES_TABLE = """
+			CREATE TABLE IF NOT EXISTS categories (
+			categoryId Text PRIMARY KEY,
+			parentCategoryId Text NULL,
 			categoryName Text NOT NULL,
-			allocatedAmount Integer NOT NULL,
-			FOREIGN KEY (budgetId) REFERENCES budgets(budgetId) on DELETE CASCADE
+			categoryDescription Text NULL,
+			FOREIGN KEY (parentCategoryId) REFERENCES categories(categoryId) ON DELETE SET NULL
+			);""";
+	
+	private static final String CREATE_BUDGET_ALLOCATIONS_TABLE = """
+			CREATE TABLE IF NOT EXISTS budget_allocations (
+			allocation_id TEXT PRIMARY KEY,
+			budgetId TEXT NOT NULL,
+			categoryId TEXT NOT NULL,
+			allocated_amount INTEGER NOT NULL,
+			FOREIGN KEY (budgetId) REFERENCES budgets(budgetId) ON DELETE CASCADE
+			FOREIGN KEY (categoryId) REFERENCES categories(categoryId) ON DELETE CASCADE
 			);""";
 	
 	public static void initializeDatabase(Connection dbConnection) throws SQLException {
@@ -62,7 +72,8 @@ public class DatabaseInitializer {
 			stmt.execute(CREATE_ACCOUNTS_TABLE);
 			stmt.execute(CREATE_CSV_STRATEGIES_TABLE);
 			stmt.execute(CREATE_BUDGET_TABLE);
-			stmt.execute(CREATE_BUDGET_CATEGORIES);
+			stmt.execute(CREATE_CATEGORIES_TABLE);
+			stmt.execute(CREATE_BUDGET_ALLOCATIONS_TABLE);
 			
 			// Enable foreign keys and set busy timeout
 			stmt.execute("PRAGMA foreign_keys = ON");

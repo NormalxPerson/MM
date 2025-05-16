@@ -32,7 +32,7 @@ public class BudgetService {
 	}
 	
 	public void createBudgetCategoryFromInput(String budgetId, String categoryName, String categoryDescription, Double allocatedAmount ) {
-		BudgetCategory newCategory = new BudgetCategory(budgetId, categoryName, categoryDescription, allocatedAmount);
+		BudgetCategory newCategory = new BudgetCategory(budgetId, null, categoryName, categoryDescription);
 		budgetCategoryRepo.addBudgetCategory(newCategory);
 	}
 	
@@ -126,7 +126,7 @@ public class BudgetService {
 				
 				for (BudgetCategory category : rawCategories) {
 					String categoryId = category.getCategoryId();
-					double allocatedAmount = category.getAllocatedAmount();
+					//double allocatedAmount = category.getAllocatedAmount();
 					double spentAmount = categorySpending.getOrDefault(categoryId, 0.0);
 					
 					// Create and add the model

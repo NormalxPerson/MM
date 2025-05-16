@@ -21,16 +21,15 @@ public class SQLBudgetCategoryRepo implements BudgetCategoryRepo {
 	
 	@Override
 	public String addCategoryAndReturnId(BudgetCategory category) {
-		String sql = "INSERT INTO budget_categories (categoryId, budgetId, categoryName, allocatedAmount) VALUES (?, ?, ?, ?)";
-		int allocatedAmountInCents = (int) Math.round(category.getAllocatedAmount() * 100);
+		String sql = "INSERT INTO budget_categories (categoryId, parentCategoryId, categoryName, categoryDescription) VALUES (?, ?, ?, ?)";
 		
 		try (Connection connection = databaseConnection.getConnection();
 		     PreparedStatement stmt = connection.prepareStatement(sql)) {
 			
 			stmt.setString(1, category.getCategoryId());
-			stmt.setString(2, category.getBudgetId());
+			stmt.setString(2, category.getParentCategoryId());
 			stmt.setString(3, category.getCategoryName());
-			stmt.setInt(4, allocatedAmountInCents);
+			stmt.setString(4, category.getDescription());
 			
 			int affectedRows = stmt.executeUpdate();
 			if (affectedRows == 0) {
@@ -81,13 +80,13 @@ public class SQLBudgetCategoryRepo implements BudgetCategoryRepo {
 	
 	private BudgetCategory createCategoryFromResultSet(ResultSet rs) throws SQLException {
 		String categoryId = rs.getString("categoryId");
-		String budgetId = rs.getString("budgetId");
+		String parentCategoryId = rs.getString("parentCategoryId");
 		String categoryName = rs.getString("categoryName");
-		double allocatedAmount = rs.getInt("allocatedAmount") / 100.0;
+		String categoryDescription = rs.getString("categoryDescription");
 		
 		// Create a category instance with description defaulting to empty string
 		// as it's not stored in the database
-		BudgetCategory category = new BudgetCategory(categoryId, budgetId, categoryName, "", allocatedAmount);
+		BudgetCategory category = new BudgetCategory(categoryId, parentCategoryId, categoryName, categoryDescription);
 		
 		
 		return category;

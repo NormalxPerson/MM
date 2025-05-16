@@ -39,12 +39,12 @@ public class BudgetSystemTest {
 		// Set up test data
 		String monthName = YearMonth.now().getMonth().toString();
 		testBudget = new Budget(YearMonth.now());
-		testCategory = new BudgetCategory(testBudget.getBudgetId(), "Groceries", "Food and household items", 500.0);
+		//testCategory = new BudgetCategory(testBudget.getBudgetId(), "Groceries", "Food and household items", 500.0);
 		
 		testCategories = new ArrayList<>();
 		testCategories.add(testCategory);
-		testCategories.add(new BudgetCategory(testBudget.getBudgetId(), "Utilities", "Electricity, water, gas", 200.0));
-		testCategories.add(new BudgetCategory(testBudget.getBudgetId(), "Entertainment", "Movies, games, events", 150.0));
+		//testCategories.add(new BudgetCategory(testBudget.getBudgetId(), "Utilities", "Electricity, water, gas", 200.0));
+		//testCategories.add(new BudgetCategory(testBudget.getBudgetId(), "Entertainment", "Movies, games, events", 150.0));
 	}
 	
 	// ======== MODEL TESTS ========
@@ -70,16 +70,14 @@ public class BudgetSystemTest {
 		String budgetId = testBudget.getBudgetId();
 		String categoryName = "Test Category";
 		String description = "Test description";
-		double amount = 100.0;
 		
-		BudgetCategory category = new BudgetCategory(budgetId, categoryName, description, amount);
+		BudgetCategory category = new BudgetCategory(budgetId, null, categoryName, description);
 		
 		assertNotNull(category);
 		assertNotNull(category.getCategoryId());
-		assertEquals(budgetId, category.getBudgetId());
+		assertEquals(budgetId, category.getCategoryId());
 		assertEquals(categoryName, category.getCategoryName());
 		assertEquals(description, category.getDescription());
-		assertEquals(amount, category.getAllocatedAmount());
 	}
 	
 	@Test
@@ -100,11 +98,9 @@ public class BudgetSystemTest {
 		
 		testCategory.setCategoryName(newName);
 		testCategory.setDescription(newDescription);
-		testCategory.setAllocatedAmount(newAmount);
 		
 		assertEquals(newName, testCategory.getCategoryName());
 		assertEquals(newDescription, testCategory.getDescription());
-		assertEquals(newAmount, testCategory.getAllocatedAmount());
 	}
 	
 	@Test
