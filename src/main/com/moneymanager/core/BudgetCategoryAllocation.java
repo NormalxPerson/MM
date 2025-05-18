@@ -2,20 +2,20 @@ package com.moneymanager.core;
 
 import java.util.UUID;
 
-public class BudgetAllocation {
+public class BudgetCategoryAllocation {
 	private String allocationId;
 	private String budgetId;
 	private String categoryId;
 	private double allocatedAmount;
 	
-	public BudgetAllocation(String budgetId, String categoryId, double allocatedAmount) {
+	public BudgetCategoryAllocation(String budgetId, String categoryId, double allocatedAmount) {
 		this.allocationId = UUID.randomUUID().toString();
 		this.budgetId = budgetId;
 		this.categoryId = categoryId;
 		this.allocatedAmount = allocatedAmount;
 	}
 	
-	public BudgetAllocation(String allocationId, String budgetId, String categoryId, double allocatedAmount) {
+	public BudgetCategoryAllocation(String allocationId, String budgetId, String categoryId, double allocatedAmount) {
 		this.allocationId = allocationId;
 		this.budgetId = budgetId;
 		this.categoryId = categoryId;

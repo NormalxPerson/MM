@@ -6,7 +6,7 @@ import java.sql.Statement;
 
 public class DatabaseInitializer {
 	private static final String CREATE_TRANSACTION_TABLE = """
-			CREATE TABLE IF NOT EXISTS transactions(
+			CREATE TABLE IF NOT EXISTS transactions (
 				transactionId TEXT PRIMARY KEY,
 				transactionDate TEXT NOT NULL,""" /*Stored as YYYY-MM-DD */ + """
 				transactionAmount INTEGER NOT NULL,
@@ -56,10 +56,10 @@ public class DatabaseInitializer {
 	
 	private static final String CREATE_BUDGET_ALLOCATIONS_TABLE = """
 			CREATE TABLE IF NOT EXISTS budget_allocations (
-			allocation_id TEXT PRIMARY KEY,
+			allocationId TEXT PRIMARY KEY,
 			budgetId TEXT NOT NULL,
 			categoryId TEXT NOT NULL,
-			allocated_amount INTEGER NOT NULL,
+			allocatedAmount INTEGER NOT NULL,
 			FOREIGN KEY (budgetId) REFERENCES budgets(budgetId) ON DELETE CASCADE
 			FOREIGN KEY (categoryId) REFERENCES categories(categoryId) ON DELETE CASCADE
 			);""";

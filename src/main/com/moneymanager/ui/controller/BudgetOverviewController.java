@@ -22,6 +22,7 @@ import org.controlsfx.validation.Validator;
 
 import java.net.URL;
 import java.time.YearMonth;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
@@ -77,8 +78,6 @@ public class BudgetOverviewController implements BaseViewController {
 		grid.add(categoryNameField, 1, 0);
 		grid.add(new Label("Category Description"), 0, 1);
 		grid.add(categoryDescriptionField, 1, 1);
-		grid.add(new Label("Allocated Amount:"), 0, 2);
-		grid.add(allocatedAmountField, 1, 2);
 		
 		categoryCreationDialog.getDialogPane().setContent(grid);
 		
@@ -86,11 +85,8 @@ public class BudgetOverviewController implements BaseViewController {
 		saveButton.setDisable(true);
 		
 		BooleanBinding validInput = Bindings.createBooleanBinding(() ->
-						!categoryNameField.getText().trim().isEmpty() &&
-								!allocatedAmountField.getText().trim().isEmpty() &&
-								isValidAmount(allocatedAmountField.getText()),
-				categoryNameField.textProperty(),
-				allocatedAmountField.textProperty());
+						!categoryNameField.getText().trim().isEmpty(),
+				categoryNameField.textProperty());
 		
 		saveButton.disableProperty().bind(validInput.not());
 		
@@ -99,15 +95,23 @@ public class BudgetOverviewController implements BaseViewController {
 				try {
 					String categoryName = categoryNameField.getText();
 					String categoryDescription = categoryDescriptionField.getText();
-					double allocatedAmount = Double.parseDouble(allocatedAmountField.getText());
 					
 					if (budgetOverviewModel.budgetExists()) {
+						BudgetCategory newCat =
 						budgetService.createBudgetCategoryFromInput(
-								budgetOverviewModel.getBudgetId().get(),
+								null,
 								categoryName,
-								categoryDescription,
-								allocatedAmount
+								categoryDescription
 						);
+						
+						Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Add to Current Budget?");
+						alert.setTitle("Add to Current Budget");
+						alert.getButtonTypes().setAll(ButtonType.YES, ButtonType.NO);
+						Optional<ButtonType> result = alert.showAndWait();
+						if (result.isPresent() && result.get() == ButtonType.YES) {
+							budgetInteractor.addNewCategoryToCurrentBudget(newCat, budgetOverviewModel.getBudgetId().get());
+						}
+						
 						budgetInteractor.loadBudgetForMonth(budgetOverviewModel.getSelectedYearMonth());
 						return null;
 					} else {

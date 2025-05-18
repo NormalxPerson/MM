@@ -1,6 +1,7 @@
 package com.moneymanager.ui.interactor;
 
 import com.moneymanager.core.Budget;
+import com.moneymanager.core.BudgetCategory;
 import com.moneymanager.service.BudgetService;
 import com.moneymanager.service.TransactionService;
 import com.moneymanager.ui.model.BudgetCategoryCard;
@@ -19,6 +20,7 @@ public class BudgetInteractor {
 	private final BudgetService budgetService;
 	private final TransactionService transactionService;
 	
+	
 	private HashMap<YearMonth, BudgetService.BudgetWithCategories> yearMonthBudgetWithCategoriesMap = new HashMap<>();
 	
 	public BudgetInteractor(BudgetOverviewMod budgetOverviewModel, BudgetService budgetService, TransactionService transactionService) {
@@ -29,6 +31,14 @@ public class BudgetInteractor {
 		addListenerOnModSelectedYearMonth();
 		loadBudgetForMonth(budgetOverviewModel.getSelectedYearMonth());
 		
+	}
+	
+	public void addNewCategoryToCurrentBudget(BudgetCategory budgetCategory, String budgetId) {
+		budgetService.addNewCategoryToBudget(budgetCategory,budgetId);
+	}
+	
+	private void loadBudgetCategories() {
+	
 	}
 	
 	private void updateBudgetMap() {

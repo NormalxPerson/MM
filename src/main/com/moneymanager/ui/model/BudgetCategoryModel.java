@@ -7,15 +7,17 @@ import javafx.beans.property.StringProperty;
 
 public class BudgetCategoryModel {
 	private StringProperty categoryId = new SimpleStringProperty();
+	private StringProperty parentCategoryId = new SimpleStringProperty();
 	private StringProperty budgetId = new SimpleStringProperty();
 	private StringProperty categoryName = new SimpleStringProperty();
 	private StringProperty description = new SimpleStringProperty();
 	private DoubleProperty allocatedAmount = new SimpleDoubleProperty();
 	private DoubleProperty spentAmount = new SimpleDoubleProperty();
 	
-	public BudgetCategoryModel(String categoryId, String budgetId, String categoryName,
+	public BudgetCategoryModel(String categoryId, String parentCategoryId, String budgetId, String categoryName,
 	                           String description, double allocatedAmount, double spentAmount) {
 		this.categoryId.set(categoryId);
+		this.parentCategoryId.set(parentCategoryId);
 		this.budgetId.set(budgetId);
 		this.categoryName.set(categoryName);
 		this.description.set(description);
@@ -24,6 +26,7 @@ public class BudgetCategoryModel {
 	}
 	
 	public StringProperty categoryIdProperty() { return categoryId; }
+	public StringProperty parentCategoryIdProperty() { return parentCategoryId; }
 	public StringProperty budgetIdProperty() { return budgetId; }
 	public StringProperty categoryNameProperty() { return categoryName; }
 	public StringProperty descriptionProperty() { return description; }
@@ -33,6 +36,9 @@ public class BudgetCategoryModel {
 	// Getters and setters
 	public String getCategoryId() { return categoryId.get(); }
 	public void setCategoryId(String categoryId) { this.categoryId.set(categoryId); }
+	
+	public String getParentCategoryId() { return parentCategoryId.get(); }
+	public void setParentCategoryId(String parentCategoryId) { this.parentCategoryId.set(parentCategoryId); }
 	
 	public String getBudgetId() { return budgetId.get(); }
 	public void setBudgetId(String budgetId) { this.budgetId.set(budgetId); }

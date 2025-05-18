@@ -11,8 +11,9 @@ public class BudgetCategory {
 	private String description;
 	private List<BudgetCategory> childrenCategories;
 	
-	public BudgetCategory(String categoryName, String description) {
+	public BudgetCategory(String categoryName, String description, String parentCategoryId) {
 		this.categoryId = UUID.randomUUID().toString();
+		this.parentCategoryId = parentCategoryId;
 		this.categoryName = categoryName;
 		this.description = description;
 	}
@@ -27,9 +28,10 @@ public class BudgetCategory {
 	public String getCategoryId() {
 		return categoryId;
 	}
+	public void setCategoryId(String categoryId) { this.categoryId = categoryId; }
 	
 	public String getParentCategoryId() { return parentCategoryId; }
-	public void setCategoryId(String categoryId) { this.categoryId = categoryId; }
+	public void setParentCategoryId(String parentCategoryId) { this.parentCategoryId = parentCategoryId; }
 	
 	public String getCategoryName() {
 		return categoryName;
@@ -44,6 +46,11 @@ public class BudgetCategory {
 	public void setDescription(String description) {
 		this.description = description;
 	}
+	
+	public List<BudgetCategory> getChildrenCategories() { return childrenCategories; }
+	public void addChildToList(BudgetCategory child) { childrenCategories.add(child); }
+	public void removeChildFromList(BudgetCategory child) { childrenCategories.remove(child); }
+	public void setChildrenCategories(List<BudgetCategory> childrenCategories) { this.childrenCategories = childrenCategories; }
 	
 	@Override
 	public boolean equals(Object o) {
