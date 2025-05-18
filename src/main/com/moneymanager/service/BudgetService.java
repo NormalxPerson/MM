@@ -99,6 +99,22 @@ public class BudgetService {
 	}
 	
 	
+	public void updateBudgetCategory(BudgetCategoryModel updatedBudgetCategoryModel) {
+		
+		BudgetCategory category = categoryMap.get(updatedBudgetCategoryModel.getCategoryId());
+		if (category != null) {
+			category.setCategoryName(updatedBudgetCategoryModel.getCategoryName());
+			category.setDescription(updatedBudgetCategoryModel.getDescription());
+			budgetCategoryRepo.updateCategory(category);
+		}
+		
+		BudgetCategoryAllocation allocation = budgetCategoryRepo.getAllocationByIds(updatedBudgetCategoryModel.getCategoryId(), updatedBudgetCategoryModel.getBudgetId());
+		if (allocation != null) {
+			allocation.setAllocatedAmount(updatedBudgetCategoryModel.getAllocatedAmount());
+			budgetCategoryRepo.updateBudgetCategoryAllocation(allocation);
+		}
+	}
+	
 	
 	
 	public class BudgetWithCategories {
@@ -117,7 +133,8 @@ public class BudgetService {
 		}
 		
 		private List<BudgetCategoryAllocation> getBudgetAllocation(String budgetId) {
-			return budgetCategoryRepo.getAllocationsForBudget(budgetId);
+			budgetCategoryAllocations = budgetCategoryRepo.getAllocationsForBudget(budgetId);
+			return budgetCategoryAllocations;
 		}
 		
 		public Budget getBudget() {
@@ -132,9 +149,7 @@ public class BudgetService {
 		}
 		
 		private void loadCategoriesWithSpentAmount() {
-			if (categoriesLoaded) {
-				return;
-			}
+			getBudgetAllocation(budget.getBudgetId());
 			try {
 				
 				YearMonth budgetMonth = budget.getYearMonth();
@@ -168,6 +183,7 @@ public class BudgetService {
 							category.getCategoryId(),
 							category.getParentCategoryId(),
 							budget.getBudgetId(),
+							allocation.getAllocationId(),
 							category.getCategoryName(),
 							category.getDescription(),
 							allocatedAmount,

@@ -34,7 +34,7 @@ public class Transaction {
 	private TransactionType type;
 	private String accountId;
 	private String categoryId;
-
+	
 	public Transaction(String id, double amount, String description, LocalDate date, String type, String accountId, String categoryId) {
 		this.id = id;
 		this.amount = amount;

@@ -36,8 +36,8 @@ public class BudgetOverviewController implements BaseViewController {
 	
 	public BudgetOverviewController(BudgetService budgetService, TransactionService transactionService) {
 		this.budgetOverviewModel = new BudgetOverviewMod();
-		createAddBudgetCatCard();
-		this.budgetInteractor = new BudgetInteractor(budgetOverviewModel, budgetService, transactionService);
+		//createAddBudgetCatCard();
+		this.budgetInteractor = new BudgetInteractor(budgetOverviewModel, budgetService, transactionService, this::openCategoryEditDialog);
 		this.budgetOverviewBuilder = new BudgetOverviewBuilder(budgetOverviewModel, budgetInteractor::createBudget, this::openCategoryCreationDialog);
 	
 		//temp
@@ -51,9 +51,9 @@ public class BudgetOverviewController implements BaseViewController {
 
 	}
 	
-	public void createAddBudgetCatCard() {
+/*	public void createAddBudgetCatCard() {
 		budgetOverviewModel.setCategoryCreationCard(BudgetCategoryCard.createAddBudgetCategoryCard(this::openCategoryCreationDialog));
-	}
+	}*/
 	
 	public void openCategoryCreationDialog() {
 		
@@ -179,6 +179,69 @@ public class BudgetOverviewController implements BaseViewController {
 		
 		
 		return labelAndFields;
+	}
+	
+	public void openCategoryEditDialog(BudgetCategoryModel categoryModel) {
+		Dialog<BudgetCategoryModel> categoryEditDialog = new Dialog<>();
+		categoryEditDialog.setTitle("Edit Budget Category");
+		categoryEditDialog.setHeaderText("Edit budget category details");
+		
+		ButtonType saveButtonType = new ButtonType("Save", ButtonBar.ButtonData.OK_DONE);
+		ButtonType cancelButtonType = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
+		categoryEditDialog.getDialogPane().getButtonTypes().addAll(saveButtonType, cancelButtonType);
+		
+		
+		
+		GridPane grid = new GridPane();
+		grid.setHgap(10);
+		grid.setVgap(10);
+		grid.setPadding(new Insets(20, 150, 10, 10));
+		
+		TextField categoryNameField = new TextField(categoryModel.getCategoryName());
+		TextField categoryDescriptionField = new TextField(categoryModel.getDescription());
+		TextField allocatedAmountField = new TextField(String.format("%.2f", categoryModel.getAllocatedAmount()));
+		
+		grid.add(new Label("Category Name"), 0, 0);
+		grid.add(categoryNameField, 1, 0);
+		grid.add(new Label("Category Description"), 0, 1);
+		grid.add(categoryDescriptionField, 1, 1);
+		grid.add(new Label("Allocated Amount"), 0, 2);
+		grid.add(allocatedAmountField, 1, 2);
+		
+		categoryEditDialog.getDialogPane().setContent(grid);
+		
+		BooleanBinding validInput = Bindings.createBooleanBinding(() ->
+						!categoryNameField.getText().trim().equals(categoryModel.getCategoryName()) && !categoryNameField.getText().trim().isEmpty() &&
+								!categoryDescriptionField.getText().trim().equals(categoryModel.getDescription()) && !categoryDescriptionField.getText().trim().isEmpty() &&
+								allocatedAmountField.getText().trim().equals(categoryModel.allocatedAmountProperty().toString()) && !allocatedAmountField.getText().trim().isEmpty(), categoryNameField.textProperty(), categoryDescriptionField.textProperty(), allocatedAmountField.textProperty());
+		
+		Button saveButton = (Button) categoryEditDialog.getDialogPane().lookupButton(saveButtonType);
+		saveButton.disableProperty().bind(validInput);
+		
+				
+		
+		categoryEditDialog.setResultConverter(dialogButton -> {
+			if (dialogButton == saveButtonType) {
+				try {
+					categoryModel.setCategoryName(categoryNameField.getText());
+					categoryModel.setDescription(categoryDescriptionField.getText());
+					categoryModel.setAllocatedAmount(Double.parseDouble(allocatedAmountField.getText()));
+					
+					
+					
+					// Update the category in the database
+					budgetService.updateBudgetCategory(categoryModel);
+					
+					budgetInteractor.loadBudgetForMonth(budgetOverviewModel.getSelectedYearMonth());
+					return categoryModel;
+				} catch (NumberFormatException e) {
+					// Handle format exception...
+				}
+			}
+			return null;
+		});
+		
+		categoryEditDialog.showAndWait();
 	}
 	
 	@Override

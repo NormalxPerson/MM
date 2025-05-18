@@ -13,4 +13,9 @@ public interface BudgetCategoryRepo {
 	
 	void saveBudgetCategoryAllocation(BudgetCategoryAllocation budgetCategoryAllocation);
 	List<BudgetCategoryAllocation> getAllocationsForBudget(String budgetId);
+	
+	void updateCategory(BudgetCategory category);
+	void updateBudgetCategoryAllocation(BudgetCategoryAllocation allocation);
+	BudgetCategoryAllocation getAllocationByIds(String categoryId, String budgetId);
+	
 }

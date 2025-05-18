@@ -13,12 +13,14 @@ public class BudgetCategoryModel {
 	private StringProperty description = new SimpleStringProperty();
 	private DoubleProperty allocatedAmount = new SimpleDoubleProperty();
 	private DoubleProperty spentAmount = new SimpleDoubleProperty();
+	private String allocationId;
 	
-	public BudgetCategoryModel(String categoryId, String parentCategoryId, String budgetId, String categoryName,
+	public BudgetCategoryModel(String categoryId, String parentCategoryId, String budgetId, String allocationId, String categoryName,
 	                           String description, double allocatedAmount, double spentAmount) {
 		this.categoryId.set(categoryId);
 		this.parentCategoryId.set(parentCategoryId);
 		this.budgetId.set(budgetId);
+		this.allocationId = allocationId;
 		this.categoryName.set(categoryName);
 		this.description.set(description);
 		this.allocatedAmount.set(allocatedAmount);
@@ -43,7 +45,7 @@ public class BudgetCategoryModel {
 	public String getBudgetId() { return budgetId.get(); }
 	public void setBudgetId(String budgetId) { this.budgetId.set(budgetId); }
 	
-	public String getCategoryName() { return categoryName.getName(); }
+	public String getCategoryName() { return categoryName.get(); }
 	public void setCategoryName(String categoryName) { this.categoryName.set(categoryName); }
 	
 	public String getDescription() { return description.get(); }
@@ -54,5 +56,7 @@ public class BudgetCategoryModel {
 	
 	public double getSpentAmount() { return spentAmount.get(); }
 	public void setSpentAmount(double spentAmount) { this.spentAmount.set(spentAmount); }
+	
+	public String getAllocationId() { return allocationId; }
 }
 

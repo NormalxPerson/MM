@@ -125,12 +125,77 @@ public class SQLBudgetCategoryRepo implements BudgetCategoryRepo {
 		return allocations;
 	}
 	
+	@Override
+	public void updateCategory(BudgetCategory category) {
+		String sql = "UPDATE categories SET categoryName = ?, categoryDescription = ?, parentCategoryId = ? WHERE categoryId = ?";
+		
+		try (Connection connection = databaseConnection.getConnection();
+		     PreparedStatement stmt = connection.prepareStatement(sql)) {
+			
+			stmt.setString(1, category.getCategoryName());
+			stmt.setString(2, category.getDescription());
+			stmt.setString(3, category.getParentCategoryId());
+			stmt.setString(4, category.getCategoryId());
+			
+			int rowsUpdated = stmt.executeUpdate();
+			if (rowsUpdated == 0) {
+				throw new SQLException("Updating budget category failed, no rows affected.");
+			}
+			
+		} catch (SQLException e) {
+			throw new RuntimeException("Failed to update budget category", e);
+		}
+	}
+	
+	@Override
+	public void updateBudgetCategoryAllocation(BudgetCategoryAllocation allocation) {
+		String sql = "UPDATE budget_allocations SET allocatedAmount = ? WHERE categoryId = ? AND budgetId = ?";
+		
+		try (Connection connection = databaseConnection.getConnection();
+		     PreparedStatement stmt = connection.prepareStatement(sql)) {
+			
+			// Convert to cents for storage (following your existing pattern)
+			int amountInCents = (int) Math.round(allocation.getAllocatedAmount() * 100);
+			
+			stmt.setInt(1, amountInCents);
+			stmt.setString(2, allocation.getCategoryId());
+			stmt.setString(3, allocation.getBudgetId());
+			
+			int rowsUpdated = stmt.executeUpdate();
+			if (rowsUpdated == 0) {
+				throw new SQLException("Updating budget allocation failed, no rows affected.");
+			}
+			
+		} catch (SQLException e) {
+			throw new RuntimeException("Failed to update budget category allocation", e);
+		}
+	}
+	
+	@Override
+	public BudgetCategoryAllocation getAllocationByIds(String categoryId, String budgetId) {
+		String sql = "SELECT * FROM budget_allocations WHERE categoryId = ? AND budgetId = ?";
+		
+		try (Connection connection = databaseConnection.getConnection();
+		     PreparedStatement stmt = connection.prepareStatement(sql)) {
+			
+			stmt.setString(1, categoryId);
+			stmt.setString(2, budgetId);
+			
+			try (ResultSet rs = stmt.executeQuery()) {
+				if (rs.next()) {
+					return createAllocationFromResultSet(rs);
+				}
+			}
+		} catch (SQLException e) { throw new RuntimeException("Failed to retrieve budget allocation", e); }
+		return null;
+	}
+	
 	private BudgetCategoryAllocation createAllocationFromResultSet(ResultSet rs) throws SQLException {
+		double amount = rs.getInt("allocatedAmount") / 100.0;
 		return new BudgetCategoryAllocation(rs.getString("allocationId"),
 				rs.getString("budgetId"),
 				rs.getString("categoryId"),
-				rs.getInt("allocatedAmount")
-		);
+				amount);
 	}
 	
 	private BudgetCategory createCategoryFromResultSet(ResultSet rs) throws SQLException {

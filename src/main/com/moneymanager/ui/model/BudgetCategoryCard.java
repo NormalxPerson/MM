@@ -16,6 +16,8 @@ import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 
+import java.util.function.Consumer;
+
 public class BudgetCategoryCard extends VBox {
 	private StringProperty categoryId = new SimpleStringProperty();
 	private StringProperty budgetId = new SimpleStringProperty();
@@ -172,8 +174,15 @@ public class BudgetCategoryCard extends VBox {
 	}*/
 	
 	// Factory method to create a card from data
-	public static BudgetCategoryCard fromModel(BudgetCategoryModel model) {
+	public static BudgetCategoryCard fromModel(BudgetCategoryModel model, Consumer<BudgetCategoryModel> onCardClickHandler) {
 		BudgetCategoryCard card = new BudgetCategoryCard();
+		
+		card.setOnMouseClicked(event -> {
+			if (event.getClickCount() == 1) {
+				onCardClickHandler.accept(model);
+			}
+		});
+		
 		card.categoryId.bind(model.categoryIdProperty());
 		card.budgetId.bind(model.budgetIdProperty());
 		card.categoryName.bind(model.categoryNameProperty());

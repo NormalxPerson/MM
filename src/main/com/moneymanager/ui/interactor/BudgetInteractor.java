@@ -4,6 +4,7 @@ import com.moneymanager.core.Budget;
 import com.moneymanager.core.BudgetCategory;
 import com.moneymanager.service.BudgetService;
 import com.moneymanager.service.TransactionService;
+import com.moneymanager.ui.controller.BudgetOverviewController;
 import com.moneymanager.ui.model.BudgetCategoryCard;
 import com.moneymanager.ui.model.BudgetCategoryModel;
 import com.moneymanager.ui.state.BudgetOverviewMod;
@@ -14,19 +15,22 @@ import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class BudgetInteractor {
 	private final BudgetOverviewMod budgetOverviewModel;
 	private final BudgetService budgetService;
 	private final TransactionService transactionService;
 	
+	private Consumer<BudgetCategoryModel> categoryEditHandler;
 	
 	private HashMap<YearMonth, BudgetService.BudgetWithCategories> yearMonthBudgetWithCategoriesMap = new HashMap<>();
 	
-	public BudgetInteractor(BudgetOverviewMod budgetOverviewModel, BudgetService budgetService, TransactionService transactionService) {
+	public BudgetInteractor(BudgetOverviewMod budgetOverviewModel, BudgetService budgetService, TransactionService transactionService, Consumer<BudgetCategoryModel> categoryEditHandler) {
 		this.budgetOverviewModel = budgetOverviewModel;
 		this.budgetService = budgetService;
 		this.transactionService = transactionService;
+		this.categoryEditHandler = categoryEditHandler;
 		updateBudgetMap();
 		addListenerOnModSelectedYearMonth();
 		loadBudgetForMonth(budgetOverviewModel.getSelectedYearMonth());
@@ -56,6 +60,10 @@ public class BudgetInteractor {
 		});
 	}
 	
+	private BudgetCategoryCard createCardFromModel(BudgetCategoryModel model) {
+		return BudgetCategoryCard.fromModel(model, categoryEditHandler);
+	}
+	
 	public void loadBudgetForMonth(YearMonth yearMonth) {
 		updateBudgetMap();
 		List<BudgetCategoryCard> categoryCards = new ArrayList<>();
@@ -76,7 +84,7 @@ public class BudgetInteractor {
 			BudgetService.BudgetWithCategories budgetWithCategories = yearMonthBudgetWithCategoriesMap.get(yearMonth);
 			Budget budget = budgetWithCategories.getBudget();
 			for (BudgetCategoryModel categoryModel : budgetWithCategories.getCategories()) {
-				categoryCards.add(BudgetCategoryCard.fromModel(categoryModel));
+				categoryCards.add(createCardFromModel(categoryModel));
 			}
 			//categoryCards.add(budgetOverviewModel.getCategoryCreationCard());
 			budgetOverviewModel.setCategoryCards(categoryCards);

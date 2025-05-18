@@ -23,12 +23,12 @@ public class BudgetOverviewMod {
 		budgetExistsWrapper.bind(Bindings.isNotEmpty(budgetId));
 	}
 	private ReadOnlyBooleanProperty budgetExists = budgetExistsWrapper.getReadOnlyProperty();
-	private BudgetCategoryCard categoryCreationCard;
+	//private BudgetCategoryCard categoryCreationCard;
 	
 	
 	
-	public void setCategoryCreationCard(BudgetCategoryCard card) { this.categoryCreationCard = card; }
-	public BudgetCategoryCard getCategoryCreationCard() { return categoryCreationCard; }
+	//public void setCategoryCreationCard(BudgetCategoryCard card) { this.categoryCreationCard = card; }
+	//public BudgetCategoryCard getCategoryCreationCard() { return categoryCreationCard; }
 	public YearMonth getSelectedYearMonth() { return selectedYearMonth.get(); }
 	public void setSelectedYearMonth(YearMonth selectedYearMonth) { this.selectedYearMonth.set(selectedYearMonth); }
 	public ObjectProperty<YearMonth> selectedYearMonthProperty() { return selectedYearMonth; }
