@@ -57,7 +57,7 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 	
 	@Override
 	public void addTransactions(List<Transaction> transactions) {
-		String sql = "INSERT INTO transactions (transactionId, transactionAmount, transactionDescription, transactionDate, transactionType, accountId) VALUES (?, ?, ?, ?, ?, ?)";
+		String sql = "INSERT INTO transactions (transactionId, transactionAmount, transactionDescription, transactionDate, transactionType, accountId, categoryId) VALUES (?, ?, ?, ?, ?, ?, ?)";
 		
 		try (Connection connection = dbConnection.getConnection();
 		     PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -69,7 +69,7 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 				statement.setString(4, appDateToDbDate(transaction.getFormattedDate())); // Assuming date is stored as TEXT in your database
 				statement.setString(5, transaction.getType().name());
 				statement.setString(6, transaction.getAccountId());
-				
+				statement.setString(7, transaction.getCategoryId());
 				statement.executeUpdate();
 			}
 		} catch (SQLException e) {
@@ -144,16 +144,18 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 	
 	@Override
 	public void updateTransaction(TransactionTableView.TransactionModel transactionModel) {
-		String sql = "UPDATE transactions set transactionDate = ?, transactionAmount = ?, transactionDescription = ?, transactionType = ?, accountId = ? WHERE transactionId = ?";
+		String sql = "UPDATE transactions set transactionDate = ?, transactionAmount = ?, transactionDescription = ?, transactionType = ?, accountId = ?, categoryId = ? WHERE transactionId = ?";
 		int amountInCents = (int) Math.round(transactionModel.getTransactionAmount() * 100);
 		
-		try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(sql)) {
-			stmt.setString(1, appDateToDbDate(transactionModel.getTransactionDate().toString()));
+		try (Connection connection = dbConnection.getConnection();
+		     PreparedStatement stmt = connection.prepareStatement(sql)) {
+			stmt.setString(1, appDateToDbDate(transactionModel.getStringDate()));
 			stmt.setInt(2, amountInCents);
 			stmt.setString(3, transactionModel.getTransactionDescription());
 			stmt.setString(4, transactionModel.getTransactionType().name());
 			stmt.setInt(5, Integer.parseInt(transactionModel.getTransactionAccountId()));
-			stmt.setString(6, transactionModel.getTransactionId());
+			stmt.setString(6, transactionModel.getTransactionCategoryId());
+			stmt.setString(7, transactionModel.getTransactionId());
 			
 			int rowsUpdated = stmt.executeUpdate();
 			

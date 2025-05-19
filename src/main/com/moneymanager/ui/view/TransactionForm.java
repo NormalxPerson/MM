@@ -1,8 +1,7 @@
 package com.moneymanager.ui.view;
 
-import com.moneymanager.service.TransactionService;
+import com.moneymanager.core.BudgetCategory;
 import com.moneymanager.ui.event.FormEvent;
-import com.moneymanager.ui.validation.FormValidationSupport;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
@@ -11,7 +10,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.util.StringConverter;
 import org.controlsfx.validation.Severity;
 import org.controlsfx.validation.Validator;
@@ -19,22 +17,28 @@ import org.controlsfx.validation.Validator;
 import java.time.LocalDate;
 import java.util.Map;
 
+//TODO : add category selection to form. Also general transaction - category
+
+
 public class TransactionForm extends AbstractForm<TransactionTableView.TransactionModel> {
 	
 	private TextField transactionAmountField;
 	private TextField transactionDescriptionField;
 	private DatePicker transactionDatePicker;
 	private ComboBox<TransactionTableView.TransactionModel.TransactionType> transactionTypeComboBox;
+	private ComboBox<BudgetCategory> budgetCategoryComboBox;
 	private ComboBox<AccountTableView.AccountModel> accountComboBox;
 	private CheckBox updateBalanceCheckBox;
 	private VBox updateBalanceFieldBox;
 	
 	private ObservableMap<String, AccountTableView.AccountModel> accountModelMap;
+	private ObservableList<BudgetCategory> categoryList;
 
 	
-	public TransactionForm(ObservableMap<String, AccountTableView.AccountModel> accountModelsMap, ObservableList<AccountTableView.AccountModel> accountModelList) {
+	public TransactionForm(ObservableMap<String, AccountTableView.AccountModel> accountModelsMap, ObservableList<AccountTableView.AccountModel> accountModelList, ObservableList<BudgetCategory> budgetCategoryList) {
 		super();
 		this.accountModelMap = accountModelsMap;
+		this.categoryList = budgetCategoryList;
 		initializeFields(accountModelList);
 		setupValidators();
 	}
@@ -45,8 +49,27 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 		transactionDescriptionField = new TextField();
 		transactionDatePicker = new DatePicker(LocalDate.now());
 		transactionTypeComboBox = new ComboBox<>();
+		budgetCategoryComboBox = new ComboBox<>();
 		accountComboBox = new ComboBox<>();
 		updateBalanceCheckBox = new CheckBox();
+		
+		budgetCategoryComboBox.setItems(categoryList.sorted());
+		budgetCategoryComboBox.setConverter(new StringConverter<>() {
+			@Override
+			public String toString(BudgetCategory object) {
+				return object != null ? object.getCategoryName() : null;
+			}
+			
+			@Override
+			public BudgetCategory fromString(String string) {
+				for (BudgetCategory category : categoryList) {
+					if (category.getCategoryName().equalsIgnoreCase(string)) {
+						return category;
+					}
+				}
+				return null;
+			}
+		});
 		
 		transactionTypeComboBox.setItems(FXCollections.observableArrayList(TransactionTableView.TransactionModel.TransactionType.values()));
 		transactionTypeComboBox.setConverter(new StringConverter<>() {
@@ -74,6 +97,7 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 		Label transactionDescriptionLabel = new Label("Transaction Description");
 		Label transactionDateLabel = new Label("Transaction Date");
 		Label transactionTypeLabel = new Label("Transaction Type");
+		Label budgetCategoryLabel = new Label("Budget Category");
 		Label accountLabel = new Label("Account for Transaction");
 		Label accountBalanceLabel = new Label("Update Account Balance?");
 		
@@ -81,19 +105,21 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 		VBox descriptionFieldBox = new VBox(2, transactionDescriptionLabel, transactionDescriptionField);
 		VBox dateFieldBox = new VBox(2, transactionDateLabel, transactionDatePicker);
 		VBox typeFieldBox = new VBox(2, transactionTypeLabel, transactionTypeComboBox);
+		VBox budgetCategoryBox = new VBox(2, budgetCategoryLabel, budgetCategoryComboBox);
 		VBox accountFieldBox = new VBox(2, accountLabel, accountComboBox);
 		updateBalanceFieldBox = new VBox(2, accountBalanceLabel, updateBalanceCheckBox);
-		
 		updateBalanceFieldBox.setAlignment(Pos.CENTER);
 		
 		HBox dateAndCheckbox = new HBox(16, dateFieldBox, updateBalanceFieldBox);
+		HBox typeAndCheckbox = new HBox(16, typeFieldBox, budgetCategoryBox);
 		
-		this.getChildren().addAll(amountFieldBox, descriptionFieldBox, dateAndCheckbox, typeFieldBox, accountFieldBox);
+		this.getChildren().addAll(amountFieldBox, descriptionFieldBox, dateAndCheckbox, typeAndCheckbox, accountFieldBox);
 	
 		registerField("transactionAmount", transactionAmountField, amountFieldBox);
 		registerField("transactionDescription", transactionDescriptionField, descriptionFieldBox);
 		registerField("transactionDate", transactionDatePicker, dateFieldBox);
 		registerField("transactionType", transactionTypeComboBox, typeFieldBox);
+		registerField("budgetCategory", budgetCategoryComboBox, budgetCategoryBox);
 		registerField("transactionAccount", accountComboBox, accountFieldBox);
 		registerField("updateBalance", updateBalanceCheckBox, updateBalanceFieldBox);
 	

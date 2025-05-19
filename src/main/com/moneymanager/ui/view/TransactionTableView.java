@@ -1,5 +1,6 @@
 package com.moneymanager.ui.view;
 
+import com.moneymanager.core.BudgetCategory;
 import javafx.beans.property.*;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableCell;
@@ -157,11 +158,7 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 		public String getTransactionDescription() {
 			return transactionDescription.get();
 		}
-		
-		public void setTransactionDescription(String transactionDescription) {
-			this.transactionDescription.set(transactionDescription);
-		}
-		
+		public void setTransactionDescription(String transactionDescription) {this.transactionDescription.set(transactionDescription);}
 		public StringProperty transactionDescriptionProperty() {
 			return transactionDescription;
 		}
@@ -169,11 +166,13 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 		public LocalDate getTransactionDate() {
 			return transactionDate.get();
 		}
-		
+		public String getStringDate() {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("M-d-yy");
+			return transactionDate.get().format(formatter);
+		}
 		public void setTransactionDate(LocalDate transactionDate) {
 			this.transactionDate.set(transactionDate);
 		}
-		
 		public ObjectProperty<LocalDate> transactionDateProperty() {
 			return transactionDate;
 		}
@@ -181,11 +180,7 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 		public TransactionType getTransactionType() {
 			return transactionType.get();
 		}
-		
-		public void setTransactionType(String transactionType) {
-			this.transactionType.set(TransactionType.valueOf(transactionType.toUpperCase()));
-		}
-		
+		public void setTransactionType(String transactionType) {this.transactionType.set(TransactionType.valueOf(transactionType.toUpperCase()));}
 		public ObjectProperty<TransactionType> transactionTypeProperty() {
 			return transactionType;
 		}
@@ -193,11 +188,7 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 		public String getTransactionAccountId() {
 			return transactionAccountId.get();
 		}
-		
-		public void setTransactionAccountId(String transactionAccountId) {
-			this.transactionAccountId.set(transactionAccountId);
-		}
-		
+		public void setTransactionAccountId(String transactionAccountId) {this.transactionAccountId.set(transactionAccountId);}
 		public StringProperty TransactionAccountIdProperty() {
 			return transactionAccountId;
 		}
@@ -205,11 +196,7 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 		public String getTransactionAccountName() {
 			return transactionAccountName.get();
 		}
-		
-		public void setTransactionAccountName(String transactionAccountName) {
-			this.transactionAccountName.set(transactionAccountName);
-		}
-		
+		public void setTransactionAccountName(String transactionAccountName) {this.transactionAccountName.set(transactionAccountName);}
 		public StringProperty TransactionAccountNameProperty() {
 			return transactionAccountName;
 		}
@@ -217,11 +204,7 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 		public String getTransactionCategoryId() {
 			return transactionCategoryId.get();
 		}
-		
-		public void setTransactionCategoryId(String transactionCategoryId) {
-			this.transactionCategoryId.set(transactionCategoryId);
-		}
-		
+		public void setTransactionCategoryId(String transactionCategoryId) {this.transactionCategoryId.set(transactionCategoryId);}
 		public StringProperty TransactionCategoryIdProperty() {
 			return transactionCategoryId;
 		}
@@ -229,11 +212,9 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 		public StringProperty TransactionCategoryNameProperty() {
 			return transactionCategoryName;
 		}
-		
 		public String getTransactionCategoryName() {
 			return transactionCategoryName.get();
 		}
-		
 		public void setTransactionCategoryName(String transactionCategoryName) {
 			this.transactionCategoryName.set(transactionCategoryName);
 		}
@@ -250,6 +231,10 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 				setTransactionDate((LocalDate) value);
 			} else if (change.equalsIgnoreCase("transactionType")) {
 				setTransactionType(((TransactionType) value).toString());
+			} else if (change.equalsIgnoreCase("budgetCategory")) {
+				BudgetCategory cat = (BudgetCategory) value;
+				setTransactionCategoryId(cat.getCategoryId());
+				setTransactionCategoryName(cat.getCategoryName());
 			} else if (change.equalsIgnoreCase("transactionAccount")) {
 				AccountTableView.AccountModel accountModel = (AccountTableView.AccountModel) value;
 				setTransactionAccountId(accountModel.getAccountId());

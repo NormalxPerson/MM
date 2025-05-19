@@ -54,6 +54,7 @@ public class TransactionFactory {
 			LocalDate date = validateDate(String.valueOf(fieldValues.get("transactionDate")));
 			TransactionTableView.TransactionModel.TransactionType transactionModelType = (TransactionTableView.TransactionModel.TransactionType) fieldValues.get("transactionType");
 			Transaction.TransactionType transactionType = validateType(transactionModelType.getDisplayName());
+			BudgetCategory budgetCategory = (BudgetCategory) fieldValues.get("budgetCategory");
 			
 			
 			double amount = validateAndAdjustAmount(Double.parseDouble((String) fieldValues.get("transactionAmount")), transactionType);
@@ -61,9 +62,9 @@ public class TransactionFactory {
 			
 			String accountId = accountModel.getAccountId();
 			String accountName = accountModel.getAccountName();
-			String categoryId = (String) fieldValues.get("trasactionCategoryId");
+			String categoryId = budgetCategory.getCategoryId();
 			String generatedId = generateTransactionId(date, accountId, transRepo);
-		System.out.printf("Values to create Transaction in TransactionFactory.createTransaction(Map<String, Object> fieldValues, TransactionRepo transRepo)\n\tgeneratedId=%s\n\tamount=%s\n\tdescription=%s", generatedId, amount, description);
+		System.out.printf("Values to create Transaction in TransactionFactory.createTransaction(Map<String, Object> fieldValues, TransactionRepo transRepo)\n\tgeneratedId=%s\n\tamount=%s\n\tdescription=%s\n\taccountId=%s\n\tcategoryId=%s\n", generatedId, amount, description, accountId, categoryId);
 			return new Transaction(generatedId, amount, description, date, transactionType.getDisplayName(), accountId, categoryId);
 			
 		

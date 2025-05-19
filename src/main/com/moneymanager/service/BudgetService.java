@@ -11,6 +11,7 @@ import com.moneymanager.ui.model.BudgetCategoryModel;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -23,7 +24,7 @@ public class BudgetService {
 	BudgetRepo budgetRepo;
 	BudgetCategoryRepo budgetCategoryRepo;
 	TransactionRepo transactionRepo;
-	List<BudgetCategory> budgetCategories;
+	ObservableList<BudgetCategory> budgetCategories = FXCollections.emptyObservableList();
 	HashMap<String, BudgetCategory> categoryMap = new HashMap<>();
 
 	public BudgetService(BudgetRepo budgetRepo, BudgetCategoryRepo budgetCategoryRepo, TransactionRepo transactionRepo) {
@@ -91,11 +92,13 @@ public class BudgetService {
 		for (BudgetCategory category : budgetCategoryRepo.getAllCategories()) {
 			categoryMap.put(category.getCategoryId(), category);
 		}
+		this.budgetCategories.clear();
+		this.budgetCategories = FXCollections.observableArrayList(categoryMap.values());
 	}
 	
-	public List<BudgetCategory> getAllCategories() {
+	public ObservableList<BudgetCategory> getAllCategories() {
 		updateCategories();
-		return budgetCategoryRepo.getAllCategories();
+		return this.budgetCategories;
 	}
 	
 	

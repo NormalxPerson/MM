@@ -1,5 +1,6 @@
 package com.moneymanager.service;
 
+import com.moneymanager.core.BudgetCategory;
 import com.moneymanager.core.Transaction;
 import com.moneymanager.core.TransactionFactory;
 import com.moneymanager.repos.TransactionRepo;
@@ -17,11 +18,16 @@ public class TransactionService {
 	private final TransactionRepo transRepo;
 	private final AccountService accountService;
 	private final ObservableList<TransactionTableView.TransactionModel> transactionModels;
+	private ObservableList<BudgetCategory> budgetCategories;
 	
 	public TransactionService(TransactionRepo transRepo, AccountService accountService) {
 		this.transRepo = transRepo;
 		this.accountService = accountService;
 		this.transactionModels = FXCollections.observableArrayList();
+	}
+	
+	public void setBudgetCategoryList(ObservableList<BudgetCategory> catList) {
+		this.budgetCategories = catList;
 	}
 	
 	public ObservableList<TransactionTableView.TransactionModel> getObservableTransactionModelsList() {
@@ -114,6 +120,10 @@ public class TransactionService {
 			 return transRepo.deleteTransaction(transactionModel.getTransactionId());
 		}
 		return 0;
+	}
+	
+	public ObservableList<BudgetCategory> getBudgetCategoryObservableList() {
+		return budgetCategories;
 	}
 	
 	public TransactionRepo getTransactionRepo() {

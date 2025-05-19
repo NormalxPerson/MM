@@ -1,5 +1,6 @@
 package com.moneymanager.ui.controller;
 
+import com.moneymanager.core.BudgetCategory;
 import com.moneymanager.service.TransactionService;
 import com.moneymanager.ui.event.FormEvent;
 import com.moneymanager.ui.view.TransactionForm;
@@ -45,17 +46,16 @@ public class TransactionViewController extends AbstractViewController implements
 	public void postInitialize() {
 		refreshTransactionTable(transactionService.getObservableTransactionModelsList());
 		
-		transactionSlidingForm = new TransactionForm(transactionService.getAccountModelObservableMap(), transactionService.getAccountModelObservableList());
+		transactionSlidingForm = new TransactionForm(transactionService.getAccountModelObservableMap(), transactionService.getAccountModelObservableList(), transactionService.getBudgetCategoryObservableList());
 		this.editingForm = this.transactionSlidingForm;
 		
-		this.transactionCreationForm = new TransactionForm(transactionService.getAccountModelObservableMap(), transactionService.getAccountModelObservableList());
+		this.transactionCreationForm = new TransactionForm(transactionService.getAccountModelObservableMap(), transactionService.getAccountModelObservableList(), transactionService.getBudgetCategoryObservableList());
 		this.creationDialogForm = this.transactionCreationForm;
 		
 		transactionContainer.getChildren().addAll(transactionTableView, transactionSlidingForm);
 		VBox.setVgrow(transactionTableView, Priority.ALWAYS);
 		setupRowSelection();
 	}
-	
 	
 	public void refreshTransactionTable(ObservableList<TransactionTableView.TransactionModel> transactionModels) {
 		transactionTableView.populateTransactionTable(transactionModels);
@@ -72,7 +72,7 @@ public class TransactionViewController extends AbstractViewController implements
 	protected void handleRowClick(TableRow<?> row, MouseEvent event) { // Implement abstract method
 		if (!row.isEmpty() && event.getClickCount() == 1 ) {
 			TransactionTableView.TransactionModel selectedTransaction = (TransactionTableView.TransactionModel) row.getItem();
-			System.out.println("Clicked: " + selectedTransaction);
+			//System.out.println("Clicked: " + selectedTransaction);
 			
 			transactionSlidingForm.setCurrentModel(selectedTransaction);
 		}
@@ -89,6 +89,9 @@ public class TransactionViewController extends AbstractViewController implements
 					transactionModel.makeChanges(key, changedValues.get(key));
 				}
 			}
+/*			if (key.equalsIgnoreCase("budgetCategory")) {
+				transactionModel.makeChanges(key, changedValues.get(key));
+			}*/
 			
 			if (changedValues.containsKey("updateBalance")) {
 				transactionService.updateAccountBalance(transactionModel.getTransactionAccountId(), transactionModel.getTransactionAmount());
@@ -116,7 +119,8 @@ public class TransactionViewController extends AbstractViewController implements
 					transactionService.updateTransaction(transactionModel);
 				}
 			} catch (Exception e) {
-				System.out.println("Error in TransactionViewController.handleSaveEvent");
+				System.out.println("Error in TransactionViewController.handleSaveEvent\n");
+				e.printStackTrace();
 			}
 		}
 	}
@@ -141,7 +145,6 @@ public class TransactionViewController extends AbstractViewController implements
 			transactionSlidingForm.fireCloseEvent();
 		}
 	}
-	
 	
 	@Override
 	protected <T> void handleCloseEvent(FormEvent<T> formCloseEvent) {
