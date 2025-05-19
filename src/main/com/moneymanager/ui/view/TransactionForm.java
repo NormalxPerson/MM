@@ -17,9 +17,6 @@ import org.controlsfx.validation.Validator;
 import java.time.LocalDate;
 import java.util.Map;
 
-//TODO : add category selection to form. Also general transaction - category
-
-
 public class TransactionForm extends AbstractForm<TransactionTableView.TransactionModel> {
 	
 	private TextField transactionAmountField;
@@ -32,13 +29,13 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 	private VBox updateBalanceFieldBox;
 	
 	private ObservableMap<String, AccountTableView.AccountModel> accountModelMap;
-	private ObservableList<BudgetCategory> categoryList;
-
+	private ObservableMap<String, BudgetCategory> categoryMap;
 	
-	public TransactionForm(ObservableMap<String, AccountTableView.AccountModel> accountModelsMap, ObservableList<AccountTableView.AccountModel> accountModelList, ObservableList<BudgetCategory> budgetCategoryList) {
+	
+	public TransactionForm(ObservableMap<String, AccountTableView.AccountModel> accountModelsMap, ObservableList<AccountTableView.AccountModel> accountModelList, ObservableMap<String, BudgetCategory> budgetCategoryMap) {
 		super();
 		this.accountModelMap = accountModelsMap;
-		this.categoryList = budgetCategoryList;
+		this.categoryMap = budgetCategoryMap;
 		initializeFields(accountModelList);
 		setupValidators();
 	}
@@ -53,7 +50,7 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 		accountComboBox = new ComboBox<>();
 		updateBalanceCheckBox = new CheckBox();
 		
-		budgetCategoryComboBox.setItems(categoryList.sorted());
+		budgetCategoryComboBox.setItems(FXCollections.observableArrayList(categoryMap.values()));
 		budgetCategoryComboBox.setConverter(new StringConverter<>() {
 			@Override
 			public String toString(BudgetCategory object) {
@@ -62,7 +59,7 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 			
 			@Override
 			public BudgetCategory fromString(String string) {
-				for (BudgetCategory category : categoryList) {
+				for (BudgetCategory category : categoryMap.values()) {
 					if (category.getCategoryId().equalsIgnoreCase(string)) {
 						return category;
 					}
@@ -164,7 +161,7 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 			
 			String selectedCategoryId = transactionModel.getTransactionCategoryId();
 			if (selectedCategoryId != null) {
-				for (BudgetCategory cats : categoryList) {
+				for (BudgetCategory cats : categoryMap.values()) {
 					if (cats.getCategoryId().equals(selectedCategoryId)) {
 						budgetCategoryComboBox.getSelectionModel().select(cats);
 					}

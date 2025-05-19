@@ -29,7 +29,7 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 		descriptionColumn.setCellValueFactory(cellData -> cellData.getValue().transactionDescriptionProperty());
 		
 		TableColumn<TransactionModel, String> categoryColumn = new TableColumn<>("Budget Category");
-		descriptionColumn.setCellValueFactory(cellData -> cellData.getValue().TransactionCategoryNameProperty());
+		categoryColumn.setCellValueFactory(cellData -> cellData.getValue().TransactionCategoryNameProperty());
 		
 		TableColumn<TransactionModel, String> accountNameColumn = new TableColumn<>("Account Name");
 		accountNameColumn.setCellValueFactory(cellData -> cellData.getValue().TransactionAccountNameProperty());
@@ -37,7 +37,7 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 		this.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
 		this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
 		
-		getColumns().addAll(List.of(dateColumn, amountColumn, descriptionColumn, accountNameColumn));
+		getColumns().addAll(List.of(dateColumn, amountColumn, descriptionColumn, categoryColumn, accountNameColumn));
 		
 	}
 	
@@ -264,7 +264,6 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 			private final String transactionId;
 			private final LocalDate transactionDate;
 			private final double transactionAmount;
-			private final String transactionDescription;
 			private final TransactionType transactionType;
 			
 			// Optional parameters - initialized with default values
@@ -272,19 +271,25 @@ public class TransactionTableView extends TableView<TransactionTableView.Transac
 			private String transactionAccountName = "";
 			private String transactionCategoryId = "";
 			private String transactionCategoryName = "";
+			private String transactionDescription = "";
+			
 			
 			// Constructor with required parameters
-			public Builder(String id, LocalDate date, double amount, String description, String type) {
+			public Builder(String id, LocalDate date, double amount, String type) {
 				this.transactionId = id;
 				this.transactionDate = date;
 				this.transactionAmount = amount;
-				this.transactionDescription = description;
 				this.transactionType = TransactionType.valueOf(type.toUpperCase());
 			}
 			
 			// Methods to set optional parameters
 			public Builder accountId(String accountId) {
 				this.transactionAccountId = accountId;
+				return this;
+			}
+			
+			public Builder transactionDescription(String transactionDescription) {
+				this.transactionDescription = transactionDescription;
 				return this;
 			}
 			

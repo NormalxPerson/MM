@@ -46,10 +46,10 @@ public class TransactionViewController extends AbstractViewController implements
 	public void postInitialize() {
 		refreshTransactionTable(transactionService.getObservableTransactionModelsList());
 		
-		transactionSlidingForm = new TransactionForm(transactionService.getAccountModelObservableMap(), transactionService.getAccountModelObservableList(), transactionService.getBudgetCategoryObservableList());
+		transactionSlidingForm = new TransactionForm(transactionService.getAccountModelObservableMap(), transactionService.getAccountModelObservableList(), transactionService.getBudgetCategoryObservableMap());
 		this.editingForm = this.transactionSlidingForm;
 		
-		this.transactionCreationForm = new TransactionForm(transactionService.getAccountModelObservableMap(), transactionService.getAccountModelObservableList(), transactionService.getBudgetCategoryObservableList());
+		this.transactionCreationForm = new TransactionForm(transactionService.getAccountModelObservableMap(), transactionService.getAccountModelObservableList(), transactionService.getBudgetCategoryObservableMap());
 		this.creationDialogForm = this.transactionCreationForm;
 		
 		transactionContainer.getChildren().addAll(transactionTableView, transactionSlidingForm);

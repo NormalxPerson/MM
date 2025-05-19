@@ -1,12 +1,10 @@
 package com.moneymanager.ui.controller;
 
-import com.moneymanager.core.BudgetCategory;
 import com.moneymanager.repos.*;
 import com.moneymanager.service.AccountService;
 import com.moneymanager.service.BudgetService;
 import com.moneymanager.service.TransactionService;
 import javafx.application.Application;
-import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -26,7 +24,7 @@ public class MainFx extends Application {
 		TransactionService transactionService = new TransactionService(transactionRepo, accountService);
 		BudgetService budgetService = new BudgetService(budgetRepo, budgetCategoryRepo, transactionRepo);
 		
-		transactionService.setBudgetCategoryList(budgetService.getAllCategories());
+		transactionService.setBudgetCategoryMap(budgetService.getAllCategoryMap());
 		
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainView.fxml"));
 		Parent root = loader.load();

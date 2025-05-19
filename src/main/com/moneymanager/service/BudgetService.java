@@ -12,6 +12,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.ObservableMap;
 
 import java.time.LocalDate;
 import java.time.YearMonth;
@@ -25,7 +26,7 @@ public class BudgetService {
 	BudgetCategoryRepo budgetCategoryRepo;
 	TransactionRepo transactionRepo;
 	ObservableList<BudgetCategory> budgetCategories = FXCollections.observableArrayList();
-	HashMap<String, BudgetCategory> categoryMap = new HashMap<>();
+	ObservableMap<String, BudgetCategory> categoryMap = FXCollections.observableHashMap();
 
 	public BudgetService(BudgetRepo budgetRepo, BudgetCategoryRepo budgetCategoryRepo, TransactionRepo transactionRepo) {
 		this.budgetRepo = budgetRepo;
@@ -79,11 +80,6 @@ public class BudgetService {
 		return budgetsWithCategories;
 	}
 	
-	public List<BudgetCategoryModel> getCategoriesForBudget(YearMonth yearMonth) {
-		BudgetWithCategories budsAndCats = new BudgetWithCategories(getBudgetFromYearMonth(yearMonth));
-		return budsAndCats.getCategories();
-	}
-	
 	public List<Budget> getAllBudgets() {
 		return budgetRepo.getAllBudgets();
 	}
@@ -95,9 +91,9 @@ public class BudgetService {
 		this.budgetCategories.setAll(categoryMap.values());
 	}
 	
-	public ObservableList<BudgetCategory> getAllCategories() {
+	public ObservableMap<String, BudgetCategory> getAllCategoryMap() {
 		updateCategories();
-		return this.budgetCategories;
+		return this.categoryMap;
 	}
 	
 	

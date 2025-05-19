@@ -18,7 +18,7 @@ public class TransactionService {
 	private final TransactionRepo transRepo;
 	private final AccountService accountService;
 	private final ObservableList<TransactionTableView.TransactionModel> transactionModels;
-	private ObservableList<BudgetCategory> budgetCategories;
+	private ObservableMap<String, BudgetCategory> budgetCategories;
 	
 	public TransactionService(TransactionRepo transRepo, AccountService accountService) {
 		this.transRepo = transRepo;
@@ -26,7 +26,7 @@ public class TransactionService {
 		this.transactionModels = FXCollections.observableArrayList();
 	}
 	
-	public void setBudgetCategoryList(ObservableList<BudgetCategory> catList) {
+	public void setBudgetCategoryMap(ObservableMap<String, BudgetCategory> catList) {
 		this.budgetCategories = catList;
 	}
 	
@@ -35,7 +35,7 @@ public class TransactionService {
 		return transactionModels;
 	}
 	
-	public TransactionTableView.TransactionModel createTransactionFromUser(double amount, String description, String date, String type, String accountId, String categoryId) {
+/*	public TransactionTableView.TransactionModel createTransactionFromUser(double amount, String description, String date, String type, String accountId, String categoryId) {
 		Transaction transaction = TransactionFactory.createTransaction(amount, description, date, type, accountId, categoryId, transRepo);
 		System.out.println("TransactionService.createTransactionFromUser: " + transaction.toString());
 		
@@ -47,7 +47,7 @@ public class TransactionService {
 		return newTransactionModel;
 		
 		
-	}
+	}*/
 	
 	public void updateAccountBalance(String accountId, double amount) {
 		accountService.updateBalance(accountId, amount);
@@ -64,16 +64,17 @@ public class TransactionService {
 	
 	private TransactionTableView.TransactionModel createNewModelFromTransaction(Transaction transaction) {
 		String accountName = accountService.getAccountNameByAccountId(transaction.getAccountId());
+		
 		return new TransactionTableView.TransactionModel.Builder(
 				transaction.getId(),
 				transaction.getDate(),
 				transaction.getAmount(),
-				transaction.getDescription(),
 				transaction.getType().getDisplayName())
+				.transactionDescription(transaction.getDescription())
 				.accountId(transaction.getAccountId()) // This can safely be null
 				.accountName(accountName)
 				.categoryId(transaction.getCategoryId()) // This can safely be null
-				// Add category name if needed
+				.categoryName(budgetCategories.get(transaction.getCategoryId()).getCategoryName())// Add category name if needed
 				.build();
 	}
 	
@@ -85,7 +86,7 @@ public class TransactionService {
 		return accountService.getAccountModelMap();
 	}
 	
-	public TransactionTableView.TransactionModel createTransactionModelFromTransaction(Transaction transaction) {
+/*	public TransactionTableView.TransactionModel createTransactionModelFromTransaction(Transaction transaction) {
 		String accountName = accountService.getAccountNameByAccountId(transaction.getAccountId());
 		return new TransactionTableView.TransactionModel.Builder(
 				transaction.getId(),
@@ -98,7 +99,7 @@ public class TransactionService {
 				.categoryId(transaction.getCategoryId()) // This can safely be null
 				// Add category name if needed
 				.build();
-	}
+	}*/
 	
 	public TransactionTableView.TransactionModel createFromFormValues(Map<String, Object> fieldValues) {
 		Transaction transaction = TransactionFactory.createTransaction(fieldValues, transRepo);
@@ -122,7 +123,7 @@ public class TransactionService {
 		return 0;
 	}
 	
-	public ObservableList<BudgetCategory> getBudgetCategoryObservableList() {
+	public ObservableMap<String, BudgetCategory> getBudgetCategoryObservableMap() {
 		return budgetCategories;
 	}
 	
