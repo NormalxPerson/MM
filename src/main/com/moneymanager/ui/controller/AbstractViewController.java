@@ -68,6 +68,9 @@ public abstract class AbstractViewController implements Initializable, BaseViewC
 		creationDialogForm.openCreationDialog();
 	}
 	
+	@Override
+	public abstract void refreshView();
+	
 	
 	protected abstract <T> void handleSaveEvent(FormEvent<T> formSaveEvent);
 	protected abstract <T> void handleDeleteEvent(FormEvent<T> formDeleteEvent);

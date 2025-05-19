@@ -24,7 +24,7 @@ public class BudgetService {
 	BudgetRepo budgetRepo;
 	BudgetCategoryRepo budgetCategoryRepo;
 	TransactionRepo transactionRepo;
-	ObservableList<BudgetCategory> budgetCategories = FXCollections.emptyObservableList();
+	ObservableList<BudgetCategory> budgetCategories = FXCollections.observableArrayList();
 	HashMap<String, BudgetCategory> categoryMap = new HashMap<>();
 
 	public BudgetService(BudgetRepo budgetRepo, BudgetCategoryRepo budgetCategoryRepo, TransactionRepo transactionRepo) {
@@ -92,8 +92,7 @@ public class BudgetService {
 		for (BudgetCategory category : budgetCategoryRepo.getAllCategories()) {
 			categoryMap.put(category.getCategoryId(), category);
 		}
-		this.budgetCategories.clear();
-		this.budgetCategories = FXCollections.observableArrayList(categoryMap.values());
+		this.budgetCategories.setAll(categoryMap.values());
 	}
 	
 	public ObservableList<BudgetCategory> getAllCategories() {

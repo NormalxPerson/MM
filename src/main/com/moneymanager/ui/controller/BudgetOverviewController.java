@@ -258,4 +258,9 @@ public class BudgetOverviewController implements BaseViewController {
 	public void showCreationDialog() {
 	
 	}
+	
+	@Override
+	public void refreshView() {
+		budgetInteractor.loadBudgetForMonth(budgetOverviewModel.getSelectedYearMonth());
+	}
 }

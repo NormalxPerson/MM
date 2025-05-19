@@ -10,7 +10,7 @@ public class DatabaseInitializer {
 				transactionId TEXT PRIMARY KEY,
 				transactionDate TEXT NOT NULL,""" /*Stored as YYYY-MM-DD */ + """
 				transactionAmount INTEGER NOT NULL,
-				transactionDescription TEXT NOT NULL,
+				transactionDescription TEXT NULL,
 				transactionType TEXT NOT NULL,
 				accountId INTEGER NOT NULL,
 				categoryId Text NULL,

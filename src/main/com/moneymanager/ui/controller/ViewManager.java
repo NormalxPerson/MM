@@ -58,6 +58,8 @@ public class ViewManager {
 			}
 		}
 		currentViewController = controllerCache.get(viewName);
+		
+		currentViewController.refreshView();
 		return viewCache.get(viewName);
 	}
 	

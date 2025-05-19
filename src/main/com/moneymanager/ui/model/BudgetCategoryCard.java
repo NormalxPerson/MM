@@ -30,6 +30,7 @@ public class BudgetCategoryCard extends VBox {
 	
 	private Label categoryNameLabel;
 	private Label allocatedAmountLabel;
+	private Label spentAmountLabel;
 	private Label remainingAmountLabel;
 	private ProgressBar progressBar;
 	private Label progressLabel;
@@ -56,6 +57,14 @@ public class BudgetCategoryCard extends VBox {
 		HBox amountBox = new HBox(allocatedPrefix, allocatedAmountLabel);
 		amountBox.setAlignment(Pos.CENTER_LEFT);
 		
+		// Spent section
+		Label spentPrefix = new Label("Spent: ");
+		spentAmountLabel = new Label();
+		
+		HBox spentBox = new HBox(spentPrefix, spentAmountLabel);
+		spentBox.setAlignment(Pos.CENTER_LEFT);
+		
+		// Remaining section
 		Label remainingPrefix = new Label("Remaining: ");
 		remainingAmountLabel = new Label();
 		
@@ -74,7 +83,7 @@ public class BudgetCategoryCard extends VBox {
 		HBox.setMargin(progressLabel, new Insets(0, 0, 0, 8));
 		
 		// Put it all together
-		this.getChildren().addAll(nameBox, amountBox, remainingBox, progressBox);
+		this.getChildren().addAll(nameBox, amountBox, spentBox, remainingBox, progressBox);
 		
 		// Add some padding and spacing
 		this.setPadding(new Insets(12));
@@ -85,6 +94,7 @@ public class BudgetCategoryCard extends VBox {
 		// Bind labels to properties
 		categoryNameLabel.textProperty().bind(categoryName);
 		allocatedAmountLabel.textProperty().bind(allocatedAmount.asString("$%.2f"));
+		spentAmountLabel.textProperty().bind(spentAmount.asString("$%.2f"));
 		remainingAmountLabel.textProperty().bind(remainingAmount.asString("$%.2f"));
 		progressLabel.textProperty().bind(progress.multiply(100).asString("%.0f%%"));
 		
@@ -97,16 +107,16 @@ public class BudgetCategoryCard extends VBox {
 	}
 	
 	private void setupStyles() {
-		this.getStyleClass().add("budget-category-card");
 		this.getStyleClass().add("md3-rounded-medium");
 		
 		categoryNameLabel.getStyleClass().add("title-label");
 		progressBar.getStyleClass().add("budget-progress-bar");
 		
+		spentAmountLabel.setStyle("-fx-text-fill: #D29030E4;");
 		updateRemainingColor();
 		updateProgressColor();
 		
-		this.setStyle("-fx-border-color: green; -fx-border-width: 2; -fx-background-color: -fx-md3-surface-color; -fx-background: -fx-md3-surface-color;");
+		this.setStyle("-fx-border-color: green; -fx-border-width: 2; -fx-background-color: #EADDFF;");
 	}
 	
 	private void updateRemainingColor() {
@@ -117,7 +127,7 @@ public class BudgetCategoryCard extends VBox {
 		} else if (remaining < allocatedAmount.get() * 0.2) {
 			remainingAmountLabel.setStyle("-fx-text-fill: #f39c12;"); // Orange for low funds
 		} else {
-			remainingAmountLabel.setStyle("-fx-text-fill: #2ecc71;"); // Green for healthy funds
+			remainingAmountLabel.setStyle("-fx-text-fill: #279817BB;"); // Green for healthy funds
 		}
 	}
 	
@@ -195,7 +205,7 @@ public class BudgetCategoryCard extends VBox {
 		if (card.allocatedAmount.get() > 0.0) { card.progress.bind (
 				Bindings.divide(card.spentAmount,card.allocatedAmount));
 		}
-		card.setStyle("-fx-border-color: green; -fx-border-width: 2; -fx-background-color: -fx-md3-surface-color; -fx-background: -fx-md3-surface-color;");
+		card.setStyle("-fx-border-color: green; -fx-border-width: 2; -fx-background-color: #EADDFF");
 		
 		return card;
 	}

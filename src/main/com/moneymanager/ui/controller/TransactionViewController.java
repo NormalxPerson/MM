@@ -79,6 +79,11 @@ public class TransactionViewController extends AbstractViewController implements
 	}
 	
 	@Override
+	public void refreshView() {
+	
+	}
+	
+	@Override
 	protected void handleSaveEvent(FormEvent event) {
 		if (event.getEventType() == FormEvent.SAVE) {
 			TransactionTableView.TransactionModel transactionModel = (TransactionTableView.TransactionModel) event.getModel();

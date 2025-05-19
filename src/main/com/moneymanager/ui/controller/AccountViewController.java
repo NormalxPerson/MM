@@ -77,6 +77,11 @@ public class AccountViewController extends AbstractViewController {
 	}
 	
 	@Override
+	public void refreshView() {
+	
+	}
+	
+	@Override
 	protected <T> void handleNewSaveEvent(FormEvent<T> formNewSaveEvent) {
 		if (formNewSaveEvent.getEventType() == FormEvent.NEWSAVE) {
 			Map<String, Object> fieldValues = formNewSaveEvent.getFieldValues();

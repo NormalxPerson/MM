@@ -63,7 +63,7 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 			@Override
 			public BudgetCategory fromString(String string) {
 				for (BudgetCategory category : categoryList) {
-					if (category.getCategoryName().equalsIgnoreCase(string)) {
+					if (category.getCategoryId().equalsIgnoreCase(string)) {
 						return category;
 					}
 				}
@@ -137,11 +137,6 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 		);
 		
 		validationSupport.registerValidator(
-				transactionDescriptionField,
-				Validator.createEmptyValidator("Transaction Description Required")
-		);
-		
-		validationSupport.registerValidator(
 				transactionDatePicker,
 				Validator.createEmptyValidator("Transaction Date Required")
 		);
@@ -166,6 +161,15 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 			transactionDescriptionField.setText(transactionModel.getTransactionDescription());
 			transactionDatePicker.setValue(transactionModel.getTransactionDate());
 			transactionTypeComboBox.getSelectionModel().select(transactionModel.getTransactionType());
+			
+			String selectedCategoryId = transactionModel.getTransactionCategoryId();
+			if (selectedCategoryId != null) {
+				for (BudgetCategory cats : categoryList) {
+					if (cats.getCategoryId().equals(selectedCategoryId)) {
+						budgetCategoryComboBox.getSelectionModel().select(cats);
+					}
+				}
+			}
 			
 			String selectedAccountId = transactionModel.getTransactionAccountId();
 			if (selectedAccountId != null && accountModelMap.containsKey(selectedAccountId)) {

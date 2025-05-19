@@ -371,3 +371,7 @@
     -fx-spacing: 24px; /* Example padding around the content area */
     -fx-background-color: -fx-md3-background-color; /* Ensure content area has surface background */
 }
+
+.budget-category-card {
+    -fx-background-color: -fx-md3-primary-container-color
+}
