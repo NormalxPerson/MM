@@ -59,10 +59,8 @@ public class AccountService {
     
     public AccountTableView.AccountModel createAndAddAccount(String accountName, String bankName, String accountType, Double balance) {
         Account newAccount = new Account(accountName, bankName, accountType, balance);
-        String newId = accountRepo.addAccountAndReturnId(newAccount);
-        newAccount.setAccountId(newId);
-        
-        theSourceHashMapOfAccounts.put(newId,newAccount);
+        accountRepo.saveNewAccount(newAccount);
+        theSourceHashMapOfAccounts.put(newAccount.getAccountId(),newAccount);
         
         AccountTableView.AccountModel newAccountModel = createModelFromAccount(newAccount);
         accountModelMap.put(newAccountModel.getAccountId(), newAccountModel);
@@ -80,13 +78,8 @@ public class AccountService {
         } else { return "ACCOUNT_DELETED"; }
     }
     
-    public HashMap<String, Account> getAccountMap() {return theSourceHashMapOfAccounts;}
     
     private void updateTheSourceAccountMap() {this.theSourceHashMapOfAccounts = (HashMap<String, Account>) accountRepo.getAccountMap();}
-    
-    public List<Account> getAccountList() {
-	    return new ArrayList<>(accountRepo.getAllAccounts());
-    }
     
     public AccountTableView.AccountModel createModelFromAccount(Account account) {
 	    return new AccountTableView.AccountModel(account.getAccountName(), account.getBankName(), account.getAccountType().name(), account.getBalance(), account.getAccountId());

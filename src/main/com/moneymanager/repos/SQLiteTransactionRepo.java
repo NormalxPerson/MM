@@ -153,7 +153,7 @@ public class SQLiteTransactionRepo implements TransactionRepo {
 			stmt.setInt(2, amountInCents);
 			stmt.setString(3, transactionModel.getTransactionDescription());
 			stmt.setString(4, transactionModel.getTransactionType().name());
-			stmt.setInt(5, Integer.parseInt(transactionModel.getTransactionAccountId()));
+			stmt.setString(5, transactionModel.getTransactionAccountId());
 			stmt.setString(6, transactionModel.getTransactionCategoryId());
 			stmt.setString(7, transactionModel.getTransactionId());
 			

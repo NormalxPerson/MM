@@ -27,7 +27,7 @@ public class SQLiteAccountRepo implements AccountRepo {
         try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(sql)) {
             int balanceInCents = (int) Math.round(account.getBalance() * 100);
             stmt.setInt(1, balanceInCents);
-            stmt.setInt(2, Integer.parseInt(account.getAccountId()));
+            stmt.setString(2, account.getAccountId());
             
             int rowsUpdated = stmt.executeUpdate();
             
@@ -42,12 +42,12 @@ public class SQLiteAccountRepo implements AccountRepo {
         String sql = "SELECT * FROM accounts WHERE accountId = ?";
         try (Connection connection = dbConnection.getConnection();
              PreparedStatement stmt = connection.prepareStatement(sql)) {
-            stmt.setInt(1, Integer.parseInt(accountId)); // Assuming accountId is an integer in the database
+            stmt.setString(1, accountId); // Assuming accountId is an integer in the database
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 double balanceInDollars = rs.getInt("accountBalance") / 100.0;
                 return new Account(
-                        String.valueOf(rs.getInt("accountId")),
+                        rs.getString("accountId"),
                         rs.getString("accountName"),
                         rs.getString("bankName"),
                         rs.getString("accountType"),
@@ -82,7 +82,7 @@ public class SQLiteAccountRepo implements AccountRepo {
             while (rs.next()) {
                 double balanceInDollars = rs.getDouble("accountBalance") / 100;
                 Account account = new Account(
-                        String.valueOf(rs.getInt("accountId")),
+                        rs.getString("accountId"),
                         rs.getString("accountName"),
                         rs.getString("bankName"),
                         rs.getString("accountType"),
@@ -140,33 +140,26 @@ public class SQLiteAccountRepo implements AccountRepo {
     }
     
     @Override
-    public String addAccountAndReturnId(Account account) {
-        String sql = "INSERT INTO accounts (accountName, bankName, accountBalance, accountType) VALUES (?, ?, ?, ?)";
+    public void saveNewAccount(Account account) {
+        String sql = "INSERT INTO accounts (accountId, accountName, bankName, accountBalance, accountType) VALUES (?, ?, ?, ?, ?)";
         int balanceInCents = (int) Math.round(account.getBalance() * 100);
         
         try (Connection connection = dbConnection.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement stmt = connection.prepareStatement(sql)) {
             
-            stmt.setString(1, account.getAccountName());
-            stmt.setString(2, account.getBankName());
-            stmt.setDouble(3, balanceInCents);
-            stmt.setString(4, account.getAccountType().name());
+            stmt.setString(1, account.getAccountId());
+            stmt.setString(2, account.getAccountName());
+            stmt.setString(3, account.getBankName());
+            stmt.setDouble(4, balanceInCents);
+            stmt.setString(5, account.getAccountType().name().toUpperCase());
             
             int affectedRows = stmt.executeUpdate();
             if (affectedRows == 0) {
                 throw new SQLException("Creating account failed, no rows affected.");
             }
             
-            try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    System.out.println("Successfully added account: " + account.getAccountName() + " with ID: " + generatedKeys.getInt(1));
-                    return String.valueOf(generatedKeys.getInt(1));
-                } else {
-                    throw new SQLException("Creating account failed, no ID obtained.");
-                }
-            }
         } catch (SQLException e) {
-            throw new RuntimeException("Failed to add account", e);
+            throw new RuntimeException("Failed to save account", e);
         }
     }
     
@@ -178,7 +171,7 @@ public class SQLiteAccountRepo implements AccountRepo {
             stmt.setString(2, account.getBankName());
             stmt.setDouble(3, balanceInCents);
             stmt.setString(4, account.getAccountType().name());
-            stmt.setInt(5, Integer.parseInt(account.getAccountId()));
+            stmt.setString(5, account.getAccountId());
             
             int rowsUpdated = stmt.executeUpdate();
             
@@ -191,10 +184,9 @@ public class SQLiteAccountRepo implements AccountRepo {
     }
     
     public int deleteAccountById(String accountId) {
-        int id = Integer.parseInt(accountId);
         String sql = "DELETE FROM accounts WHERE accountId = ?";
         try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(sql)) {
-            stmt.setInt(1, id);
+            stmt.setString(1, accountId);
             
             return stmt.executeUpdate();
         } catch (SQLException e) {

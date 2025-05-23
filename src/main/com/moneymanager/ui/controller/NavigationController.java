@@ -40,6 +40,9 @@ public class NavigationController implements Initializable{
 	private ToggleButton budgetButton;
 	
 	@FXML
+	private ToggleButton csvParserButton;
+	
+	@FXML
 	private ToggleGroup navigationGroup;
 	
 	@FXML

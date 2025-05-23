@@ -62,7 +62,7 @@ public class AccountServiceTest {
 		Account newAccount = new Account(accountName, bankName, accountType, balance);
 		String generatedId = "test-id-123";
 		
-		when(accountRepo.addAccountAndReturnId(any(Account.class))).thenReturn(generatedId);
+		when(accountRepo.saveAccountAndReturnId(any(Account.class))).thenReturn(generatedId);
 		
 		HashMap<String, Account> accountMap = new HashMap<>();
 		accountMap.put(generatedId, newAccount);
@@ -79,7 +79,7 @@ public class AccountServiceTest {
 		assertEquals(accountType, result.getAccountType().name());
 		assertEquals(balance, result.getAccountBalance());
 		assertEquals(generatedId, result.getAccountId());
-		verify(accountRepo).addAccountAndReturnId(any(Account.class));
+		verify(accountRepo).saveAccountAndReturnId(any(Account.class));
 	}
 
 	@Test

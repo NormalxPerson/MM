@@ -8,9 +8,11 @@ import com.moneymanager.repos.BudgetCategoryRepo;
 import com.moneymanager.repos.BudgetRepo;
 import com.moneymanager.repos.TransactionRepo;
 import com.moneymanager.ui.model.BudgetCategoryModel;
+import com.moneymanager.ui.view.AccountTableView;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
@@ -25,13 +27,20 @@ public class BudgetService {
 	BudgetRepo budgetRepo;
 	BudgetCategoryRepo budgetCategoryRepo;
 	TransactionRepo transactionRepo;
-	ObservableList<BudgetCategory> budgetCategories = FXCollections.observableArrayList();
-	ObservableMap<String, BudgetCategory> categoryMap = FXCollections.observableHashMap();
+	ObservableList<BudgetCategory> budgetCategories;
+	ObservableMap<String, BudgetCategory> categoryMap;
 
 	public BudgetService(BudgetRepo budgetRepo, BudgetCategoryRepo budgetCategoryRepo, TransactionRepo transactionRepo) {
 		this.budgetRepo = budgetRepo;
 		this.budgetCategoryRepo = budgetCategoryRepo;
 		this.transactionRepo = transactionRepo;
+		this.categoryMap = FXCollections.observableHashMap();
+		this.budgetCategories = FXCollections.observableArrayList(categoryMap.values());
+		
+		categoryMap.addListener((MapChangeListener.Change<? extends String, ? extends BudgetCategory> change) -> {
+			this.budgetCategories.setAll(categoryMap.values());
+		});
+		
 		updateCategories();
 		
 	}
@@ -64,11 +73,8 @@ public class BudgetService {
 		return newBudget;
 	}
 	
-	public Budget getBudgetFromYearMonth(YearMonth yearMonth) {
-		return budgetRepo.getBudgetByYearMonth(yearMonth);
-	}
-	
 	public List<BudgetWithCategories> getBudgetsWithCategories() {
+		
 		List<Budget> allBudgets = getAllBudgets();
 		List<BudgetWithCategories> budgetsWithCategories = new ArrayList<>();
 		
@@ -88,7 +94,6 @@ public class BudgetService {
 		for (BudgetCategory category : budgetCategoryRepo.getAllCategories()) {
 			categoryMap.put(category.getCategoryId(), category);
 		}
-		this.budgetCategories.setAll(categoryMap.values());
 	}
 	
 	public ObservableMap<String, BudgetCategory> getAllCategoryMap() {

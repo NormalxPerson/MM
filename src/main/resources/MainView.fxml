@@ -29,7 +29,7 @@
             <ToggleButton fx:id="accountsButton" text="Accounts" toggleGroup="$navigationGroup" styleClass="md3-navigation-rail-item, md3-rounded-large" userData="accountView"/>
             <ToggleButton fx:id="transactionsButton" text="Transactions" toggleGroup="$navigationGroup" styleClass="md3-navigation-rail-item, md3-rounded-large" userData="transactionView"/>
             <ToggleButton fx:id="budgetButton" text="Budget" toggleGroup="$navigationGroup" styleClass="md3-navigation-rail-item, md3-rounded-large" userData="budgetView"/>
-
+            <ToggleButton fx:id="csvParserButton" text="Import" toggleGroup="$navigationGroup" styleClass="md3-navigation-rail-item, md3-rounded-large" userData="CSVParserView"/>
         </VBox>
     </left>
     <center>

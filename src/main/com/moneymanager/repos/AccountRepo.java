@@ -15,5 +15,5 @@ public interface AccountRepo {
     void updateAccountBalance(Account account);
     public void updateAccount(AccountTableView.AccountModel account);
     int deleteAccountById(String id);
-    String addAccountAndReturnId(Account newAccount);
+    void saveNewAccount(Account newAccount);
 }

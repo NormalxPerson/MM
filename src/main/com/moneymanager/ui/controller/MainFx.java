@@ -1,5 +1,6 @@
 package com.moneymanager.ui.controller;
 
+import com.moneymanager.csv.CsvParser;
 import com.moneymanager.repos.*;
 import com.moneymanager.service.AccountService;
 import com.moneymanager.service.BudgetService;
@@ -9,6 +10,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+
+import java.io.File;
+import java.io.FileReader;
 
 public class MainFx extends Application {
 	
@@ -34,6 +38,10 @@ public class MainFx extends Application {
 		navigationController.setTransactionService(transactionService);
 		navigationController.setBudgetService(budgetService);
 		navigationController.setUpControllers();
+		
+		CsvParser parser = new CsvParser(new File("/home/citizen/Documents/java/MoneyManager/src/main/resources/test.csv"));
+		
+		
 		
 		// 2. Create the Scene
 		Scene scene = new Scene(root, 900, 750);

@@ -2,6 +2,7 @@ package com.moneymanager.core;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Account {
 	
@@ -33,7 +34,7 @@ public class Account {
 	private List<Transaction> transactionList;
 
 	public Account(String accountName, String bankName, String accountType, double balance) {
-		
+		this.accountId = UUID.randomUUID().toString();
 		this.accountName = accountName;
 		this.bankName = bankName;
 		this.accountType = AccountType.valueOf(accountType.toUpperCase());
@@ -53,7 +54,7 @@ public class Account {
 		this.balance = balance;
 	}
 	
-	public void setAccountId(String accountId) { this.accountId = accountId; }
+	//public void setAccountId(String accountId) { this.accountId = accountId; }
 
 	public String getAccountId() {
 		return accountId;

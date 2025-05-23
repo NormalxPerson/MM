@@ -64,6 +64,11 @@ public class TransactionService {
 	
 	private TransactionTableView.TransactionModel createNewModelFromTransaction(Transaction transaction) {
 		String accountName = accountService.getAccountNameByAccountId(transaction.getAccountId());
+		String catName = null;
+		
+		if (budgetCategories.containsKey(transaction.getCategoryId())) {
+			catName = budgetCategories.get(transaction.getCategoryId()).getCategoryName();
+		}
 		
 		return new TransactionTableView.TransactionModel.Builder(
 				transaction.getId(),
@@ -74,7 +79,7 @@ public class TransactionService {
 				.accountId(transaction.getAccountId()) // This can safely be null
 				.accountName(accountName)
 				.categoryId(transaction.getCategoryId()) // This can safely be null
-				.categoryName(budgetCategories.get(transaction.getCategoryId()).getCategoryName())// Add category name if needed
+				.categoryName(catName)// Add category name if needed
 				.build();
 	}
 	

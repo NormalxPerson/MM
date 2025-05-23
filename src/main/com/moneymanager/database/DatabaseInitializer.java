@@ -12,7 +12,7 @@ public class DatabaseInitializer {
 				transactionAmount INTEGER NOT NULL,
 				transactionDescription TEXT NULL,
 				transactionType TEXT NOT NULL,
-				accountId INTEGER NOT NULL,
+				accountId Text NOT NULL,
 				categoryId Text NULL,
 				FOREIGN KEY (accountId) REFERENCES accounts(accountId)
 				FOREIGN KEY (categoryId) REFERENCES categories(categoryId) ON DELETE SET NULL
@@ -20,7 +20,7 @@ public class DatabaseInitializer {
 	
 	private static final String CREATE_ACCOUNTS_TABLE = """
 			CREATE TABLE IF NOT EXISTS accounts (
-				accountId INTEGER PRIMARY KEY AUTOINCREMENT,
+				accountId TEXT PRIMARY KEY,
 				accountName TEXT NOT NULL,
 				bankName TEXT NOT NULL,
 				accountBalance integer NOT NULL,
@@ -31,7 +31,7 @@ public class DatabaseInitializer {
 	private static final String CREATE_CSV_STRATEGIES_TABLE = """
 			CREATE TABLE IF NOT EXISTS csv_strategies (
 				transactionId INTEGER PRIMARY KEY AUTOINCREMENT,
-				accountId INTEGER NOT NULL,
+				accountId Text NOT NULL,
 				headerPattern TEXT NOT NULL,
 				columnMappings TEXT NOT NULL,
 				dateFormat TEXT,
