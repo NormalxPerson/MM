@@ -101,6 +101,10 @@ public class BudgetService {
 		return this.categoryMap;
 	}
 	
+	public ObservableList<BudgetCategory> getBudgetCategoriesObservableList() {
+		return this.budgetCategories;
+	}
+	
 	
 	public void updateBudgetCategory(BudgetCategoryModel updatedBudgetCategoryModel) {
 		

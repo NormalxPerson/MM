@@ -29,13 +29,12 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 	private VBox updateBalanceFieldBox;
 	
 	private ObservableMap<String, AccountTableView.AccountModel> accountModelMap;
-	private ObservableMap<String, BudgetCategory> categoryMap;
+	private ObservableList<BudgetCategory> budgetCategoriesList;
 	
-	
-	public TransactionForm(ObservableMap<String, AccountTableView.AccountModel> accountModelsMap, ObservableList<AccountTableView.AccountModel> accountModelList, ObservableMap<String, BudgetCategory> budgetCategoryMap) {
+	public TransactionForm(ObservableMap<String, AccountTableView.AccountModel> accountModelsMap, ObservableList<AccountTableView.AccountModel> accountModelList, ObservableList<BudgetCategory> budgetCategoryList) {
 		super();
 		this.accountModelMap = accountModelsMap;
-		this.categoryMap = budgetCategoryMap;
+		this.budgetCategoriesList = budgetCategoryList;
 		initializeFields(accountModelList);
 		setupValidators();
 	}
@@ -50,7 +49,7 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 		accountComboBox = new ComboBox<>();
 		updateBalanceCheckBox = new CheckBox();
 		
-		budgetCategoryComboBox.setItems(FXCollections.observableArrayList(categoryMap.values()));
+		budgetCategoryComboBox.setItems(this.budgetCategoriesList);
 		budgetCategoryComboBox.setConverter(new StringConverter<>() {
 			@Override
 			public String toString(BudgetCategory object) {
@@ -59,7 +58,7 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 			
 			@Override
 			public BudgetCategory fromString(String string) {
-				for (BudgetCategory category : categoryMap.values()) {
+				for (BudgetCategory category : budgetCategoriesList) {
 					if (category.getCategoryId().equalsIgnoreCase(string)) {
 						return category;
 					}
@@ -161,7 +160,7 @@ public class TransactionForm extends AbstractForm<TransactionTableView.Transacti
 			
 			String selectedCategoryId = transactionModel.getTransactionCategoryId();
 			if (selectedCategoryId != null) {
-				for (BudgetCategory cats : categoryMap.values()) {
+				for (BudgetCategory cats : budgetCategoriesList) {
 					if (cats.getCategoryId().equals(selectedCategoryId)) {
 						budgetCategoryComboBox.getSelectionModel().select(cats);
 					}

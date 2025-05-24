@@ -125,9 +125,9 @@ public class TransactionFactory {
 		if (lastTransactionId != null) {
 			// Extract the last count from the transaction ID
 			String[] parts = lastTransactionId.split("-");
-			if (parts.length > 2) {
+			if (parts.length > 6) {
 				try {
-					nextCount = Integer.parseInt(parts[2]) + 1;
+					nextCount = Integer.parseInt(parts[6]) + 1;
 				} catch (NumberFormatException e) {
 					throw new RuntimeException("Failed to parse transaction count from ID: " + lastTransactionId, e);
 				}

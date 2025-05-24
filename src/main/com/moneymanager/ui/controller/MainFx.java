@@ -12,7 +12,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.io.FileReader;
 
 public class MainFx extends Application {
 	
@@ -28,7 +27,7 @@ public class MainFx extends Application {
 		TransactionService transactionService = new TransactionService(transactionRepo, accountService);
 		BudgetService budgetService = new BudgetService(budgetRepo, budgetCategoryRepo, transactionRepo);
 		
-		transactionService.setBudgetCategoryMap(budgetService.getAllCategoryMap());
+		transactionService.setBudgetCategoryList(budgetService.getBudgetCategoriesObservableList());
 		
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("/MainView.fxml"));
 		Parent root = loader.load();

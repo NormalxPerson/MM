@@ -7,6 +7,7 @@ import com.moneymanager.repos.TransactionRepo;
 import com.moneymanager.ui.view.AccountTableView;
 import com.moneymanager.ui.view.TransactionTableView;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 
@@ -19,6 +20,7 @@ public class TransactionService {
 	private final AccountService accountService;
 	private final ObservableList<TransactionTableView.TransactionModel> transactionModels;
 	private ObservableMap<String, BudgetCategory> budgetCategories;
+	private ObservableList<BudgetCategory> budgetCategoriesList;
 	
 	public TransactionService(TransactionRepo transRepo, AccountService accountService) {
 		this.transRepo = transRepo;
@@ -26,8 +28,32 @@ public class TransactionService {
 		this.transactionModels = FXCollections.observableArrayList();
 	}
 	
-	public void setBudgetCategoryMap(ObservableMap<String, BudgetCategory> catList) {
-		this.budgetCategories = catList;
+	public void setBudgetCategoryList(ObservableList<BudgetCategory> catList) {
+		this.budgetCategoriesList = catList;
+		this.budgetCategories = FXCollections.observableHashMap();
+		
+		for (BudgetCategory cat : budgetCategoriesList) {
+			this.budgetCategories.put(cat.getCategoryId(), cat);
+		}
+		
+		this.budgetCategoriesList.addListener((ListChangeListener<BudgetCategory>) change -> {
+			while (change.next()) {
+				if (change.wasAdded()) {
+					for (BudgetCategory cat : change.getAddedSubList()) {
+						this.budgetCategories.put(cat.getCategoryId(), cat);
+					}
+				}
+				if (change.wasRemoved()) {
+					for (BudgetCategory cat : change.getRemoved()) {
+						this.budgetCategories.remove(cat.getCategoryId());
+					}
+				}
+			}
+		});
+	}
+	
+	public ObservableList<BudgetCategory> getBudgetCategoryList() {
+		return budgetCategoriesList;
 	}
 	
 	public ObservableList<TransactionTableView.TransactionModel> getObservableTransactionModelsList() {
