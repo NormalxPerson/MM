@@ -3,7 +3,9 @@ package com.moneymanager.ui.view;
 
 import com.moneymanager.ui.viewModel.CSVParserViewModel;
 import javafx.beans.binding.Bindings;
-import javafx.event.EventHandler;
+import javafx.beans.binding.StringBinding;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -13,6 +15,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.util.Builder;
 import javafx.util.StringConverter;
 
@@ -23,12 +27,22 @@ public class CSVParserViewBuilder implements Builder<Region> {
 	
 	private final CSVParserViewModel viewModel;
 	private Button fileChooserButton;
+	private Button fileActionButton;
+	private final StringProperty fileButtonText = new SimpleStringProperty("Choose CSV File");
 	
-	private Consumer<Button> handleFileSelection;
+	private Consumer<File> onFileSelectedHandler;
 	
-	public CSVParserViewBuilder(CSVParserViewModel viewModel, Consumer<> handler) {
+	public CSVParserViewBuilder(CSVParserViewModel viewModel, Consumer<File> onFileSelectedHandler) {
 		this.viewModel = viewModel;
-		this.handleFileSelection = handler;
+		this.onFileSelectedHandler = onFileSelectedHandler;
+		
+		viewModel.fileProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue != null) {
+				fileButtonText.set(newValue.getName());
+			} else {
+				fileButtonText.set("Choose CSV File");
+			}
+		});
 	}
 	
 	@Override
@@ -49,7 +63,7 @@ public class CSVParserViewBuilder implements Builder<Region> {
 		Label title = new Label("Import CSV File");
 		title.getStyleClass().add("headline-label");
 		
-		topSection.getChildren().setAll(title, createAccountComboBox());
+		topSection.getChildren().setAll(title, createAccountComboBox(), createFileChooser());
 		
 		return topSection;
 	}
@@ -58,21 +72,36 @@ public class CSVParserViewBuilder implements Builder<Region> {
 		VBox fileChooserBox = new VBox(10);
 		fileChooserBox.setAlignment(Pos.CENTER);
 		
-		fileChooserButton = new Button("Choose CSV File");
-		fileChooserButton.getStyleClass().addAll("button", "md3-rounded-medium");
+		fileActionButton = new Button();
+		fileActionButton.textProperty().bind(fileButtonText);
+		fileActionButton.getStyleClass().addAll("button", "md3-rounded-medium");
 		
-		fileChooserButton.disableProperty().bind(viewModel.selectedAccountModelProperty().isNull());
+		fileActionButton.disableProperty().bind(viewModel.selectedAccountModelProperty().isNull());
 		
-		Label fileLabel = new Label("No File Selected");
-		fileLabel.textProperty().bind(
-				Bindings.createStringBinding(() -> {
-					File file = viewModel.getFile();
-					return file != null ? file.getName() : "No File Selected";
-				}, viewModel.fileProperty())
-		);
-		
-		fileChooserButton.setOnAction(event -> handleFileSelection.accept(fileChooserButton));
-		fileChooserBox.getChildren().addAll(fileChooserButton, fileLabel);
+		fileActionButton.setOnAction(event -> {
+			if (viewModel.getFile() == null) {
+				FileChooser fileChooser = new FileChooser();
+				fileChooser.setTitle("Select CSV file");
+				fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV file", "*.csv"));
+				fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+				
+				Stage stage = (Stage) fileActionButton.getScene().getWindow();
+				File selectedFile = fileChooser.showOpenDialog(stage);
+				
+				if (selectedFile != null) {
+					// Pass the selected file to the handler provided by the controller
+					if (onFileSelectedHandler != null) {
+						onFileSelectedHandler.accept(selectedFile);
+					}
+				}
+			} else {
+				viewModel.setFile(null);
+				if (onFileSelectedHandler != null) {
+					onFileSelectedHandler.accept(null);
+				}
+			}
+		});
+		fileChooserBox.getChildren().addAll(fileActionButton);
 		return fileChooserBox;
 	}
 	

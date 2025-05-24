@@ -20,28 +20,21 @@ public class CSVParserController implements BaseViewController{
 	public CSVParserController(TransactionService transactionService) {
 		this.viewModel = new CSVParserViewModel(transactionService.getAccountModelObservableList());
 		this.interactor = new CSVParserInteractor(transactionService, viewModel);
-		this.viewBuilder = new CSVParserViewBuilder(this.viewModel, fileChooserButton -> handleFileSelection(fileChooserButton));
+		this.viewBuilder = new CSVParserViewBuilder(this.viewModel, this::handleFileSelected);
+	}
+	
+	private void handleFileSelected(File selectedFile) {
+		if (selectedFile != null) {
+			viewModel.setFile(selectedFile);
+			// Add any further processing of the file here or in the interactor
+			System.out.println("File selected in Controller: " + selectedFile.getAbsolutePath());
+		}
 	}
 	
 	public Region getView() {
 		return viewBuilder.build();
 	}
 	
-	public void handleFileSelection(Button fileChooserButton) {
-		FileChooser fileChooser = new FileChooser();
-		fileChooser.setTitle("Select CSV file");
-		
-		fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV file", "*.csv"));
-		
-		fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-		
-		Stage stage = (Stage) fileChooserButton.getScene().getWindow();
-		File selectedFile = fileChooser.showOpenDialog(stage);
-		
-		if (selectedFile != null) {
-			viewModel.setFile(selectedFile);
-		}
-	}
 	
 	
 	
