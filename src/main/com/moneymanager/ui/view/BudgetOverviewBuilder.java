@@ -1,10 +1,8 @@
 package com.moneymanager.ui.view;
 
-import com.moneymanager.ui.state.BudgetOverviewMod;
+import com.moneymanager.ui.viewModel.BudgetOverviewMod;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.StringBinding;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;

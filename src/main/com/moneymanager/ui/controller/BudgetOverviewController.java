@@ -4,15 +4,11 @@ import com.moneymanager.core.BudgetCategory;
 import com.moneymanager.service.BudgetService;
 import com.moneymanager.service.TransactionService;
 import com.moneymanager.ui.interactor.BudgetInteractor;
-import com.moneymanager.ui.model.BudgetCategoryCard;
 import com.moneymanager.ui.model.BudgetCategoryModel;
-import com.moneymanager.ui.state.BudgetOverviewMod;
-import com.moneymanager.ui.validation.FormValidationSupport;
+import com.moneymanager.ui.viewModel.BudgetOverviewMod;
 import com.moneymanager.ui.view.BudgetOverviewBuilder;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.*;
@@ -20,10 +16,7 @@ import javafx.scene.layout.*;
 import org.controlsfx.validation.ValidationSupport;
 import org.controlsfx.validation.Validator;
 
-import java.net.URL;
-import java.time.YearMonth;
 import java.util.Optional;
-import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
 public class BudgetOverviewController implements BaseViewController {

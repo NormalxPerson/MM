@@ -4,7 +4,6 @@ import com.moneymanager.service.AccountService;
 import com.moneymanager.service.BudgetService;
 import com.moneymanager.service.TransactionService;
 import com.moneymanager.ui.event.FormEvent;
-import com.moneymanager.ui.view.BudgetOverviewBuilder;
 import com.moneymanager.ui.view.FloatingActionButton;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -150,7 +149,7 @@ public class NavigationController implements Initializable{
 		this.viewManager.registerView(transactionsButton.getUserData().toString(), transactionsController.getTransactionContainer(), transactionsController);
 		
 		setUpBudgetController();
-		
+		setUpCsvParserController();
 		accountsButton.setSelected(true);
 	}
 	
@@ -162,6 +161,16 @@ public class NavigationController implements Initializable{
 			String budgetViewName = budgetButton.getUserData().toString();
 			this.viewManager.registerView(budgetViewName, budgetView, budController);
 		} catch (Exception e) { System.err.println("failed to load BudgetOverviewController: " + e.getMessage() ); }
+	}
+	
+	public void setUpCsvParserController() {
+		try {
+			CSVParserController csvParserController = new CSVParserController(transactionService);
+			Region csvParserView = csvParserController.getView();
+			String csvParserViewName = csvParserButton.getUserData().toString();
+			
+			this.viewManager.registerView(csvParserViewName, csvParserView, csvParserController);
+		} catch (Exception e) { System.err.println("failed to load CSVParserController: " + e.getMessage() ); }
 	}
 
 	

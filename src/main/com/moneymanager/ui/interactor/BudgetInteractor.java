@@ -4,12 +4,9 @@ import com.moneymanager.core.Budget;
 import com.moneymanager.core.BudgetCategory;
 import com.moneymanager.service.BudgetService;
 import com.moneymanager.service.TransactionService;
-import com.moneymanager.ui.controller.BudgetOverviewController;
 import com.moneymanager.ui.model.BudgetCategoryCard;
 import com.moneymanager.ui.model.BudgetCategoryModel;
-import com.moneymanager.ui.state.BudgetOverviewMod;
-import javafx.collections.ObservableList;
-import javafx.scene.Node;
+import com.moneymanager.ui.viewModel.BudgetOverviewMod;
 
 import java.time.YearMonth;
 import java.util.ArrayList;

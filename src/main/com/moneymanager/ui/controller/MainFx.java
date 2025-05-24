@@ -38,12 +38,12 @@ public class MainFx extends Application {
 		navigationController.setBudgetService(budgetService);
 		navigationController.setUpControllers();
 		
-		CsvParser parser = new CsvParser(new File("/home/citizen/Documents/java/MoneyManager/src/main/resources/test.csv"));
+		//CsvParser parser = new CsvParser(new File("/home/citizen/Documents/java/MoneyManager/src/main/resources/test.csv"));
 		
 		
 		
 		// 2. Create the Scene
-		Scene scene = new Scene(root, 900, 750);
+		Scene scene = new Scene(root, 1000, 800);
 		scene.getStylesheets().add(getClass().getResource("/stylesheetfx.css").toExternalForm());
 		// 3. Set up the Stage
 		primaryStage.setTitle("Money Manager");

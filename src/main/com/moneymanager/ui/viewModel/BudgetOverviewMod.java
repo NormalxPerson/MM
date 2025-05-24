@@ -1,12 +1,10 @@
-package com.moneymanager.ui.state;
+package com.moneymanager.ui.viewModel;
 
 import com.moneymanager.ui.model.BudgetCategoryCard;
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.Node;
 
 import java.time.YearMonth;
 import java.util.List;

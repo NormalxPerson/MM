@@ -1,6 +1,6 @@
 package com.moneymanager.ui.view;
 
-import com.moneymanager.ui.state.BudgetOverviewMod;
+import com.moneymanager.ui.viewModel.BudgetOverviewMod;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -62,16 +62,22 @@ public class BudgetCardContainerBuilder implements Builder<ScrollPane> {
 	}
 	
 	private ScrollPane createScrollPane() {
-		FlowPane cardsContainer = new FlowPane();
+		TilePane cardsContainer = new TilePane();
 		cardsContainer.setPadding(new Insets(5,0,5,0));
-		cardsContainer.setHgap(6);
-		cardsContainer.setVgap(6);
-		cardsContainer.setMaxWidth(Double.MAX_VALUE);
+		cardsContainer.setHgap(10);
+		cardsContainer.setVgap(10);
+		cardsContainer.setPrefColumns(3);
+		cardsContainer.setTileAlignment(Pos.TOP_LEFT);
+		cardsContainer.setStyle("-fx-border-color: red; -fx-border-width: 2;");
+		
+		cardsContainer.setPrefTileWidth(Region.USE_COMPUTED_SIZE);
 		
 		
 		Bindings.bindContent(cardsContainer.getChildren(),viewModel.getCategoryCards());
 		
 		ScrollPane scrollPane = new ScrollPane(cardsContainer);
+		scrollPane.setFitToWidth(true);
+		scrollPane.setPannable(false);
 		
 		//scrollPane.setFitToHeight(true);
 		//scrollPane.setFitToWidth(true);
@@ -82,7 +88,6 @@ public class BudgetCardContainerBuilder implements Builder<ScrollPane> {
 		//scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 		//scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
 		scrollPane.setPannable(false);
-		
 		
 		//scrollPane.setStyle("-background-color: -fx-md3-surface-color; -fx-background: -fx-md3-surface-color;");
 		//cardsContainer.setStyle("-fx-background-color: transparent;");
