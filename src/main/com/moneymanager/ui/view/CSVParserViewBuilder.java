@@ -12,9 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.util.Builder;
@@ -52,7 +50,43 @@ public class CSVParserViewBuilder implements Builder<Region> {
 		mainPane.setStyle("-fx-background-color: #E7E0EC; -fx-border-color: red; -fx-border-width: 2;");
 		
 		mainPane.setTop(createTopSection());
+		mainPane.setCenter(createPreviewTable());
 		return mainPane;
+	}
+	
+	private Node createPreviewTable() {
+		VBox centerSection = new VBox(10);
+		centerSection.setPadding(new Insets(10, 5, 10, 5));
+		
+		// Preview section header
+		Label previewLabel = new Label("Data Preview");
+		previewLabel.getStyleClass().add("title-label");
+		previewLabel.visibleProperty().bind(viewModel.csvDataProperty().isNotNull());
+		previewLabel.managedProperty().bind(previewLabel.visibleProperty());
+		
+		// Create preview table using builder with view model binding
+		CsvPreviewTable previewTableBuilder = new CsvPreviewTable(viewModel);
+		Region tableRegion = previewTableBuilder.build();
+		
+		tableRegion.visibleProperty().bind(viewModel.csvDataProperty().isNotNull());
+		tableRegion.managedProperty().bind(tableRegion.visibleProperty());
+		
+		// No need for manual data loading - table binds to viewModel.csvDataProperty() automatically
+		
+		// Placeholder when no data
+		Label placeholderLabel = new Label("Select a CSV file to preview data");
+		placeholderLabel.getStyleClass().add("label");
+		placeholderLabel.setStyle("-fx-text-fill: #666666;");
+		placeholderLabel.visibleProperty().bind(viewModel.csvDataProperty().isNull());
+		placeholderLabel.managedProperty().bind(placeholderLabel.visibleProperty());
+		
+		StackPane centerStack = new StackPane();
+		centerStack.getChildren().addAll(tableRegion, placeholderLabel);
+		VBox.setVgrow(centerStack, Priority.ALWAYS);
+		
+		centerSection.getChildren().addAll(previewLabel, centerStack);
+		
+		return centerSection;
 	}
 	
 	private Node createTopSection() {
