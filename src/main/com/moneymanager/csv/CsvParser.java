@@ -5,8 +5,11 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 public class CsvParser {
     
@@ -117,6 +120,28 @@ public class CsvParser {
         // Add the last field
         result.add(currentField.toString());
         return result;
+    }
+    
+    public static Map<Integer, String> getHeaderMapFromFile(File csvFile) {
+        try {
+            char delimiter = detectDelimiter(csvFile);
+            BufferedReader br = new BufferedReader(new FileReader(csvFile));
+            String firstLine = br.readLine();
+            
+            if (firstLine == null) {
+                return Collections.emptyMap();
+            } else {
+                List<String>headersList = parseCsvLine(firstLine, delimiter);
+                return IntStream.range(0, headersList.size())
+                        .boxed()
+                        .collect(Collectors.toMap(
+                                i -> i,
+                                i -> headersList.get(i).trim()
+                        ));
+            }
+        } catch (IOException e) { System.out.println("Error in CsvParser.getHeaderMapFromFile: " + e.getMessage()); }
+        
+        return Collections.emptyMap();
     }
     
     private static char detectDelimiter(File csvFile) throws IOException {

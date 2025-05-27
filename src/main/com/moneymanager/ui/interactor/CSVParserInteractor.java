@@ -7,6 +7,7 @@ import com.moneymanager.ui.viewModel.CSVParserViewModel;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public class CSVParserInteractor {
 	private final TransactionService transactionService;
@@ -21,7 +22,7 @@ public class CSVParserInteractor {
 	
 	private void setupFileListener() {
 		viewModel.fileProperty().addListener((observable, oldFile, newFile) -> {
-			if (newFile != null && newFile.exists()) {
+			if (newFile != null && newFile.exists() && newFile.getName().endsWith(".csv")) {
 				System.out.println("File selected, auto-parsing: " + newFile.getName());
 				try {
 					parseCsvFile(newFile);
@@ -63,6 +64,10 @@ public class CSVParserInteractor {
 			viewModel.setCsvData(null);
 			throw new RuntimeException("Unexpected error while parsing CSV file", e);
 		}
+	}
+	
+	public Map<Integer, String> getCsvHeaders() {
+		return CsvParser.getHeaderMapFromFile(viewModel.getFile());
 	}
 	
 }

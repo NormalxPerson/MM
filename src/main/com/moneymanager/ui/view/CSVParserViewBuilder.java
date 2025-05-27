@@ -9,9 +9,7 @@ import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
+import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
@@ -19,12 +17,12 @@ import javafx.util.Builder;
 import javafx.util.StringConverter;
 
 import java.io.File;
+import java.util.List;
 import java.util.function.Consumer;
 
 public class CSVParserViewBuilder implements Builder<Region> {
 	
 	private final CSVParserViewModel viewModel;
-	private Button fileChooserButton;
 	private Button fileActionButton;
 	private final StringProperty fileButtonText = new SimpleStringProperty("Choose CSV File");
 	
@@ -52,6 +50,12 @@ public class CSVParserViewBuilder implements Builder<Region> {
 		mainPane.setTop(createTopSection());
 		mainPane.setCenter(createPreviewTable());
 		return mainPane;
+	}
+	
+	private void openConfigTransactionDialog() {
+		List<String> colors = List.of("Red", "Yellow", "Green");
+		ChoiceDialog<String> choiceDialog = new ChoiceDialog<>("Yellow", colors);
+		choiceDialog.showAndWait();
 	}
 	
 	private Node createPreviewTable() {
